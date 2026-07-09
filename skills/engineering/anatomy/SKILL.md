@@ -1,5 +1,5 @@
 ---
-name: system-trace
+name: anatomy
 description: >-
   Traces a codebase from its actual source code, never from existing
   README/docs/comments which may be stale or simply wrong, and produces or
@@ -18,7 +18,7 @@ description: >-
   microservices, or library.
 ---
 
-# System Trace
+# Anatomy
 
 ## Why this exists
 

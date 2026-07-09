@@ -3,7 +3,7 @@
 This repo is a fork of [mattpocock/skills](https://github.com/mattpocock/skills) with custom skills added on top.
 
 **Custom skills** (owned by this fork, never synced from upstream):
-- `skills/engineering/system-trace/` — codebase architecture tracer
+- `skills/engineering/anatomy/` — codebase architecture tracer
 
 **Upstream skills** — everything else. Sync regularly to get bug fixes and new skills.
 
@@ -47,18 +47,18 @@ Read what changed. Pay attention to commits that touch:
 git merge upstream/main
 ```
 
-**If there are conflicts** on your custom skill files (`skills/engineering/system-trace/**`), always keep **your** version:
+**If there are conflicts** on your custom skill files (`skills/engineering/anatomy/**`), always keep **your** version:
 
 ```bash
-git checkout HEAD -- skills/engineering/system-trace/
-git add skills/engineering/system-trace/
+git checkout HEAD -- skills/engineering/anatomy/
+git add skills/engineering/anatomy/
 git merge --continue
 ```
 
 ### Step 4 — Verify custom skills are intact
 
 ```bash
-ls skills/engineering/system-trace/
+ls skills/engineering/anatomy/
 # Should list: SKILL.md  references/  scripts/
 ```
 
