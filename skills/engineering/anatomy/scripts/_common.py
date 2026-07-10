@@ -3,6 +3,7 @@ Shared helpers for the anatomy skill's scripts.
 No third-party dependencies -- stdlib only, so this runs anywhere Python 3.8+ runs.
 """
 import hashlib
+import json
 import os
 from pathlib import Path
 
@@ -146,3 +147,56 @@ def slugify(name: str) -> str:
     while "--" in slug:
         slug = slug.replace("--", "-")
     return slug.strip("-") or "module"
+
+
+def load_module_map(modules_json_path):
+    """Load a Phase-2 `modules.json` (slug -> relative-path) and return it
+    sorted longest-path-first, ready for prefix matching via
+    `resolve_module_for_path`. Returns None (not {}) if the path is falsy,
+    so callers can tell "no --modules flag given" apart from "an empty
+    mapping was given" -- the two should behave differently (fall back to
+    directory-guessing vs. genuinely finding no module for anything)."""
+    if not modules_json_path:
+        return None
+    data = json.loads(Path(modules_json_path).read_text())
+    entries = []
+    for slug, rel in data.items():
+        parts = tuple(p for p in Path(rel).parts if p not in (".",))
+        entries.append((parts, slug))
+    # Longest prefix (most path segments) first, so a nested module wins
+    # over an ancestor one if both happen to be declared.
+    entries.sort(key=lambda e: -len(e[0]))
+    return entries
+
+
+def resolve_module_for_path(rel_path_parts, module_map):
+    """Longest-prefix match of a file's path parts against a loaded
+    `module_map` (from `load_module_map`). Returns the owning slug, or None
+    if the path doesn't fall under any declared module (e.g. a repo-root
+    config file, or a directory Phase 2 didn't map) -- callers should treat
+    None as 'unmapped', not silently bucket it somewhere misleading."""
+    if module_map is None:
+        return None
+    for prefix_parts, slug in module_map:
+        if rel_path_parts[: len(prefix_parts)] == prefix_parts:
+            return slug
+    return None
+
+
+def resolve_relative_import(source_rel_path, target: str):
+    """Resolve a relative-looking import target (starts with '.' or '..',
+    the common JS/TS/Python-relative convention) against the importing
+    file's own directory, returning a repo-root-relative path string (no
+    guarantee the file exists at that exact path -- extension/index
+    resolution isn't attempted, this is still a hypothesis). Returns None
+    if `target` doesn't look like a relative import, so callers can fall
+    back to their existing dotted/bare-package handling for everything
+    else."""
+    if not (target.startswith(".") or target.startswith("./") or target.startswith("../")):
+        return None
+    source_dir = Path(source_rel_path).parent
+    combined = (source_dir / target).as_posix()
+    normalized = os.path.normpath(combined).replace("\\", "/")
+    if normalized.startswith(".."):
+        return None  # escapes repo root -- not a resolvable in-repo target
+    return normalized

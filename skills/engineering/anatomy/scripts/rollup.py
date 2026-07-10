@@ -82,10 +82,18 @@ def extract_coverage(text):
     m = FOOTER_RE.search(text)
     if not m:
         return "unstated", None
-    # Strip trailing markdown italics-closing "*" (the footer line is
-    # wrapped in *...* per the template) and any stray punctuation left
-    # over from the lazy match reaching end-of-line.
-    fragment = m.group(1).strip().rstrip("*").rstrip(".").strip()
+    # The footer line is wrapped in underscore-italics per
+    # output-templates.md's template (`_Traced from source ... files._`), so
+    # the lazy match above typically swallows the sentence's closing period
+    # *and* the italics-closing "_" before it can find a "$" to anchor on.
+    # Strip trailing italics-marker characters (some projects' own docs use
+    # *asterisk* italics instead -- strip either) and any stray punctuation
+    # left over either side of them, in whichever order they show up.
+    fragment = m.group(1).strip()
+    fragment = fragment.rstrip("*_")
+    fragment = fragment.rstrip(".")
+    fragment = fragment.rstrip("*_")
+    fragment = fragment.strip()
     if ALL_N_RE.search(fragment):
         return "full", fragment
     if SAMPLED_RE.search(fragment):

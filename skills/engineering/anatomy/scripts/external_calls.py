@@ -12,7 +12,7 @@ other end, so import_graph.py has nothing to find. This script greps for
 the common patterns of each instead.
 
 Usage:
-    python3 external_calls.py <repo_root> [--kinds http_client,grpc_client,queue,cron,webhook_route]
+    python3 external_calls.py <repo_root> [--kinds http_client,grpc_client,queue,cron,webhook_route] [--modules modules.json]
 
 Prints JSON to stdout: a flat list of hits, each with the file/line it was
 found at, a kind, a framework/library guess, and whatever identifying
@@ -21,6 +21,17 @@ queue-related hits it also reports `possible_pairs`: publish/subscribe hits
 that named the same topic or event string, which is the closest this script
 can get to hypothesizing a same-process pub/sub edge without any import
 connecting the two sides.
+
+--modules <modules.json>: same flag and same reason as import_graph.py --
+each hit's `top_level` field (and therefore `counts_by_top_level` and
+`possible_pub_sub_pairs`' published_from/consumed_by) is grouped by actual
+module boundary instead of the first path segment under repo root. Without
+this, a project with a wrapping directory (src/, app/, lib/) reports every
+hit under that one wrapper name, which is particularly unhelpful for
+possible_pub_sub_pairs -- a publisher in one module and a consumer in
+another both show up as "src", making a real cross-module pub/sub edge look
+like a same-module no-op. Pass --modules once Phase 2's module boundaries
+exist.
 
 THIS IS A HYPOTHESIS GENERATOR, NOT GROUND TRUTH -- same caveat as
 import_graph.py, and if anything a stronger one: covering every HTTP
@@ -41,7 +52,9 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from _common import walk_source_files  # noqa: E402
+from _common import (  # noqa: E402
+    walk_source_files, load_module_map, resolve_module_for_path,
+)
 
 ALL_KINDS = ["http_client", "grpc_client", "queue", "cron", "webhook_route"]
 
@@ -123,8 +136,10 @@ ROUTE_PATTERNS = [
 ]
 
 
-def scan_file(rel_path: Path, lines, kinds_wanted, hits):
-    top = top_level_of(rel_path)
+def scan_file(rel_path: Path, lines, kinds_wanted, hits, module_map=None):
+    top = resolve_module_for_path(rel_path.parts, module_map) if module_map is not None else top_level_of(rel_path)
+    if top is None:
+        top = top_level_of(rel_path)  # unmapped file -- fall back rather than dropping the hit
     is_crontab_like = rel_path.name in {"crontab"} or rel_path.suffix == ".cron"
     is_yaml = rel_path.suffix.lower() in {".yaml", ".yml"}
 
@@ -229,10 +244,17 @@ def main():
     ap.add_argument("repo_root")
     ap.add_argument("--kinds", default=",".join(ALL_KINDS),
                      help="comma-separated subset of: " + ",".join(ALL_KINDS))
+    ap.add_argument(
+        "--modules", default=None,
+        help="path to Phase 2's modules.json (slug -> relative-path); when "
+             "given, each hit's top_level field is the actual owning module "
+             "instead of a guess from the first path segment",
+    )
     args = ap.parse_args()
 
     kinds_wanted = set(k.strip() for k in args.kinds.split(",") if k.strip())
     repo_root = Path(args.repo_root).resolve()
+    module_map = load_module_map(args.modules)
 
     hits = []
     for abs_path, rel_path in walk_source_files(repo_root):
@@ -243,7 +265,7 @@ def main():
         if not text:
             continue
         lines = text.splitlines()
-        scan_file(rel_path, lines, kinds_wanted, hits)
+        scan_file(rel_path, lines, kinds_wanted, hits, module_map=module_map)
 
     counts_by_kind = {}
     counts_by_top_level = {}
@@ -261,6 +283,12 @@ def main():
             "Hypothesis generator, not ground truth -- see this script's "
             "module docstring. Every hit needs its call site opened and "
             "confirmed before it goes into a module doc or diagram."
+        ) + (
+            " top_level fields are grouped by --modules' module boundaries."
+            if module_map is not None else
+            " top_level fields are grouped by first path segment under repo "
+            "root -- pass --modules <modules.json> for accurate grouping on "
+            "a project with a wrapping directory (src/, app/, lib/)."
         ),
     }
     print(json.dumps(result, indent=2))

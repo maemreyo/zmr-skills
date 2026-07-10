@@ -1,36 +1,20 @@
 ---
 name: anatomy
 description: >-
-  Traces a codebase from its actual source code, never from existing
-  README/docs/comments which may be stale or simply wrong, and produces or
-  updates accurate system documentation under docs/anatomy/: one file per
-  module, an index with a tech-stack summary plus an architecture narrative
-  and codebase-health signals (most-connected modules, dead-code/orphan
-  candidates, dependency cycles), a system-diagram.md (Mermaid) plus a
-  standalone interactive system-diagram.html of how modules interact, an
-  entry-points.md rolling up every route/CLI command/queue consumer/cron
-  job in the system, and -- when the project actually has one -- a
-  data-model.md and a deployment.md. Use this whenever the user asks to
-  trace, map, document, or reverse-engineer a codebase's architecture;
-  wants an architecture diagram, system diagram, or dependency diagram of a
-  whole codebase, service, or repo; wants to understand or record how
-  modules, services, or packages interact; asks to generate, refresh, or
-  update architecture docs, onboarding docs, or a folder like docs/anatomy
-  or docs/architecture; wants a full inventory of every endpoint, command,
-  or background job in a codebase; or wants written documentation built
-  directly from code rather than from what is already written about it.
-  Also triggers when re-running against a codebase that already has a
-  docs/anatomy output from before (or a docs/system-trace output from an
-  older version of this skill), since this skill detects that and updates
-  only what changed instead of starting over -- and for narrow, specific
-  questions ("where does X live", "what would changing Y break") against a
-  codebase that already has a docs/anatomy output, since this skill can
-  answer those directly from the existing trace instead of re-running it.
-  Works for any language or project shape: monolith, monorepo,
-  microservices, or library. Do NOT use this for explaining, documenting,
-  or diagramming a single function, file, class, or snippet in isolation --
-  that's a normal read-and-explain task with no need for a whole-system
-  trace; this skill is for the module/service/repo level and up.
+  Traces a codebase from its source code, not stale docs, and writes or
+  updates architecture docs under docs/anatomy/ -- module docs, an index,
+  diagrams, and an entry-points inventory. Use whenever the user asks to
+  trace, map, document, or reverse-engineer a codebase's architecture; wants
+  an architecture, system, or dependency diagram of a codebase, service, or
+  repo; wants to understand how modules, services, or packages interact; asks
+  to generate or refresh architecture/onboarding docs (docs/anatomy or
+  docs/architecture); or wants a full inventory of every endpoint, command, or
+  background job. Also triggers on re-runs against an existing docs/anatomy
+  (or older docs/system-trace) output to update only what changed, and for
+  narrow questions ("where does X live", "what would changing Y break")
+  against an existing trace. Works for any language or shape: monolith,
+  monorepo, microservices, or library. NOT for explaining or diagramming a
+  single function, file, class, or snippet in isolation.
 ---
 
 # Anatomy
@@ -157,9 +141,10 @@ for common frameworks, sizing guidance (prefer ~5-40 modules total, not one
 file per class), and how to handle entry points and infra-as-code that don't
 fit neatly into "just another module."
 
-Write this mapping down (even just mentally structured, or as a scratch
-JSON) before moving on -- Phase 3 and the incremental-update machinery in
-Phase 0/6 both consume it as `modules.json`:
+Write this mapping down as an actual `modules.json` file (not just
+mentally) before moving on -- Phase 3's `--modules` flag and the
+incremental-update machinery in Phase 0/6 both read it from disk, not from
+context:
 
 ```json
 { "api": "src/api", "services": "src/services", "...": "..." }
@@ -192,12 +177,22 @@ recorded in their own doc's coverage line.
 ### Phase 3 -- Build interaction hypotheses
 
 ```bash
-python3 scripts/import_graph.py <repo_root> --group-by-top-level
-python3 scripts/external_calls.py <repo_root>
+python3 scripts/import_graph.py <repo_root> --group-by-top-level --modules modules.json
+python3 scripts/external_calls.py <repo_root> --modules modules.json
 ```
 
+Pass `--modules modules.json` (the Phase 2 slug -> relative-path mapping,
+saved to an actual file) to both -- without it, edges get grouped by the
+first path segment under the repo root, which is wrong for any project with
+a wrapping directory before its real module dirs (`src/api`, `src/services`,
+`app/controllers`, ... -- see `references/module-detection.md`'s "layered
+monolith" shape) since every file's first segment is then the same wrapper
+and cross-module edges disappear entirely. `--modules` is optional only
+because Phase 2 might not be done yet the very first time you look at a
+codebase; by the time Phase 3 actually runs, it normally is.
+
 `import_graph.py` extracts import/require/use statements per file via
-per-language regexes and rolls them up into top-level-directory edges with
+per-language regexes and rolls them up into module-to-module edges with
 counts (e.g. `api -> services: 12`). Treat this strictly as a **hypothesis
 to verify**, not an answer -- it cannot know whether an import is actually
 used, used once or constantly, or dead. It tells you fast where to look
@@ -405,17 +400,28 @@ All scripts are stdlib-only Python (3.8+), no installs required:
 
 - `scripts/inventory.py` -- Phase 1, structural overview; also does
   best-effort parsing of `docker-compose.yml`/`.yaml` when present (services,
-  ports, `depends_on`), which feeds `deployment.md`
+  ports, `depends_on`), which feeds `deployment.md`, and best-effort parsing
+  of `.github/workflows/*.yml`/`.circleci/config.yml` (`ci_config`), which
+  is stronger ground truth for `index.md`'s "How to build/test" line than a
+  guessed-at manifest script name
 - `scripts/import_graph.py` -- Phase 3, same-language import/require/use
-  hypothesis
+  hypothesis; pass `--modules modules.json` for accurate module-boundary
+  grouping instead of a first-path-segment guess
 - `scripts/external_calls.py` -- Phase 3, cross-service/network hypothesis:
   HTTP clients, gRPC stubs, queue publish/subscribe, cron, webhooks -- the
-  interactions `import_graph.py` structurally can't see
+  interactions `import_graph.py` structurally can't see; also takes
+  `--modules modules.json` for the same reason
 - `scripts/state.py` -- Phase 0/6, manifest hash/diff/write for incremental
   updates (subcommands: `hash-modules`, `diff`, `write`, `git-commit`)
+- `scripts/rollup.py` -- end of Phase 5 (once module docs exist), aggregates
+  `modules/*.md` into `index.md`'s "Codebase health signals": most-connected
+  modules, orphan candidates, dependency cycles, trace coverage
 - `scripts/verify_diagram.py` -- end of Phase 5, mechanically cross-checks
   `system-diagram.md`'s edges against every module doc's "Depends on"/"Used
   by" sections instead of relying on an eyeballed cross-check
+- `scripts/verify_entry_points.py` -- end of Phase 5, the same cross-check
+  applied to `entry-points.md` against every module doc's "Public interface"
+  section
 
 Run any of them with no arguments (or read the top-of-file docstring) to see
 usage details.
