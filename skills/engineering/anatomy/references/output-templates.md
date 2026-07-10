@@ -4,7 +4,8 @@ Contents: [module file](#module-file-modulesslugmd) · [index.md](#indexmd) ·
 [system-diagram.md](#system-diagrammd) · [entry-points.md](#entry-pointsmd) ·
 [data-model.md](#data-modelmd-conditional) ·
 [deployment.md](#deploymentmd-conditional) ·
-[system-diagram.html](#system-diagramhtml)
+[system-diagram.html](#system-diagramhtml) ·
+[_graph.json](#_graphjson) · [_modules.json](#_modulesjson)
 
 Several kinds of file get written under the output root (default
 `docs/anatomy/`, see SKILL.md for how that root is chosen):
@@ -20,12 +21,22 @@ docs/anatomy/
 ├── modules/
 │   ├── <module-slug>.md  <- one per module
 │   └── ...
-└── _manifest.json        <- internal state for incremental updates (see
-                              references/incremental-updates.md). Not meant
-                              for humans to read, but it's plain JSON and
-                              plain-text if a human opens it. Mention in
-                              index.md that deleting it forces a full
-                              re-trace next time, as an escape hatch.
+├── _manifest.json        <- internal state for incremental updates (see
+│                             references/incremental-updates.md). Not meant
+│                             for humans to read, but it's plain JSON and
+│                             plain-text if a human opens it. Mention in
+│                             index.md that deleting it forces a full
+│                             re-trace next time, as an escape hatch.
+├── _modules.json         <- internal state: Phase 2's slug -> relative-path
+│                             mapping, persisted verbatim (see "_modules.json"
+│                             section below). Also internal, same
+│                             not-for-humans-but-plain-JSON status as
+│                             _manifest.json.
+└── _graph.json           <- machine-readable snapshot of the whole module/
+                              edge/entry-point graph, for another tool (or a
+                              future/multi-repo run of this skill) to consume
+                              without re-parsing Markdown (see "_graph.json"
+                              section below and scripts/graph_export.py)
 ```
 
 `data-model.md` and `deployment.md` are conditional -- see their own
@@ -249,7 +260,9 @@ summarizing existing README/comments. See individual module files' "Notes /
 discrepancies" sections for anywhere the prior docs and the code disagreed.
 `_manifest.json` in this folder tracks what was traced, so a future run of
 this skill can update only what changed -- delete it if you ever want to
-force a full re-trace instead.
+force a full re-trace instead. `_graph.json` in this folder is a
+machine-readable snapshot of the same module/edge/entry-point graph, for
+tooling that wants to consume it directly instead of parsing this Markdown.
 ```
 
 ## `system-diagram.md`
@@ -626,3 +639,114 @@ template is meant to be filled in with data, not redesigned per project.
 If a genuine improvement to the template itself would help future runs,
 that's a change to make to `assets/diagram-template.html` in the skill
 itself, not a one-off tweak to a single project's generated output.
+
+## `_graph.json`
+
+The machine-readable counterpart to everything else in `docs/anatomy/`.
+Every other file is prose (or Mermaid/HTML) for a human to read;
+`_graph.json` is the same module/edge/entry-point/health-signal information
+as a single structured artifact another tool -- a CI freshness check, a
+different repo's run of this skill doing multi-repo stitching, an
+unrelated agent -- can consume without re-parsing five different Markdown
+files by hand. Written by `scripts/graph_export.py --write` at the end of
+Phase 5, after `modules/*.md`, `entry-points.md`, `verify_diagram.py`, and
+`verify_entry_points.py` have all run (it re-parses their already-written
+output, so it must run after them, not instead of them -- see the script's
+own docstring). Regenerated in full every run, same as `index.md` and the
+diagrams, regardless of full vs incremental mode.
+
+It is purely a re-parse of already-written output -- it does not re-read
+source code or re-verify anything against it. Everything in it is only as
+correct as the module docs and `entry-points.md` it was extracted from,
+which is what Phase 4's discipline and the two verify scripts are for.
+Don't hand-edit it; if something in it looks wrong, the fix belongs in the
+module doc or `entry-points.md` it was derived from, then re-run
+`graph_export.py`.
+
+Schema (version 1):
+
+```json
+{
+  "version": 1,
+  "generated_at": "<ISO8601>",
+  "source_root": "<abs path at export time>",
+  "modules": {
+    "<slug>": {
+      "path": "<relative path, from _modules.json if present, else null>",
+      "depends_on": [
+        {
+          "target": "other-module",
+          "kind": "internal" | "external",
+          "detail": "<bullet text minus the citation>",
+          "citation": "<path:line, or null if not present on that line>"
+        }
+      ],
+      "used_by": [ "<same shape as depends_on>" ],
+      "trace_coverage": {
+        "status": "full" | "sampled" | "listed" | "unstated",
+        "detail": "<raw matched fragment, or null>"
+      }
+    }
+  },
+  "entry_points": {
+    "http_routes": [{ "module": "...", "detail": "<path>", "raw": "<full row>" }],
+    "cli_commands": [ "<same shape>" ],
+    "queue_consumers": [
+      "<same shape -- 'detail' is the topic/event name, the join key a future multi-repo run would match a publisher in one repo to a consumer in another>"
+    ],
+    "cron_jobs": [ "<same shape>" ]
+  },
+  "health_signals": {
+    "most_connected": ["..."],
+    "orphan_candidates": ["..."],
+    "cycles": ["..."],
+    "trace_coverage_counts": { "full": 0, "sampled": 0, "listed": 0, "unstated": 0 }
+  }
+}
+```
+
+Known limitations (v1, worth knowing before leaning on this for something
+load-bearing -- both are noted here rather than only in the script's
+docstring, since this is the file whoever consumes `_graph.json` is most
+likely to actually read):
+
+- `depends_on`/`used_by` internal/external classification is a convention
+  check against the exact bullet format `output-templates.md`'s module
+  template uses (`**\`slug\`**` for internal, `external:\`name\`` for
+  external). A module doc that doesn't follow that format won't be
+  captured here -- the same brittleness `rollup.py` already has against
+  the same convention.
+- Outbound cross-service calls (an HTTP client hitting another service, a
+  gRPC stub) don't have a guaranteed structured field the way queue topics
+  do -- they show up as prose inside a "Depends on" bullet's `detail` if
+  written as an external dependency, or inside "Data & side effects" ->
+  "Network calls" if not, and this script doesn't further parse either
+  into a URL. `queue_consumers`' topic names are the one entry-point kind
+  with a clean, already-tabular join key today; HTTP routes only capture
+  the path this repo *serves*, not URLs it *calls*. A future multi-repo
+  pass will likely need `external_calls.py`'s own hypothesis output
+  (URLs/topics it detects) folded in here directly, not just what
+  survived into module-doc prose.
+
+## `_modules.json`
+
+The persisted copy of Phase 2's slug -> relative-path mapping (the same
+content as the `modules.json` file Phase 3's scripts take via `--modules`),
+written into `<output_root>/_modules.json` at the *start* of Phase 5 --
+before `_manifest.json`, which waits for Phase 6's fresh hashes, because
+`graph_export.py` needs `_modules.json` on disk by the end of Phase 5:
+
+```json
+{ "api": "src/api", "services": "src/services", "...": "..." }
+```
+
+Two things read it back: `graph_export.py`, to fill in each module's
+`path` field in `_graph.json` (a module slug alone doesn't tell an outside
+tool where in the repo it lives); and Phase 2 itself on a later run, as a
+starting point for slug continuity -- if a path Phase 1/2 rediscovers this
+run already has a slug recorded here, reuse that slug rather than deriving
+a new one, so a module's identity (its filename, its `_graph.json` key, its
+join key for multi-repo stitching) doesn't drift between runs just because
+nothing about the module actually changed. Like `_manifest.json`, this is
+internal state -- not meant for a human to read, but plain JSON if one
+opens it anyway.

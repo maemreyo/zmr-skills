@@ -46,7 +46,9 @@ docs/anatomy/
 ├── deployment.md         deployment/infra topology -- only written if compose/k8s manifests exist
 ├── modules/
 │   └── <module-slug>.md  one file per module (see output-templates.md)
-└── _manifest.json        internal state enabling incremental updates
+├── _manifest.json        internal state enabling incremental updates
+├── _modules.json         internal state: Phase 2's slug -> path mapping, persisted
+└── _graph.json           machine-readable snapshot of the whole graph (see graph_export.py)
 ```
 
 Exact file content/structure: `references/output-templates.md`. Don't
@@ -149,6 +151,15 @@ context:
 ```json
 { "api": "src/api", "services": "src/services", "...": "..." }
 ```
+
+If this is an incremental update, check `<output_root>/_modules.json` (the
+previous run's persisted mapping, written at the start of Phase 5) before
+inventing fresh slugs: for any path that still maps to the same directory,
+reuse its existing slug rather than deriving a new one. A module's slug is
+its filename, its `_graph.json` key, and -- for the multi-repo-stitching
+case `_graph.json` exists to enable -- a join key another repo's trace
+might reference; letting it churn between runs for a module that didn't
+meaningfully change breaks all three for no reason.
 
 ### Phase 2.5 -- Choose a trace depth: deep vs quick-scan
 
@@ -272,6 +283,15 @@ the fuller version of this under "Reading order per module."
 
 ### Phase 5 -- Write the outputs
 
+Before writing any module docs, copy Phase 2's `modules.json` into the
+output root as `<output_root>/_modules.json` (create `<output_root>` now if
+this is a first run and nothing's been written there yet). This has to
+happen this early, not in Phase 6 with the rest of the manifest, because
+`graph_export.py` at the end of this phase reads it back -- writing it
+later would leave `graph_export.py` with no path data on a first run, and
+stale path data (missing this run's added/changed modules) on an
+incremental one.
+
 Write each module's `modules/<slug>.md` first, then run
 `scripts/rollup.py <output_root>` (once module docs exist -- see below),
 then the whole-system files in this order: `entry-points.md`, `index.md`,
@@ -354,6 +374,24 @@ make it quiet. An empty result from both means the diagram, entry-points.md,
 and module docs all agree with each other; it doesn't mean any of it is
 correct against the actual source code, which is what Phase 4 is for.
 
+Once both checks are clean, export the structured snapshot:
+
+```bash
+python3 scripts/graph_export.py <output_root> --write
+```
+
+This writes `<output_root>/_graph.json` -- a machine-readable snapshot of
+the same module/edge/entry-point graph the rest of Phase 5 just wrote as
+prose, for another tool (a CI freshness check, a different repo's run of
+this skill doing multi-repo stitching, an unrelated agent) to consume
+without re-parsing Markdown. Run it last, after the verify scripts, not
+instead of them -- it re-parses their already-written output and inherits
+whatever drift they'd have caught. It only reads what's already on disk;
+it doesn't re-verify anything against source. Regenerate it every run,
+same as `index.md` and the diagrams, regardless of full vs incremental
+mode -- see `references/output-templates.md`'s "_graph.json" section for
+the schema and known limitations.
+
 ### Phase 6 -- Update the manifest
 
 ```bash
@@ -366,6 +404,13 @@ python3 scripts/state.py write <output_root>/_manifest.json manifest_data.json
 "modules": <fresh_hashes.json content>}`; `source_commit` gets merged in from
 the git-commit call. See `references/incremental-updates.md` for the exact
 schema if anything is unclear.
+
+`<output_root>/_modules.json` was already written at the start of Phase 5
+(it has to exist before `graph_export.py` runs at the end of that phase) --
+nothing further to do for it here. Between the two, `_manifest.json` and
+`_modules.json` give a future run everything it needs: what was traced and
+its content hash (for the diff), and where each module lives (for slug
+continuity and for `_graph.json`'s `path` field).
 
 ### Phase 7 -- Report back
 
@@ -381,8 +426,11 @@ Phase 3's scripts couldn't see and you had to track down by hand. If
 what's already in `index.md` (a suspiciously central module, an orphan that
 looks like real dead code, a cycle), call it out explicitly rather than
 trusting the user to notice it in the file. Point them at `index.md` as the
-entry point, and mention `system-diagram.html` as the version to open
-directly in a browser for the interactive view.
+entry point, mention `system-diagram.html` as the version to open directly
+in a browser for the interactive view, and note that `_graph.json` was
+(re)written if anyone downstream -- another tool, a CI check, a future
+multi-repo run -- wants the same information in a structured form instead
+of parsing Markdown.
 
 ## A note on languages the user writes in
 
@@ -422,6 +470,11 @@ All scripts are stdlib-only Python (3.8+), no installs required:
 - `scripts/verify_entry_points.py` -- end of Phase 5, the same cross-check
   applied to `entry-points.md` against every module doc's "Public interface"
   section
+- `scripts/graph_export.py` -- end of Phase 5, after both verify scripts;
+  re-parses `modules/*.md` and `entry-points.md` into `_graph.json`, a
+  single structured artifact of the whole module/edge/entry-point/
+  health-signal graph for another tool (or a future/multi-repo run of this
+  skill) to consume without parsing Markdown -- pass `--write` to persist it
 
 Run any of them with no arguments (or read the top-of-file docstring) to see
 usage details.

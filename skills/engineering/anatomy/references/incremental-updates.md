@@ -39,6 +39,16 @@ This matters because:
 reference point for the user ("last traced at commit abc123") -- never as
 the sole basis for the diff decision.
 
+Path information isn't in `_manifest.json` -- it's kept in a sibling file,
+`docs/anatomy/_modules.json`, the persisted copy of Phase 2's slug ->
+relative-path mapping (`{"api": "src/api", ...}`). Two consumers: Phase 2
+on a later run, to reuse a still-valid path's existing slug instead of
+inventing a new one (see SKILL.md's Phase 2); and `scripts/graph_export.py`,
+to fill in each module's `path` field when it builds `_graph.json`. Written
+at the *start* of Phase 5, before `graph_export.py` needs it -- earlier
+than `_manifest.json`, which waits for Phase 6's fresh hashes -- every run,
+full or incremental.
+
 ## Migrating from an older `docs/system-trace` output
 
 Earlier versions of this skill defaulted to `docs/system-trace/` instead of
@@ -186,13 +196,15 @@ one specific gap where content-hash diffing can't see a real change.
 
 ## Regenerating the whole-system files
 
-**Regenerate `index.md`, `system-diagram.md`, `system-diagram.html`, and
-`entry-points.md` unconditionally**, even in incremental mode, even if none
-of them individually "changed." All four describe the _current full system_
--- a new or changed module can introduce a new edge, route, or flow
-involving an otherwise-untouched module, and that must show up. Regenerating
-these is cheap relative to re-tracing a module, so there's no reason to try
-to diff them incrementally too.
+**Regenerate `index.md`, `system-diagram.md`, `system-diagram.html`,
+`entry-points.md`, and `_graph.json` unconditionally**, even in incremental
+mode, even if none of them individually "changed." All five describe the
+_current full system_ -- a new or changed module can introduce a new edge,
+route, or flow involving an otherwise-untouched module, and that must show
+up. Regenerating these is cheap relative to re-tracing a module, so there's
+no reason to try to diff them incrementally too. (`_graph.json` is a
+re-parse of the other four once they're written, not an independent
+regeneration step -- see SKILL.md's Phase 5 for the ordering.)
 
 The part that isn't automatic: rebuilding these requires knowing every
 current module's role, dependencies, and entry points -- including the ones
@@ -208,6 +220,9 @@ re-traced this run. An unchanged module still belongs in the full picture;
 **Write the updated manifest** with `scripts/state.py write`, including
 hashes for every current module (changed, added, and unchanged all get
 fresh/carried-forward entries) so the next run's diff is accurate.
+`_modules.json` (see "The manifest" section above) was already refreshed at
+the start of Phase 5, so slugs stay stable across runs too -- nothing
+further to do for it here.
 
 ## Reporting back to the user
 
