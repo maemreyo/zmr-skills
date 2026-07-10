@@ -4,7 +4,7 @@ This is Phase 0 of the workflow in SKILL.md, expanded. The goal: re-running
 this skill on a codebase that's already been traced should be fast and
 should only touch what actually changed, while still keeping `index.md`,
 `system-diagram.md`/`.html`, and `entry-points.md` fully correct for the
-*current* state of the whole system -- not just the part that changed.
+_current_ state of the whole system -- not just the part that changed.
 
 ## The manifest
 
@@ -16,8 +16,8 @@ per module:
   "version": 1,
   "source_root": "/abs/path/at/trace/time",
   "modules": {
-    "api": {"hash": "sha256...", "file_count": 3},
-    "services": {"hash": "sha256...", "file_count": 5}
+    "api": { "hash": "sha256...", "file_count": 3 },
+    "services": { "hash": "sha256...", "file_count": 5 }
   },
   "generated_at": "2026-07-09T12:34:56Z",
   "source_commit": "abc123... or null if not a git repo"
@@ -27,6 +27,7 @@ per module:
 The hash is content-based (sha256 over every file in the module, produced by
 `scripts/state.py hash-modules`) rather than relying on mtimes or git alone.
 This matters because:
+
 - Working trees have uncommitted changes constantly; git-commit-only
   comparison would miss them.
 - Not every codebase is a git repo at all (vendored drops, extracted
@@ -51,7 +52,7 @@ run. If you find one there:
   current, and doubles the drift-from-code problem this skill exists to
   prevent.
 - Tell the user what you found and offer to migrate: `git mv
-  docs/system-trace docs/anatomy` (or a plain move if it's not a git repo),
+docs/system-trace docs/anatomy` (or a plain move if it's not a git repo),
   then proceed as an ordinary incremental update against the moved manifest.
   The manifest's content is location-independent (it's keyed by module
   hashes, not by its own path), so a straight rename is safe and loses
@@ -60,6 +61,46 @@ run. If you find one there:
   operate against `docs/system-trace/` for the rest of this run instead of
   defaulting to `docs/anatomy/`, and say so plainly in your summary so it's
   not a silent, easy-to-forget deviation from the default.
+
+## Fast path: answering one specific question without a full run
+
+Not every request needs the full Phase 0-7 workflow. If the user asks a
+narrow, specific question -- "where does X live", "what would changing Y
+break", "which module handles the `/orders` route" -- and a manifest
+already exists, it's often both faster and more useful to answer directly
+from the existing output than to re-run the whole workflow. SKILL.md's
+Phase 0 covers exactly when to take this path instead of a full or
+incremental run; this section covers the freshness check that path leans
+on.
+
+**Freshness, not just existence.** A stale `docs/anatomy/` answering a
+specific question confidently is worse than not answering at all, so the
+fast path always confirms freshness first -- it never just trusts that the
+existing docs are current because they're present:
+
+1. Run the same `state.py hash-modules` + `state.py diff` pair Phase 0
+   already uses for incremental updates.
+2. If `change_ratio` is `0.0` (nothing changed at all), the existing docs
+   are current for the whole repo -- answer straight from `index.md` and
+   the specific `modules/<slug>.md` file(s) the question touches, with no
+   further reading needed.
+3. If `change_ratio` is greater than `0.0` but the module(s) the question
+   is actually about are in `unchanged` (not `changed`/`added`/`removed`),
+   it's still safe to answer from the existing doc for _that_ module --
+   but say so plainly ("some other modules have changed since this trace;
+   `services` itself hasn't, so this answer is current") rather than
+   implying the whole repo is fresh when only the relevant slice is.
+4. If the relevant module _is_ in `changed`/`added`, or the question can't
+   be mapped to a specific existing module at all, the fast path doesn't
+   apply -- fall through to an ordinary incremental (or full) run instead
+   of answering from what's now known-stale information.
+
+This reuses the exact same diff machinery as an incremental update; the
+only difference is that a fast-path answer doesn't write anything back
+(no manifest update, no re-generated `index.md`/diagrams) -- it's a read,
+not a run. If the user's question turns into "okay, now update the docs for
+that," that's the cue to proceed into an ordinary incremental update from
+here rather than trying to patch just the one file that was read.
 
 ## Decision tree
 
@@ -82,10 +123,12 @@ run. If you find one there:
 `references/module-detection.md`).
 
 **3. Compute fresh hashes and diff:**
+
 ```bash
 python3 scripts/state.py hash-modules <repo_root> <modules.json> > fresh_hashes.json
 python3 scripts/state.py diff <old_manifest_path> fresh_hashes.json
 ```
+
 This returns `unchanged`, `changed`, `added`, `removed`, and a
 `change_ratio` with a built-in recommendation.
 
@@ -116,8 +159,8 @@ This returns `unchanged`, `changed`, `added`, `removed`, and a
 
 ## Edges into a changed module
 
-The hash diff tells you when a module's *own* files changed. It says
-nothing about whether an *unchanged* module's description of its
+The hash diff tells you when a module's _own_ files changed. It says
+nothing about whether an _unchanged_ module's description of its
 relationship to a changed module is still accurate -- and that gap matters
 more than it looks. Say module `A` is unchanged and its existing doc says
 "**Depends on `B`** -- calls `B.charge()` synchronously, propagates its
@@ -127,7 +170,7 @@ that name -- and because `A` itself didn't change, the ordinary incremental
 rule ("leave unchanged modules alone") would leave that now-possibly-wrong
 line sitting in `A`'s doc indefinitely. `index.md` and `system-diagram.md`
 being "always regenerated in full" doesn't fix this either, because both
-are compiled *from* the "Depends on"/"Used by" lines already written in the
+are compiled _from_ the "Depends on"/"Used by" lines already written in the
 module docs -- if `A`'s doc is wrong, the diagram built from it is wrong in
 exactly the same way, just re-rendered.
 
@@ -145,7 +188,7 @@ one specific gap where content-hash diffing can't see a real change.
 
 **Regenerate `index.md`, `system-diagram.md`, `system-diagram.html`, and
 `entry-points.md` unconditionally**, even in incremental mode, even if none
-of them individually "changed." All four describe the *current full system*
+of them individually "changed." All four describe the _current full system_
 -- a new or changed module can introduce a new edge, route, or flow
 involving an otherwise-untouched module, and that must show up. Regenerating
 these is cheap relative to re-tracing a module, so there's no reason to try
@@ -154,7 +197,7 @@ to diff them incrementally too.
 The part that isn't automatic: rebuilding these requires knowing every
 current module's role, dependencies, and entry points -- including the ones
 in `unchanged`, which Phase 4 didn't re-read this run. Get that information
-by reading the *existing* `modules/<slug>.md` file for each unchanged
+by reading the _existing_ `modules/<slug>.md` file for each unchanged
 module (updated already, if applicable, by the edges-into-a-changed-module
 step above) rather than trying to recall it from earlier in a long
 conversation, or re-deriving it from scratch, or -- worst case -- quietly

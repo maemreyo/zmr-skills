@@ -138,6 +138,7 @@
   .legend-item { display: flex; align-items: center; gap: 5px; }
   .legend-line { width: 20px; height: 0; border-top: 2px solid var(--blueprint); }
   .legend-line.async { border-top: 2px dashed var(--blueprint); }
+  .legend-line.unconfirmed { border-top: 2px dotted var(--ink-faint); opacity: 0.8; }
   .legend-swatch { width: 10px; height: 10px; border-radius: 2px; }
 
   .empty-state {
@@ -174,6 +175,7 @@
   /* ---------- SVG node/edge styling ---------- */
   .node-rect { fill: var(--blueprint-fill); stroke: var(--blueprint); stroke-width: 1.4; }
   .node-rect.external { fill: var(--paper); stroke: var(--ink-faint); stroke-dasharray: 3 2; }
+  .node-rect.unconfirmed { stroke-dasharray: 2 2; opacity: 0.75; }
   .node-rect.selected { stroke: var(--signal); stroke-width: 2.4; }
   .node-rect.dimmed { opacity: 0.25; }
   .node-tick { stroke: var(--blueprint); stroke-width: 1; }
@@ -183,6 +185,11 @@
   .node-group.dimmed { opacity: 0.25; }
   .edge-path { fill: none; stroke: var(--blueprint-dim); stroke-width: 1.4; }
   .edge-path.async { stroke-dasharray: 5 4; }
+  /* quick-scan mode (see references/tracing-methodology.md): edges/nodes
+     not individually confirmed get a tighter dash + reduced opacity,
+     distinct from the async dash pattern above -- placed after .async in
+     the stylesheet so it wins when both classes apply to the same edge. */
+  .edge-path.unconfirmed { stroke-dasharray: 2 2; opacity: 0.6; }
   .edge-path.highlighted { stroke: var(--signal); stroke-width: 2.2; }
   .edge-path.dimmed { opacity: 0.15; }
   .edge-label { font-family: var(--font-mono); font-size: 9px; fill: var(--ink-soft); }
@@ -491,8 +498,11 @@
   const detailEl = document.getElementById("detail-panel");
   function showModuleDetail(m) {
     clear(detailEl);
-    detailEl.appendChild(el("div", { class: "detail-title" }, escapeHtml(m.name)));
+    detailEl.appendChild(el("div", { class: "detail-title" }, escapeHtml(m.name) + (m.confirmed === false ? " ⋯" : "")));
     detailEl.appendChild(el("div", { class: "detail-path" }, escapeHtml(m.path || "")));
+    if (m.confirmed === false) {
+      detailEl.appendChild(el("div", { class: "detail-hint" }, "Unconfirmed -- quick-scan mode, not individually traced this run."));
+    }
     if (m.role) {
       const s = el("div", { class: "detail-section" });
       s.appendChild(el("div", { class: "detail-label" }, "Role"));
@@ -510,7 +520,8 @@
         const other = modulesById[e[otherKey]];
         const li = el("li", {},
           '<span class="who">' + escapeHtml(other ? other.name : e[otherKey]) + "</span>" +
-          (e.label ? " — " + escapeHtml(e.label) : ""));
+          (e.label ? " — " + escapeHtml(e.label) : "") +
+          (e.confirmed === false ? ' <span class="detail-hint">(unconfirmed)</span>' : ""));
         ul.appendChild(li);
       });
       s.appendChild(ul);
@@ -622,7 +633,7 @@
       if (!from || !to) return;
       const isBack = layout.backEdges.has(e.from + "->" + e.to);
       const d = edgePathD(from, to, layout.nodeW, layout.nodeH, isBack);
-      const path = svgEl("path", { d: d, class: "edge-path" + (e.kind === "async" ? " async" : "") });
+      const path = svgEl("path", { d: d, class: "edge-path" + (e.kind === "async" ? " async" : "") + (e.confirmed === false ? " unconfirmed" : "") });
       path.dataset.from = e.from; path.dataset.to = e.to;
       viewport.appendChild(path);
       if (e.label) {
@@ -639,7 +650,7 @@
       if (!p) return;
       const g = svgEl("g", { class: "node-group", transform: "translate(" + p.x + "," + p.y + ")" });
       g.dataset.id = n.id;
-      const rectClass = "node-rect" + (n.kind === "external" ? " external" : "");
+      const rectClass = "node-rect" + (n.kind === "external" ? " external" : "") + (n.confirmed === false ? " unconfirmed" : "");
       g.appendChild(svgEl("rect", { width: layout.nodeW, height: layout.nodeH, rx: 3, class: rectClass }));
       // blueprint corner ticks
       [[0, 0, 1, 1], [layout.nodeW, 0, -1, 1], [0, layout.nodeH, 1, -1], [layout.nodeW, layout.nodeH, -1, -1]].forEach(function (c) {
@@ -706,10 +717,13 @@
   // 10. Tab renderers
   // ============================================================
   function renderModulesTab() {
+    const anyUnconfirmed = (DATA.modules || []).some(function (m) { return m.confirmed === false; }) ||
+      (DATA.edges || []).some(function (e) { return e.confirmed === false; });
     document.getElementById("legend").innerHTML =
       '<span class="legend-item"><span class="legend-line"></span> sync call</span>' +
-      '<span class="legend-item"><span class="legend-line async"></span> async / fire-and-forget</span>';
-    const nodes = (DATA.modules || []).map(function (m) { return { id: m.slug, label: m.name, sub: m.path, kind: "module" }; });
+      '<span class="legend-item"><span class="legend-line async"></span> async / fire-and-forget</span>' +
+      (anyUnconfirmed ? '<span class="legend-item"><span class="legend-line unconfirmed"></span> unconfirmed (quick-scan)</span>' : '');
+    const nodes = (DATA.modules || []).map(function (m) { return { id: m.slug, label: m.name, sub: m.path, kind: "module", confirmed: m.confirmed }; });
     renderGraphTab(nodes, DATA.edges || [], {
       onNodeClick: function (n) { selectModule(n.id); },
       emptyText: "No modules traced yet.",

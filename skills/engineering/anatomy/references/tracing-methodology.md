@@ -1,7 +1,7 @@
 # Tracing methodology: verify, don't summarize docs
 
 This is the part of the skill that matters most. It's easy to produce
-something that *looks* like a system trace by paraphrasing the README and
+something that _looks_ like a system trace by paraphrasing the README and
 skimming file names. That is not what this skill is for, and it's actively
 worse than no documentation, because it looks authoritative while carrying
 forward whatever's already stale or wrong.
@@ -10,9 +10,9 @@ forward whatever's already stale or wrong.
 
 Existing README files, docstrings, code comments, and any prior
 `docs/anatomy` output are **claims to verify, not facts to report.**
-Before a sentence goes into a module doc, it should pass this test: *did I
+Before a sentence goes into a module doc, it should pass this test: _did I
 just confirm this by reading the function body / route table / schema
-myself, or am I repeating something a comment or README said?* If it's the
+myself, or am I repeating something a comment or README said?_ If it's the
 second one, go open the actual code before writing the sentence.
 
 This isn't paranoia for its own sake -- comments and READMEs drift from
@@ -50,7 +50,7 @@ Working in this order avoids both missing things and wasting effort:
    in the module doc ("calls X's `save()` on every write to persist orders"),
    not just the fact that an edge exists.
 4. **Note configuration and environment dependence.** Env vars read, config
-   files loaded, feature flags checked -- these often explain *why* a module
+   files loaded, feature flags checked -- these often explain _why_ a module
    behaves differently across environments, which is exactly the kind of
    thing that's easy to get wrong from docs alone.
 5. **Tests are excellent evidence, not a replacement for reading the code.**
@@ -61,7 +61,7 @@ Working in this order avoids both missing things and wasting effort:
    actually does.
 6. **"Used by" doesn't come from this reading pass at all -- it comes from
    everyone else's.** Steps 1-5 are all about what module X calls out to;
-   none of them can discover who calls *into* X, because "who imports me"
+   none of them can discover who calls _into_ X, because "who imports me"
    isn't information X's own source contains. Treat "Used by" as something
    you fill in only after every module's "Depends on" has been confirmed:
    for every edge "X depends on Y" you wrote down, add the mirror-image "Y
@@ -71,11 +71,78 @@ Working in this order avoids both missing things and wasting effort:
    will silently leave some modules' "Used by" sections thin or empty
    simply because nothing in their own code could have surfaced it.
 
+## Choosing a trace depth: deep vs quick-scan
+
+Everything above describes **deep mode**, the default: every module gets
+Phase 4's full discipline, every edge gets individually confirmed before it
+goes in a doc or diagram, and the only concession to scale is _reading
+order_ (prioritize by traffic/size) -- not skipping verification of
+anything that ends up in the output.
+
+For a genuinely huge codebase, deep mode on every module can take a long
+time, and earlier versions of this skill handled that by silently sampling
+the smaller/less-referenced modules and noting it in a single footer
+sentence -- a real behavior, but one the user had no way to opt into or out
+of; it just happened. **Ask explicitly instead**, once you have a rough
+sense of scale from Phase 1's `inventory.py` output (module count,
+file/line totals) -- don't guess at the user's preference or default
+silently to one mode for a large repo:
+
+- **Deep** -- keep the discipline described everywhere else in this file.
+  Every module traced, every edge confirmed, nothing marked "unconfirmed."
+  Slower, but every claim in the output carries the same weight.
+- **Quick-scan** -- trace hotspots (highest edge-count and largest-by-line
+  modules, per `scripts/inventory.py`'s `largest_files_by_line_count` and
+  `scripts/import_graph.py`'s edge counts) at full deep-mode discipline, and
+  for the remainder: infer module role/edges from public
+  signatures/route tables and the Phase 3 hypothesis scripts' output
+  without opening every call site, marking every module and edge you didn't
+  individually confirm as **unconfirmed** -- explicitly, in both the module
+  doc and the diagram, not just implied by silence:
+  - Module doc: add a one-line flag near the top, e.g. "**Coverage:**
+    unconfirmed -- quick-scan mode; role/edges inferred from public
+    signatures and Phase 3 hypotheses, not individually traced." Any
+    "Depends on"/"Used by" line that's inferred rather than confirmed
+    should say so inline rather than reading identically to a confirmed one
+    -- e.g. "**`payments`** -- _unconfirmed_, hypothesized from
+    `import_graph.py` edge count; not opened this run."
+  - Diagram: use the dashed/dotted "unconfirmed" convention described in
+    `references/output-templates.md`'s `system-diagram.md` and
+    `system-diagram.html` sections -- a reader should be able to tell
+    confirmed from unconfirmed at a glance, without opening every module
+    doc to check.
+
+  This is a different thing from the honest-sampling language elsewhere in
+  this file ("sampled M of N files, see coverage note") -- that's still
+  about _how much of one module's own files_ got read. Quick-scan mode is
+  about _which modules_ get full Phase 4 treatment at all versus inference
+  from signatures and hypotheses. The two compose: a hotspot module traced
+  in quick-scan mode still follows the normal "sampled M of N" honesty
+  about its own internals if it's also individually huge.
+
+  Default to suggesting quick-scan only when the repo is large enough that
+  deep mode would be noticeably slow (tens of modules, hundreds of files) --
+  for anything smaller, deep mode is the better default and there's no need
+  to ask. When you do ask, state the tradeoff plainly rather than a bare
+  "deep or quick?": quick-scan trades completeness for speed, and every
+  unconfirmed edge is a real gap in the output's trustworthiness, not a
+  cosmetic footnote.
+
+  The user can always ask to upgrade specific unconfirmed modules to deep
+  mode later, including in a subsequent incremental run -- an "unconfirmed"
+  module isn't in the manifest's `changed`/`added`/`unchanged` sense at all
+  (its hash is real, its _trace depth_ is what's provisional), so re-running
+  deep mode against it later is just an ordinary re-trace of that module.
+
 ## Scaling to large codebases
 
 Reading every line of a 500-file module by hand doesn't scale, and this
 skill would rather you trace 20 modules honestly at appropriate depth than
-claim false completeness over all of them. Some ways to scale:
+claim false completeness over all of them. This section is about _reading
+strategy within a module you're tracing at full (deep-mode) discipline_ --
+see "Choosing a trace depth" above for the separate, coarser decision of
+whether every module gets that treatment at all. Some ways to scale within
+a module:
 
 - **Prioritize by traffic, not by alphabetical order.** Use
   `scripts/import_graph.py --group-by-top-level`'s edge counts and
@@ -111,7 +178,7 @@ gap in the scripts' pattern lists, it's a fundamental limit of reading text
 without running it.
 
 The risk isn't that you'll never find these -- reading a module's actual
-code will usually surface them. The risk is *silently* missing one and
+code will usually surface them. The risk is _silently_ missing one and
 having no record that you were even looking: unlike a hypothesis edge from
 Phase 3 that you either confirm or correct, a runtime-wired edge with no
 static trace doesn't prompt you to go check anything. So treat "does this
@@ -152,7 +219,7 @@ property that makes it usable on a codebase you've never touched before.
 ## What "how they interact" means concretely
 
 The point of this skill isn't just a static dependency arrow between two
-module names -- a real engineer wants to know the *nature* of the
+module names -- a real engineer wants to know the _nature_ of the
 interaction. For every significant edge between modules, try to capture:
 
 - **Direction and trigger**: who calls whom, and when (on every request?
@@ -169,3 +236,13 @@ This level of detail is what makes the sequence-diagram flows in
 `system-diagram.md` (see `references/output-templates.md`) worth having,
 instead of a diagram that just repeats the import graph with boxes and
 arrows.
+
+**Cite where you confirmed it.** Every "Depends on"/"Used by" line should
+end with the file and line number of the call site you actually opened
+(`src/services/order.py:88`) -- not only when something's wrong enough to
+land in "Notes / discrepancies." A citation is what turns "trust me, I read
+it" into something the next reader (or the next incremental run's
+"edges into a changed module" check) can jump straight to and verify in
+seconds instead of re-grepping the module from scratch. See
+`references/output-templates.md`'s module-file template for the exact
+placement.

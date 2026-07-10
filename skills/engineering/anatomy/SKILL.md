@@ -4,24 +4,33 @@ description: >-
   Traces a codebase from its actual source code, never from existing
   README/docs/comments which may be stale or simply wrong, and produces or
   updates accurate system documentation under docs/anatomy/: one file per
-  module, an index with a tech-stack summary, a system-diagram.md (Mermaid)
-  plus a standalone interactive system-diagram.html of how modules interact,
-  an entry-points.md rolling up every route/CLI command/queue consumer/cron
+  module, an index with a tech-stack summary plus an architecture narrative
+  and codebase-health signals (most-connected modules, dead-code/orphan
+  candidates, dependency cycles), a system-diagram.md (Mermaid) plus a
+  standalone interactive system-diagram.html of how modules interact, an
+  entry-points.md rolling up every route/CLI command/queue consumer/cron
   job in the system, and -- when the project actually has one -- a
   data-model.md and a deployment.md. Use this whenever the user asks to
-  trace, map, document, or reverse-engineer a codebase architecture; wants
-  to understand or record how modules, services, or packages interact; asks
-  to generate, refresh, or update architecture docs, onboarding docs, or a
-  folder like docs/anatomy or docs/architecture; wants a visual or
-  interactive diagram of a system's architecture; wants a full inventory of
-  every endpoint, command, or background job in a codebase; or wants
-  written documentation built directly from code rather than from what is
-  already written about it. Also triggers when re-running against a
-  codebase that already has a docs/anatomy output from before (or a
-  docs/system-trace output from an older version of this skill), since this
-  skill detects that and updates only what changed instead of starting
-  over. Works for any language or project shape: monolith, monorepo,
-  microservices, or library.
+  trace, map, document, or reverse-engineer a codebase's architecture;
+  wants an architecture diagram, system diagram, or dependency diagram of a
+  whole codebase, service, or repo; wants to understand or record how
+  modules, services, or packages interact; asks to generate, refresh, or
+  update architecture docs, onboarding docs, or a folder like docs/anatomy
+  or docs/architecture; wants a full inventory of every endpoint, command,
+  or background job in a codebase; or wants written documentation built
+  directly from code rather than from what is already written about it.
+  Also triggers when re-running against a codebase that already has a
+  docs/anatomy output from before (or a docs/system-trace output from an
+  older version of this skill), since this skill detects that and updates
+  only what changed instead of starting over -- and for narrow, specific
+  questions ("where does X live", "what would changing Y break") against a
+  codebase that already has a docs/anatomy output, since this skill can
+  answer those directly from the existing trace instead of re-running it.
+  Works for any language or project shape: monolith, monorepo,
+  microservices, or library. Do NOT use this for explaining, documenting,
+  or diagramming a single function, file, class, or snippet in isolation --
+  that's a normal read-and-explain task with no need for a whole-system
+  trace; this skill is for the module/service/repo level and up.
 ---
 
 # Anatomy
@@ -31,7 +40,7 @@ description: >-
 Existing documentation drifts from the code it describes -- features change,
 comments don't get updated, READMEs get copy-pasted between projects. A
 documentation generator that summarizes what's already written just launders
-that drift into something that *looks* newly verified. This skill instead
+that drift into something that _looks_ newly verified. This skill instead
 treats the source code as the only ground truth and existing docs as claims
 to check against it, then writes down what it actually finds -- including
 where the old docs were wrong. See `references/tracing-methodology.md` for
@@ -79,11 +88,28 @@ and helps migrate rather than silently starting a second, orphaned copy.
 
 Before doing anything else, check whether the output root already exists
 (and specifically whether `_manifest.json` is in it). This determines
-whether the rest of the run is a **full trace** or an **incremental
-update**. Full decision tree, manifest schema, and the reasoning behind
-content-hash-based diffing: `references/incremental-updates.md`. Read it now
-if `docs/anatomy/` (or wherever the user pointed) already has anything in it
--- don't guess at update logic inline.
+whether the rest of the run is a **full trace**, an **incremental
+update**, or -- if the user's request is a narrow, specific question rather
+than a request to generate/refresh documentation -- a **fast-path answer**
+that reads the existing output without re-running the workflow at all. Full
+decision tree, manifest schema, and the reasoning behind content-hash-based
+diffing: `references/incremental-updates.md`. Read it now if `docs/anatomy/`
+(or wherever the user pointed) already has anything in it -- don't guess at
+update logic inline.
+
+**Fast path first, if it applies.** If `_manifest.json` exists and the
+user's message is a specific question ("where does X live", "what would
+changing Y break", "which module handles the `/orders` route") rather than
+an instruction to trace/document/refresh, check
+`references/incremental-updates.md`'s "Fast path" section before starting
+any of Phases 1-7 -- a fresh-enough existing trace can usually answer this
+directly from `index.md` plus the relevant `modules/<slug>.md`, which is
+both faster and lower-risk than redoing work that's already been done. This
+is still a judgment call, not a rule to apply blindly: if the freshness
+check comes back stale for the relevant module, or the question doesn't map
+cleanly onto anything already traced, fall through to an ordinary
+incremental (or full) run below instead of forcing an answer from
+information that's known to be out of date.
 
 If nothing exists at `docs/anatomy/`, also check for a `docs/system-trace/`
 folder with a `_manifest.json` in it before assuming this is a clean first
@@ -107,15 +133,19 @@ python3 scripts/inventory.py <repo_root> --max-depth 3
 
 This returns: total file count, a language histogram, detected manifest
 files (package.json, pyproject.toml, go.mod, Cargo.toml, pom.xml, etc. --
-parsed for a few key fields where possible), a bounded directory tree with
-file counts, top-level directories, the largest source files by line count
-(useful later for prioritization), and any `ambiguous_dirs_found` (dir names
-like `packages` or `vendor` that could be real modules or vendored
-dependencies -- worth a direct look before deciding which).
+parsed for a few key fields where possible), `ci_config` (best-effort parse
+of `.github/workflows/*.yml`/`.circleci/config.yml` -- the actual
+build/test/lint commands CI runs, which is stronger ground truth for
+`index.md`'s "How to build/test" line than a guessed-at package.json script
+name), a bounded directory tree with file counts, top-level directories,
+the largest source files by line count (useful later for prioritization),
+and any `ambiguous_dirs_found` (dir names like `packages` or `vendor` that
+could be real modules or vendored dependencies -- worth a direct look
+before deciding which).
 
 Use this to understand: what language(s)/stack this is, how the project is
-built/run (from the manifests), and what the candidate module-root
-directories are.
+built/run and tested (from the manifests and `ci_config`), and what the
+candidate module-root directories are.
 
 ### Phase 2 -- Decide module boundaries
 
@@ -130,9 +160,34 @@ fit neatly into "just another module."
 Write this mapping down (even just mentally structured, or as a scratch
 JSON) before moving on -- Phase 3 and the incremental-update machinery in
 Phase 0/6 both consume it as `modules.json`:
+
 ```json
-{"api": "src/api", "services": "src/services", "...": "..."}
+{ "api": "src/api", "services": "src/services", "...": "..." }
 ```
+
+### Phase 2.5 -- Choose a trace depth: deep vs quick-scan
+
+Now that you have a module count and a sense of scale from Phases 1-2,
+decide (or ask the user to decide) between **deep** mode -- the default,
+every module fully traced and every edge confirmed -- and **quick-scan**
+mode, which trades completeness for speed on a genuinely large codebase by
+tracing hotspots in full and marking the rest explicitly "unconfirmed"
+rather than silently inferring them at the same confidence as everything
+else. `references/tracing-methodology.md`'s "Choosing a trace depth"
+section has the full reasoning, what counts as large enough to bring this
+up, and exactly how "unconfirmed" gets marked in both the module docs and
+the diagrams. Read it now if you haven't already.
+
+For a small-to-medium codebase (comfortably under the "tens of modules,
+hundreds of files" threshold), skip the question and default to deep mode
+without asking -- there's no real tradeoff to present. For a large one,
+ask; don't silently pick a mode on the user's behalf the way earlier
+versions of this skill used to.
+
+If this is an **incremental update** (Phase 0 determined that already),
+this choice only applies to modules in `changed`/`added` this run --
+`unchanged` modules keep whatever depth they were traced at previously,
+recorded in their own doc's coverage line.
 
 ### Phase 3 -- Build interaction hypotheses
 
@@ -171,7 +226,10 @@ send webhooks, or run a cron job tucked away in an infra folder.
 
 This is the core of the skill and the part that most needs care. For each
 module in your Phase 2 list (in incremental mode: for each module in the
-diff's `changed` + `added` sets only -- see Phase 0/6):
+diff's `changed` + `added` sets only -- see Phase 0/6; in quick-scan mode,
+per Phase 2.5: hotspot modules get the full treatment below, the rest get
+the lighter "unconfirmed" treatment described in
+`references/tracing-methodology.md`):
 
 1. Read its public surface first, then trace inward from there.
 2. Confirm or correct every Phase 3 hypothesis edge -- both the
@@ -180,9 +238,14 @@ diff's `changed` + `added` sets only -- see Phase 0/6):
 3. Never write a claim into a module doc that you haven't confirmed by
    reading code -- if an existing README/comment says something, check it
    against the implementation, and flag it in the doc if they disagree.
+   Cite the file:line you confirmed it at on every "Depends on"/"Used by"
+   line, not only on discrepancies -- see `references/output-templates.md`.
 4. Scale your depth to the module's size -- read everything for a small
    module, prioritize by reference-count/size for a huge one, and say
-   plainly what you covered versus sampled.
+   plainly what you covered versus sampled. (This is about depth _within_
+   a module you're tracing at full discipline -- whether every module gets
+   that treatment at all is Phase 2.5's separate deep-vs-quick-scan
+   decision.)
 
 Full methodology, reading order, how to describe an interaction's real
 nature (sync vs async, trigger, failure behavior) rather than just its
@@ -214,16 +277,31 @@ the fuller version of this under "Reading order per module."
 
 ### Phase 5 -- Write the outputs
 
-Write each module's `modules/<slug>.md` first, then the whole-system files
-in this order: `entry-points.md`, `index.md`, `system-diagram.md`,
-`system-diagram.html`, and -- only if they actually apply to this project --
-`data-model.md` and `deployment.md`. Follow `references/output-templates.md`
-exactly for structure (adapt section content to what actually applies to
-each module or project, but keep the overall shape consistent). Every edge
-in `system-diagram.md`/`.html` and every "Depends on"/"Used by" line in a
-module doc should be traceable to something you actually confirmed in Phase
-4 -- run `scripts/verify_diagram.py` (see below) to check this mechanically
-before considering the phase done, rather than only eyeballing it.
+Write each module's `modules/<slug>.md` first, then run
+`scripts/rollup.py <output_root>` (once module docs exist -- see below),
+then the whole-system files in this order: `entry-points.md`, `index.md`,
+`system-diagram.md`, `system-diagram.html`, and -- only if they actually
+apply to this project -- `data-model.md` and `deployment.md`. Follow
+`references/output-templates.md` exactly for structure (adapt section
+content to what actually applies to each module or project, but keep the
+overall shape consistent). Every edge in `system-diagram.md`/`.html` and
+every "Depends on"/"Used by" line in a module doc should be traceable to
+something you actually confirmed in Phase 4 -- run `scripts/verify_diagram.py`
+and `scripts/verify_entry_points.py` (see below) to check this
+mechanically before considering the phase done, rather than only
+eyeballing it.
+
+`index.md`'s "Architecture narrative" and "Codebase health signals"
+sections are new-ish and easy to shortchange -- don't skip them or reduce
+them to boilerplate. The narrative is a few sentences of synthesis in your
+own words (dominant pattern, where complexity concentrates, anything
+surprising versus the project's own claims about itself) written _after_
+Phase 4's module docs exist, not drafted speculatively beforehand. The
+health signals section is populated from `scripts/rollup.py`'s output
+(most-connected modules, orphan candidates, dependency cycles, trace
+coverage) -- run it once, don't hand-count any of this by re-reading every
+module doc yourself. See `references/output-templates.md`'s `index.md`
+template for both.
 
 `data-model.md` and `deployment.md` are conditional, not automatic -- skip
 either outright (don't write an empty or apologetic stub) if the project
@@ -257,24 +335,29 @@ section for why this matters and how narrow the fix should stay.
 `references/incremental-updates.md` for why, and for how to carry forward
 correct information for unchanged modules without re-tracing them.
 
-**Before leaving Phase 5, run the consistency check:**
+**Before leaving Phase 5, run the consistency checks:**
 
 ```bash
 python3 scripts/verify_diagram.py <output_root>
+python3 scripts/verify_entry_points.py <output_root>
 ```
 
-This mechanically cross-references `system-diagram.md`'s module graph
-against every `modules/*.md`'s "Depends on"/"Used by" sections, catching
-exactly the kind of drift "cross-check the diagrams against the module
-docs" asks you to do by eye -- a missing "Used by" line, a diagram edge
-nothing backs up, a module doc whose "Depends on" and the corresponding
-module's "Used by" disagree with each other. Run it regardless of mode
-(full or incremental), since it checks the final state of the output, not
-what changed this run. If it flags anything, open the module(s) involved
+`verify_diagram.py` mechanically cross-references `system-diagram.md`'s
+module graph against every `modules/*.md`'s "Depends on"/"Used by"
+sections, catching exactly the kind of drift "cross-check the diagrams
+against the module docs" asks you to do by eye -- a missing "Used by"
+line, a diagram edge nothing backs up, a module doc whose "Depends on" and
+the corresponding module's "Used by" disagree with each other.
+`verify_entry_points.py` does the same check for `entry-points.md` against
+each module's "Public interface" section -- the exact same
+lifted-from-elsewhere relationship, and the exact same drift risk, just a
+different pair of files. Run both regardless of mode (full or
+incremental), since they check the final state of the output, not what
+changed this run. If either flags anything, open the module(s) involved
 and fix whichever side is wrong -- don't just delete the flagged line to
-make it quiet. An empty result means the diagram and module docs agree
-with each other; it doesn't mean either one is correct against the actual
-source code, which is what Phase 4 is for.
+make it quiet. An empty result from both means the diagram, entry-points.md,
+and module docs all agree with each other; it doesn't mean any of it is
+correct against the actual source code, which is what Phase 4 is for.
 
 ### Phase 6 -- Update the manifest
 
@@ -291,15 +374,20 @@ schema if anything is unclear.
 
 ### Phase 7 -- Report back
 
-Tell the user, briefly: which mode ran (full vs incremental) and why, which
-modules were touched vs left alone, anything removed, whether `data-model.md`
-and `deployment.md` were written or skipped (and why, if skipped), and --
-this is often the most useful part -- any discrepancies you found between
-the old docs and what the code actually does, including anything wired at
+Tell the user, briefly: which mode ran (full vs incremental, and deep vs
+quick-scan if quick-scan was used or offered) and why, which modules were
+touched vs left alone, anything removed, whether `data-model.md` and
+`deployment.md` were written or skipped (and why, if skipped), and -- this
+is often the most useful part -- any discrepancies you found between the
+old docs and what the code actually does, including anything wired at
 runtime (DI containers, plugin registries, reflection-based loading) that
-Phase 3's scripts couldn't see and you had to track down by hand. Point them
-at `index.md` as the entry point, and mention `system-diagram.html` as the
-version to open directly in a browser for the interactive view.
+Phase 3's scripts couldn't see and you had to track down by hand. If
+`scripts/rollup.py` surfaced anything worth a human's attention beyond
+what's already in `index.md` (a suspiciously central module, an orphan that
+looks like real dead code, a cycle), call it out explicitly rather than
+trusting the user to notice it in the file. Point them at `index.md` as the
+entry point, and mention `system-diagram.html` as the version to open
+directly in a browser for the interactive view.
 
 ## A note on languages the user writes in
 

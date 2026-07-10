@@ -52,42 +52,60 @@ it).
 **Role:** <one sentence, in your own words, verified from code -- not copied from a comment>
 
 ## Public interface
+
 <!-- Functions/classes/routes/CLI commands/event handlers this module exposes -->
+
 - `functionOrClass(...)` -- what it does (confirmed by reading the implementation)
 - `POST /api/x` -> handled by `name()` in `file.py` -- what it does
 
 ## Internal structure
+
 <!-- Key files and what each is responsible for. Skip this section for
      single-file modules. -->
+
 - `file_a.py` -- ...
 - `file_b.py` -- ...
 
 ## Depends on
+
 <!-- Other modules and external libraries this module actually calls into,
      with the real nature of the relationship -- not just "imports X".
-     See tracing-methodology.md's "what interaction means concretely." -->
-- **`other-module`** -- calls `OtherModule.save()` on every write, synchronously; propagates its errors
-- external: `library-name` -- used for Y
+     See tracing-methodology.md's "what interaction means concretely."
+     Cite the call site (`path/to/file.py:line`) on every line here, not
+     just on discrepancies -- see the citation note below. -->
+
+- **`other-module`** -- calls `OtherModule.save()` on every write, synchronously; propagates its errors (`src/services/order.py:88`)
+- external: `library-name` -- used for Y (`src/services/payments.py:12`)
 
 ## Used by
-<!-- Reverse dependency: who calls into this module, and for what -->
-- **`caller-module`** -- calls this on every incoming request to ...
+
+<!-- Reverse dependency: who calls into this module, and for what. Cite the
+     call site the same way as "Depends on" -- it's the same edge, just
+     read from the other module's "Depends on" line when you transpose it
+     (see SKILL.md's Phase 4/5 transition), so the citation carries over
+     directly rather than needing to be re-found. -->
+
+- **`caller-module`** -- calls this on every incoming request to ... (`src/api/routes.py:44`)
 
 ## Data & side effects
+
 - Reads/writes: <tables, files, caches>
 - Network calls: <external services, and whether sync/async>
 - Config/env vars read: <...>
 
 ## Notes / discrepancies vs existing docs
+
 <!-- Omit this section entirely if there's nothing to flag. When there is,
      this is often the most valuable part of the file -- say plainly what
      the old docs/comments claimed and what the code actually does. -->
+
 - README claims X; the code actually does Y (see `path/to/file.py:line`)
 
 ---
-*Traced from source on <date>. Files examined in depth: <list, or "all N
+
+_Traced from source on <date>. Files examined in depth: <list, or "all N
 files" for small modules, or "sampled M of N -- see coverage note above" for
-large ones>.*
+large ones>._
 ```
 
 Adapt section names/labels to fit the module's actual nature (a pure-data
@@ -96,6 +114,19 @@ interface" should list commands, not routes). The goal is a document a new
 engineer could read to understand the module without opening the code --
 don't force sections that don't apply, but don't silently drop something
 just because it's inconvenient to describe either.
+
+**Cite a file:line on every "Depends on"/"Used by" entry, not only on
+discrepancies.** Earlier drafts of this skill only asked for a citation in
+the "Notes / discrepancies" section -- but an ordinary "Depends on" claim is
+just as checkable a fact as a discrepancy, and a reader (or a future
+incremental run doing the "edges into a changed module" check in
+`references/incremental-updates.md`) benefits from being able to jump
+straight to the call site instead of re-grepping for it. Append the
+relative path and line number in parentheses at the end of the bullet, as
+in the template above. If a single relationship is confirmed across several
+call sites, cite the most representative one or two rather than every
+occurrence -- the point is "here's where to look first," not an exhaustive
+index.
 
 If a "Depends on" or "Used by" edge is resolved at runtime rather than
 visible as a static import -- a DI container, a plugin registry, dynamic
@@ -123,11 +154,13 @@ what you actually found, not copied from an existing README>
 **Generated:** <date> · **Mode:** <full trace | incremental update> · **Source commit:** <hash, or "not a git repo">
 
 ## Tech stack & key dependencies
+
 <Derived from scripts/inventory.py's manifest parsing (package.json,
 pyproject.toml, go.mod, Cargo.toml, pom.xml, docker-compose.yml, etc.), but
 only include a framework/library here if you actually confirmed it's used
 somewhere in Phase 4 -- a dependency that's declared but never imported
 doesn't belong in an accurate picture of the stack.>
+
 - **Language(s):** <from the inventory language histogram>
 - **Framework(s):** <e.g. "Express 4 (confirmed in `api`)">
 - **Datastore(s):** <if any -- see data-model.md>
@@ -139,26 +172,78 @@ doesn't belong in an accurate picture of the stack.>
 
 ## Modules
 
-| Module | Responsibility | Depends on | File |
-|---|---|---|---|
-| `api` | HTTP layer, composition root | `services` | [modules/api.md](modules/api.md) |
-| `services` | Order business logic | `models`, `db`, `notifications` | [modules/services.md](modules/services.md) |
-| ... | ... | ... | ... |
+| Module     | Responsibility               | Depends on                      | File                                       |
+| ---------- | ---------------------------- | ------------------------------- | ------------------------------------------ |
+| `api`      | HTTP layer, composition root | `services`                      | [modules/api.md](modules/api.md)           |
+| `services` | Order business logic         | `models`, `db`, `notifications` | [modules/services.md](modules/services.md) |
+| ...        | ...                          | ...                             | ...                                        |
 
 ## Entry points
+
 - How to run: <command, verified against actual scripts/manifests>
-- How to build/test: <...>
+- How to build/test: <command(s) -- prefer scripts/inventory.py's `ci_config`
+  output when CI config was found, since that's what actually runs on every
+  push, not just what's declared; fall back to package.json
+  scripts/Makefile targets when there's no CI config, and say plainly which
+  source this came from -- "per `.github/workflows/ci.yml`" reads
+  differently than "per package.json scripts, unverified against CI">
 - Composition root: `<path>` -- wires <modules> together
 - Full inventory of every route/CLI command/consumer/cron job: [entry-points.md](entry-points.md)
 
 ## Architecture at a glance
+
 See [system-diagram.md](system-diagram.md) (or
 [system-diagram.html](system-diagram.html) for the interactive version) for
 the full interaction diagram and key flows.
 <If written:> [data-model.md](data-model.md) covers the data model.
 <If written:> [deployment.md](deployment.md) covers deployment topology.
 
+<3-6 sentences of prose, distinct from the tech-stack bullets and the module
+table above: how the system is actually shaped and why, in your own words.
+This is the "what would a senior engineer tell a new hire in five minutes at
+a whiteboard" version -- the dominant architectural pattern (layered
+monolith, event-driven microservices, plugin-based, etc.), the one or two
+decisions that most explain the module boundaries you drew, where the real
+complexity/risk concentrates (the most-connected module below, a gnarly
+runtime-wired integration, a module with unusually wide "Used by"), and
+anything surprising relative to what the project's own docs/README claim
+about its own shape. Write this only after Phase 4/5's module docs and the
+diagram exist -- it's a synthesis of what you found, not something to draft
+speculatively beforehand.>
+
+## Codebase health signals
+
+<Derived by running `scripts/rollup.py <output_root>` after modules/\*.md are
+written (same point in Phase 5 as `verify_diagram.py` and
+`verify_entry_points.py`) -- don't hand-count any of this.>
+
+**Most-connected modules** (by combined Depends-on + Used-by count):
+
+1. `<module>` -- <N> connections
+2. `<module>` -- <N> connections
+   <3-10 rows from rollup.py's `most_connected`, most useful for a new reader
+   deciding where to start.>
+
+**Possible dead code / orphan modules:** <list from `orphan_candidates`, or
+"none found." Frame as candidates, not verdicts -- e.g. "`legacy-importer`
+has no confirmed Depends-on or Used-by edges; likely dead code, but could
+also be a standalone entry point invoked outside this repo's own call
+graph -- worth confirming with the team.">
+
+**Dependency cycles:** <list from `cycles` as `A -> B -> ... -> A` chains,
+or "none found." A cycle isn't automatically a problem (see rollup.py's own
+note) -- say so, but still surface it; a reader deciding whether to split a
+module benefits from knowing this exists.>
+
+**Trace coverage:** <one or two sentences from `trace_coverage.counts` --
+e.g. "18 of 22 modules were traced in full; 4 large modules were sampled
+(see each module's own footer for exactly what was covered)." If
+`unstated_modules` is non-empty, that's a gap in this run's own output, not
+the codebase -- fix those modules' footer lines before finishing rather
+than reporting the gap here.>
+
 ## How this was generated
+
 This documentation was generated by tracing the actual source code, not by
 summarizing existing README/comments. See individual module files' "Notes /
 discrepancies" sections for anywhere the prior docs and the code disagreed.
@@ -177,25 +262,26 @@ node label.
 # System Diagram: <Project Name>
 
 ## System context
+
 <!-- Optional -- see criteria below. Omit this whole section (not just the
      diagram) for a small project or a library with no meaningful external
      surface. -->
 
 \`\`\`mermaid
 graph LR
-  user((End user)) --> sys[<Project Name>]
-  sys --> pay[Payment Gateway]
-  sys --> mail[Email Provider]
+user((End user)) --> sys[<Project Name>]
+sys --> pay[Payment Gateway]
+sys --> mail[Email Provider]
 \`\`\`
 
 ## Module dependency graph
 
 \`\`\`mermaid
 graph TD
-  api[api] --> services[services]
-  services --> models[models]
-  services --> db[(db)]
-  services --> notifications[notifications]
+api[api] --> services[services]
+services --> models[models]
+services --> db[(db)]
+services --> notifications[notifications]
 \`\`\`
 
 Modules: [api](modules/api.md) · [services](modules/services.md) ·
@@ -208,24 +294,25 @@ Modules: [api](modules/api.md) · [services](modules/services.md) ·
 
 \`\`\`mermaid
 sequenceDiagram
-  participant Client
-  participant api
-  participant services
-  participant db
-  participant notifications
-  Client->>api: POST /orders/:id/ship
-  api->>services: ship_order(id)
-  services->>db: save(order)
-  services->>notifications: notify_shipped(order)
-  notifications-->>services: (fire-and-forget)
-  services-->>api: order
-  api-->>Client: 200 OK
+participant Client
+participant api
+participant services
+participant db
+participant notifications
+Client->>api: POST /orders/:id/ship
+api->>services: ship_order(id)
+services->>db: save(order)
+services->>notifications: notify_shipped(order)
+notifications-->>services: (fire-and-forget)
+services-->>api: order
+api-->>Client: 200 OK
 \`\`\`
 
 Modules involved: [services](modules/services.md),
 [db](modules/db.md), [notifications](modules/notifications.md)
 
 ### <Another key flow>
+
 ...
 ```
 
@@ -258,6 +345,18 @@ finishing. Don't rely on eyeballing this: `scripts/verify_diagram.py
 mechanically and lists exactly which edges don't have a corresponding
 module-doc entry (see SKILL.md's Phase 5 for when to run it).
 
+**Quick-scan mode only** (see `references/tracing-methodology.md`'s
+"Choosing a trace depth"): a module or edge that wasn't individually
+confirmed this run -- because quick-scan mode prioritized hotspots and left
+the rest sampled/inferred -- gets marked visually rather than presented the
+same as a confirmed one. Use Mermaid's dotted-line syntax (`-.->` instead of
+`-->`) for an unconfirmed edge in the module dependency graph, and add
+`:::unconfirmed` to an unconfirmed node's line with a
+`classDef unconfirmed stroke-dasharray: 3 2` declared once near the top of
+that diagram's code block. Don't use this convention in deep-mode output --
+in deep mode every edge is confirmed by definition, so there should be
+nothing to mark.
+
 ## `entry-points.md`
 
 ```markdown
@@ -269,29 +368,40 @@ interface" section (see `modules/*.md` for full detail; this file is the
 flat index, not a re-trace of its own).
 
 ## HTTP routes
-| Method | Path | Module | Handler | File |
-|---|---|---|---|---|
-| POST | `/orders/:id/ship` | `api` | `ship_order()` | [api.md](modules/api.md) |
-| ... | ... | ... | ... | ... |
+
+| Method | Path               | Module | Handler        | File                     |
+| ------ | ------------------ | ------ | -------------- | ------------------------ |
+| POST   | `/orders/:id/ship` | `api`  | `ship_order()` | [api.md](modules/api.md) |
+| ...    | ...                | ...    | ...            | ...                      |
 
 ## CLI commands
-| Command | Module | What it does | File |
-|---|---|---|---|
-| `ship` | `cli` | Marks an order shipped and triggers notification | [cli.md](modules/cli.md) |
+
+| Command | Module | What it does                                     | File                     |
+| ------- | ------ | ------------------------------------------------ | ------------------------ |
+| `ship`  | `cli`  | Marks an order shipped and triggers notification | [cli.md](modules/cli.md) |
 
 ## Queue / event consumers
-| Topic / event | Module | Triggered by | File |
-|---|---|---|---|
+
+| Topic / event    | Module          | Triggered by                    | File                                         |
+| ---------------- | --------------- | ------------------------------- | -------------------------------------------- |
 | `orders.shipped` | `notifications` | Published by `services` on ship | [notifications.md](modules/notifications.md) |
 
 ## Scheduled / cron jobs
-| Schedule | Module | What it does | File |
-|---|---|---|---|
+
+| Schedule    | Module    | What it does                  | File                             |
+| ----------- | --------- | ----------------------------- | -------------------------------- |
 | `0 2 * * *` | `reports` | Nightly reconciliation report | [reports.md](modules/reports.md) |
 ```
 
 Omit any of the four sections entirely if the project genuinely has none of
 that kind -- don't write empty tables just to keep the shape uniform.
+
+Every row here should be traceable back to the module doc it was lifted
+from, same discipline as `system-diagram.md`'s edges: `scripts/verify_entry_points.py
+<output_root>`, run once module docs and this file both exist (same point
+in Phase 5 as `verify_diagram.py`), checks this mechanically instead of
+relying on an eyeballed cross-check -- see SKILL.md's Phase 5 for when to
+run it.
 
 For a large system where one category runs into the hundreds of
 near-identical entries (dozens of CRUD routes following the same generated
@@ -322,17 +432,21 @@ file.
 
 \`\`\`mermaid
 erDiagram
-  ORDER ||--o{ LINE_ITEM : contains
-  ORDER }o--|| CUSTOMER : belongs_to
+ORDER ||--o{ LINE_ITEM : contains
+ORDER }o--|| CUSTOMER : belongs_to
 \`\`\`
 
 ## Order
+
 **Owned by:** [models](modules/models.md)
+
 - `id`, `status`, `total`, ...
 - Relations: belongs to `Customer`; has many `LineItem`
 
 ## Customer
+
 **Owned by:** [models](modules/models.md)
+
 - `id`, `email`, ...
 ```
 
@@ -357,17 +471,18 @@ single-process app with no deployment config in the repo).
 
 \`\`\`mermaid
 graph LR
-  api[api service] --> db[(postgres)]
-  api --> redis[(redis)]
-  worker[worker service] --> redis
-  worker --> db
+api[api service] --> db[(postgres)]
+api --> redis[(redis)]
+worker[worker service] --> redis
+worker --> db
 \`\`\`
 
 ## Services
-| Service | Module(s) | Ports | Depends on | File |
-|---|---|---|---|---|
-| `api` | `api` | `8080:8080` | `db`, `redis` | [api.md](modules/api.md) |
-| `worker` | `notifications`, `reports` | -- | `redis`, `db` | ... |
+
+| Service  | Module(s)                  | Ports       | Depends on    | File                     |
+| -------- | -------------------------- | ----------- | ------------- | ------------------------ |
+| `api`    | `api`                      | `8080:8080` | `db`, `redis` | [api.md](modules/api.md) |
+| `worker` | `notifications`, `reports` | --          | `redis`, `db` | ...                      |
 ```
 
 A deployable service and a code module aren't always the same thing -- one
@@ -414,28 +529,54 @@ quality run to run.
      "mode": "full trace",
      "source_commit": "abc123def4567890",
      "modules": [
-       {"slug": "api", "name": "api", "role": "HTTP layer, composition root",
-        "path": "src/api", "doc": "modules/api.md"}
+       {
+         "slug": "api",
+         "name": "api",
+         "role": "HTTP layer, composition root",
+         "path": "src/api",
+         "doc": "modules/api.md"
+       }
      ],
      "edges": [
-       {"from": "api", "to": "services",
-        "label": "calls ship_order() synchronously", "kind": "sync"}
+       {
+         "from": "api",
+         "to": "services",
+         "label": "calls ship_order() synchronously",
+         "kind": "sync"
+       }
      ],
      "context": {
        "actors": ["End user"],
        "external_systems": ["Payment Gateway"],
-       "edges": [{"from": "End user", "to": "Acme Order Service", "label": "HTTPS"}]
+       "edges": [
+         { "from": "End user", "to": "Acme Order Service", "label": "HTTPS" }
+       ]
      },
      "flows": [
-       {"name": "Order shipped notification",
-        "steps": [{"from": "Client", "to": "api", "label": "POST /orders/:id/ship"}]}
+       {
+         "name": "Order shipped notification",
+         "steps": [
+           { "from": "Client", "to": "api", "label": "POST /orders/:id/ship" }
+         ]
+       }
      ],
      "data_model": {
-       "entities": [{"name": "Order", "fields": ["id", "status"], "module": "models"}],
-       "relations": [{"from": "Order", "to": "Customer", "label": "belongs_to"}]
+       "entities": [
+         { "name": "Order", "fields": ["id", "status"], "module": "models" }
+       ],
+       "relations": [
+         { "from": "Order", "to": "Customer", "label": "belongs_to" }
+       ]
      },
      "deployment": {
-       "services": [{"name": "api", "module": "api", "ports": ["8080:8080"], "depends_on": ["db"]}]
+       "services": [
+         {
+           "name": "api",
+           "module": "api",
+           "ports": ["8080:8080"],
+           "depends_on": ["db"]
+         }
+       ]
      }
    }
    ```
@@ -450,9 +591,20 @@ quality run to run.
    line instead of solid, matching `system-diagram.md`'s own sync/async
    convention.
 
+   **Quick-scan mode only:** set `"confirmed": false` on a `modules[]` entry
+   or `edges[]` entry that wasn't individually confirmed this run (see
+   `references/tracing-methodology.md`'s "Choosing a trace depth"). The
+   template renders these with a distinct dotted style and a legend entry,
+   separate from the sync/async distinction -- same purpose as
+   `system-diagram.md`'s `-.->`/`:::unconfirmed` convention, just in the
+   JSON the HTML template consumes instead of Mermaid syntax. Omit the
+   field entirely (don't write `"confirmed": true`) for anything that was
+   confirmed normally -- that's the default and doesn't need stating. In
+   deep mode, don't set this field on anything.
+
 3. In the template's `<script>` block there is exactly one occurrence of
    the literal token `__ANATOMY_DATA_JSON__` (inside `const DATA =
-   __ANATOMY_DATA_JSON__;`) and exactly two occurrences of
+__ANATOMY_DATA_JSON__;`) and exactly two occurrences of
    `__PROJECT_NAME__` (the `<title>` and the header). Replace
    `__ANATOMY_DATA_JSON__` with your JSON object serialized to text, and
    `__PROJECT_NAME__` with the project name. Do this replacement
