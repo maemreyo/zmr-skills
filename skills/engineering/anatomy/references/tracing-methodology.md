@@ -9,7 +9,7 @@ forward whatever's already stale or wrong.
 ## The rule
 
 Existing README files, docstrings, code comments, and any prior
-`docs/system-trace` output are **claims to verify, not facts to report.**
+`docs/anatomy` output are **claims to verify, not facts to report.**
 Before a sentence goes into a module doc, it should pass this test: *did I
 just confirm this by reading the function body / route table / schema
 myself, or am I repeating something a comment or README said?* If it's the
@@ -59,6 +59,17 @@ Working in this order avoids both missing things and wasting effort:
    when). Use it to corroborate what you read in the implementation, and
    flag it if a test's assumptions don't match what the implementation
    actually does.
+6. **"Used by" doesn't come from this reading pass at all -- it comes from
+   everyone else's.** Steps 1-5 are all about what module X calls out to;
+   none of them can discover who calls *into* X, because "who imports me"
+   isn't information X's own source contains. Treat "Used by" as something
+   you fill in only after every module's "Depends on" has been confirmed:
+   for every edge "X depends on Y" you wrote down, add the mirror-image "Y
+   is used by X" to Y's doc. Do this as an explicit pass across the whole
+   module set before writing final output (see SKILL.md's Phase 4/5
+   transition) -- not opportunistically while reading each module, which
+   will silently leave some modules' "Used by" sections thin or empty
+   simply because nothing in their own code could have surfaced it.
 
 ## Scaling to large codebases
 
@@ -85,6 +96,58 @@ claim false completeness over all of them. Some ways to scale:
 - **A module that's too big to trace at once can be split** into a couple of
   sub-module docs (see module-detection.md's sizing guidance) rather than
   either skipping it or writing something too shallow to be useful.
+
+## Wiring that's resolved at runtime, not at import time
+
+`scripts/import_graph.py` and `scripts/external_calls.py` both work by
+pattern-matching static text -- an import statement, a decorator, a client
+call. Some real edges never appear as static text anywhere: a dependency-
+injection container that wires implementations to interfaces at startup, a
+plugin registry that loads whatever's dropped into a directory, Python's
+`importlib.import_module(some_variable)` with a name built at runtime, Java
+`@Autowired` fields, a service locator, a config-driven "which handler runs"
+switch. No amount of regex sophistication fixes this category -- it's not a
+gap in the scripts' pattern lists, it's a fundamental limit of reading text
+without running it.
+
+The risk isn't that you'll never find these -- reading a module's actual
+code will usually surface them. The risk is *silently* missing one and
+having no record that you were even looking: unlike a hypothesis edge from
+Phase 3 that you either confirm or correct, a runtime-wired edge with no
+static trace doesn't prompt you to go check anything. So treat "does this
+module use DI, a plugin/registry pattern, or reflection-based loading?" as
+an active question to ask while reading, not something you'll stumble into.
+Signs to watch for: a constructor or config that takes an interface/abstract
+type rather than a concrete one, a directory that's scanned/globbed for
+plugins at startup, a string-keyed dispatch table, an ORM or framework
+that's known for heavy DI (Spring, Angular, NestJS, ASP.NET Core all
+default to it).
+
+When you find one, write it up explicitly rather than describing it the
+same way as an ordinary call -- e.g. "**`payment-plugins`** -- resolved at
+runtime via the plugin registry in `plugins/registry.py`; not visible to
+static analysis, confirmed by reading the registration call, not an import."
+That sentence itself is valuable: it tells a future reader (and a future run
+of this skill, which will hash-diff `plugins/registry.py` but has no way to
+know it should re-check every plugin module when that file changes) that
+this edge needs a human's attention if the registry logic ever moves.
+
+## When static reading isn't enough
+
+Everything above is static analysis: reading source without running it,
+which is what makes this skill safe to run against any codebase with no
+setup and no side effects. Occasionally that's genuinely insufficient to
+resolve a real ambiguity -- e.g. two plausible interpretations of a dynamic
+dispatch that only diverge at runtime. If the user explicitly asks for
+stronger verification ("run the test suite to confirm this," "trace what
+actually happens on a real request"), that's a legitimate way to
+corroborate what static reading found, and existing test suites in
+particular are still safe, already-sanctioned code to execute. But this
+should stay something the user opts into for a specific ambiguity, not a
+default step -- running arbitrary code from an unfamiliar codebase has
+side-effect and environment-setup implications this skill doesn't take on
+by default, and it would compromise the "runs anywhere, read-only, no setup"
+property that makes it usable on a codebase you've never touched before.
 
 ## What "how they interact" means concretely
 

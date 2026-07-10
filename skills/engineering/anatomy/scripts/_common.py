@@ -1,5 +1,5 @@
 """
-Shared helpers for the system-trace skill's scripts.
+Shared helpers for the anatomy skill's scripts.
 No third-party dependencies -- stdlib only, so this runs anywhere Python 3.8+ runs.
 """
 import hashlib
@@ -10,15 +10,26 @@ from pathlib import Path
 # dependency caches, VCS internals. Matched by exact directory name at any depth.
 IGNORE_DIR_NAMES = {
     ".git", ".hg", ".svn", "node_modules", "__pycache__", ".venv", "venv", "env",
-    ".env", "dist", "build", "target", "vendor", ".next", ".nuxt", "out",
+    ".env", "dist", "build", "target", ".next", ".nuxt", "out",
     "coverage", ".pytest_cache", ".mypy_cache", ".ruff_cache", ".tox",
     ".idea", ".vscode", ".gradle", "bin", "obj", "Pods", "DerivedData",
     ".terraform", ".serverless", "egg-info", ".eggs", ".cache", ".parcel-cache",
-    "site-packages", "bower_components", "packages", ".dart_tool",
+    "site-packages", "bower_components", ".dart_tool",
 }
-# Note: "packages" is ambiguous (real module dir in some monorepos, vendored
-# deps in others) -- inventory.py flags it for a human/Claude decision rather
-# than silently trusting either interpretation. See module-detection.md.
+# "packages" and "vendor" are deliberately NOT in IGNORE_DIR_NAMES, even
+# though they're common noise-dir names, because they're ambiguous: real
+# first-party module dir in some monorepos (pnpm/Lerna/Nx/Turborepo all use
+# "packages/*" as their canonical workspace-member convention), vendored
+# third-party deps in others (Go, PHP/Composer both use "vendor/" for real
+# dependency snapshots). Pruning them outright would silently skip actual
+# application code for the former case. Instead they're walked normally and
+# flagged via AMBIGUOUS_DIR_NAMES below, so inventory.py's
+# ambiguous_dirs_found lets Claude look at a sample file and decide per
+# module-detection.md, rather than either interpretation being assumed
+# silently. Keep these out of IGNORE_DIR_NAMES: walk_source_files prunes
+# before the ambiguous-dir check ever sees a file inside, so if either name
+# ends up back in IGNORE_DIR_NAMES, ambiguous_dirs_found can never fire for
+# it and this comment's premise silently stops being true.
 AMBIGUOUS_DIR_NAMES = {"packages", "vendor", "third_party", "external"}
 
 IGNORE_FILE_SUFFIXES = {".pyc", ".pyo", ".so", ".o", ".class", ".min.js", ".min.css"}

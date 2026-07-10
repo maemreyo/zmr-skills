@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """
 import_graph.py -- heuristic cross-file reference extraction, for Phase 3 of
-system-trace.
+the anatomy skill's tracing workflow. See external_calls.py for the
+complementary script that covers cross-service/network interactions this
+one can't see (it only catches same-language import/require/use statements).
 
 Usage:
     python3 import_graph.py <repo_root> [--group-by-top-level]
@@ -42,9 +44,28 @@ PATTERNS = {
     ".rb": [re.compile(r"require(?:_relative)?\s+['\"]([^'\"]+)['\"]")],
     ".php": [re.compile(r"use\s+([\w\\]+)\s*;"), re.compile(r"(?:require|include)(?:_once)?\s*\(?\s*['\"]([^'\"]+)['\"]")],
     ".cs": [re.compile(r"^\s*using\s+([\w\.]+)\s*;")],
+    ".swift": [re.compile(r"^\s*(?:@testable\s+)?import\s+([\w\.]+)")],
+    ".dart": [re.compile(r"^\s*(?:import|export|part)\s+['\"]([^'\"]+)['\"]")],
+    ".scala": [re.compile(r"^\s*import\s+([\w\.{}, ]+)")],
+    ".ex": [re.compile(r"^\s*(?:alias|import|use|require)\s+([\w\.]+)")],
+    ".c": [re.compile(r'^\s*#\s*include\s*["<]([^">]+)[">]')],
+    ".h": [re.compile(r'^\s*#\s*include\s*["<]([^">]+)[">]')],
+    ".cpp": None, ".cc": None, ".cxx": None, ".hpp": None,  # filled below
 }
 for alias in (".jsx", ".ts", ".tsx", ".mjs", ".cjs"):
     PATTERNS[alias] = PATTERNS[".js"]
+for alias in (".cpp", ".cc", ".cxx", ".hpp"):
+    PATTERNS[alias] = PATTERNS[".c"]
+PATTERNS[".exs"] = PATTERNS[".ex"]
+# Note on C/C++: this captures both `#include "local.h"` and
+# `#include <system_header.h>` -- resolve_target_to_top_level() below only
+# matches targets against actual top-level dir names, so angle-bracket
+# system/library headers just won't resolve to anything and are harmlessly
+# ignored, same as an unresolvable Python stdlib/pip import already is.
+# Note on Scala: the capture group can include brace-list imports (e.g.
+# `import foo.bar.{A, B}`) as one raw string -- resolve_target_to_top_level
+# still finds a top-level segment fine since it splits on "." and "/", but
+# don't expect a single clean package name out of this one.
 
 
 def extract_go_imports(text: str):

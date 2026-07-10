@@ -2,14 +2,14 @@
 
 This is Phase 0 of the workflow in SKILL.md, expanded. The goal: re-running
 this skill on a codebase that's already been traced should be fast and
-should only touch what actually changed, while still keeping `index.md` and
-`system-diagram.md` fully correct for the *current* state of the whole
-system.
+should only touch what actually changed, while still keeping `index.md`,
+`system-diagram.md`/`.html`, and `entry-points.md` fully correct for the
+*current* state of the whole system -- not just the part that changed.
 
 ## The manifest
 
-`docs/system-trace/_manifest.json` records what was traced and a content
-hash per module:
+`docs/anatomy/_manifest.json` records what was traced and a content hash
+per module:
 
 ```json
 {
@@ -38,15 +38,39 @@ This matters because:
 reference point for the user ("last traced at commit abc123") -- never as
 the sole basis for the diff decision.
 
+## Migrating from an older `docs/system-trace` output
+
+Earlier versions of this skill defaulted to `docs/system-trace/` instead of
+`docs/anatomy/`. If `docs/anatomy/_manifest.json` doesn't exist, check for
+`docs/system-trace/_manifest.json` before concluding this is a clean first
+run. If you find one there:
+
+- Don't silently start a brand-new full trace into `docs/anatomy/` -- that
+  leaves two documentation sets sitting in the same repo, with no signal to
+  a future reader (or a future run of this skill) about which one is
+  current, and doubles the drift-from-code problem this skill exists to
+  prevent.
+- Tell the user what you found and offer to migrate: `git mv
+  docs/system-trace docs/anatomy` (or a plain move if it's not a git repo),
+  then proceed as an ordinary incremental update against the moved manifest.
+  The manifest's content is location-independent (it's keyed by module
+  hashes, not by its own path), so a straight rename is safe and loses
+  nothing.
+- If the user would rather keep the old location, that's fine -- just
+  operate against `docs/system-trace/` for the rest of this run instead of
+  defaulting to `docs/anatomy/`, and say so plainly in your summary so it's
+  not a silent, easy-to-forget deviation from the default.
+
 ## Decision tree
 
-**1. Does `docs/system-trace/_manifest.json` exist?**
+**1. Does `docs/anatomy/_manifest.json` exist?**
 
-- **No, and the folder doesn't exist either** -> straightforward full trace.
-  This is the common case for a first run.
+- **No, and neither it nor a legacy `docs/system-trace/_manifest.json`
+  exists** -> straightforward full trace. This is the common case for a
+  first run.
 - **No, but the folder exists with other content** (hand-written docs, or
-  output from a much older version of this skill that predates the
-  manifest) -> there's no reliable state to diff against. Do a full trace.
+  output from a version of this skill old enough to predate the manifest
+  entirely) -> there's no reliable state to diff against. Do a full trace.
   Skim what's already there first though -- if it uses module names/slugs
   that make sense, reuse them for continuity rather than picking different
   ones. Mention in your summary to the user that no prior trace-state was
@@ -70,14 +94,15 @@ This returns `unchanged`, `changed`, `added`, `removed`, and a
 - **Nothing in changed/added/removed** -> the trace is already current.
   Still worth confirming this to the user rather than silently doing
   nothing -- e.g. "Checked for changes since the last trace (commit
-  abc123) -- nothing has changed, docs/system-trace is up to date."
+  abc123) -- nothing has changed, docs/anatomy is up to date."
 - **Some changed/added/removed, ratio comfortably below the ~60% line** ->
   incremental update:
   - Re-trace only the modules in `changed` and `added` (full Phase 3/4
     tracing for those specifically).
   - Delete `modules/<slug>.md` for anything in `removed`.
   - Leave `modules/<slug>.md` untouched for everything in `unchanged` --
-    don't re-read or rewrite those files. This is the whole point of the
+    don't re-read or rewrite those files, other than the narrow
+    edges-into-a-changed-module check below. This is the whole point of the
     manifest: it lets you skip real work, not just skip announcing it.
 - **Ratio at or above ~60%, or the repo structure looks fundamentally
   reorganized** (e.g. most top-level directories are new) -> the diff
@@ -89,23 +114,63 @@ This returns `unchanged`, `changed`, `added`, `removed`, and a
 - The user can always override either way by simply asking for a full
   re-trace, or by deleting `_manifest.json` themselves as a manual reset.
 
-**5. Regenerate `index.md` and `system-diagram.md` unconditionally**, even in
-incremental mode, even if neither file's own content logically "changed."
-These two files describe the *current full module set and its
-relationships* -- a new or changed module can introduce a new edge to an
-otherwise-untouched module (module C now calls into module A, which didn't
-change itself), and that edge must show up. Regenerating these two files is
-cheap relative to re-tracing a module, so there's no reason to try to diff
-them incrementally too.
+## Edges into a changed module
 
-**6. Write the updated manifest** with `scripts/state.py write`, including
+The hash diff tells you when a module's *own* files changed. It says
+nothing about whether an *unchanged* module's description of its
+relationship to a changed module is still accurate -- and that gap matters
+more than it looks. Say module `A` is unchanged and its existing doc says
+"**Depends on `B`** -- calls `B.charge()` synchronously, propagates its
+errors." If `B` is in this run's `changed` set, `B.charge()` might now be
+async, might have a different failure mode, might not exist anymore under
+that name -- and because `A` itself didn't change, the ordinary incremental
+rule ("leave unchanged modules alone") would leave that now-possibly-wrong
+line sitting in `A`'s doc indefinitely. `index.md` and `system-diagram.md`
+being "always regenerated in full" doesn't fix this either, because both
+are compiled *from* the "Depends on"/"Used by" lines already written in the
+module docs -- if `A`'s doc is wrong, the diagram built from it is wrong in
+exactly the same way, just re-rendered.
+
+The fix is narrow, not a reason to re-trace `A` wholesale: after computing
+the diff, for every `unchanged` module whose doc has a "Depends on" or
+"Used by" line naming a module in `changed`, open just the specific call
+site(s) between the two (not the rest of `A`) and confirm the line is still
+accurate. If it's still correct, leave it alone. If it changed, edit only
+that line (or that bullet) in `A`'s doc -- don't rewrite sections of `A`
+that have nothing to do with `B`. This keeps the efficiency benefit of
+incremental mode (you're still not re-reading all of `A`) while closing the
+one specific gap where content-hash diffing can't see a real change.
+
+## Regenerating the whole-system files
+
+**Regenerate `index.md`, `system-diagram.md`, `system-diagram.html`, and
+`entry-points.md` unconditionally**, even in incremental mode, even if none
+of them individually "changed." All four describe the *current full system*
+-- a new or changed module can introduce a new edge, route, or flow
+involving an otherwise-untouched module, and that must show up. Regenerating
+these is cheap relative to re-tracing a module, so there's no reason to try
+to diff them incrementally too.
+
+The part that isn't automatic: rebuilding these requires knowing every
+current module's role, dependencies, and entry points -- including the ones
+in `unchanged`, which Phase 4 didn't re-read this run. Get that information
+by reading the *existing* `modules/<slug>.md` file for each unchanged
+module (updated already, if applicable, by the edges-into-a-changed-module
+step above) rather than trying to recall it from earlier in a long
+conversation, or re-deriving it from scratch, or -- worst case -- quietly
+omitting unchanged modules from the new diagrams because they weren't
+re-traced this run. An unchanged module still belongs in the full picture;
+"unchanged" describes whether you re-verify it, not whether it exists.
+
+**Write the updated manifest** with `scripts/state.py write`, including
 hashes for every current module (changed, added, and unchanged all get
 fresh/carried-forward entries) so the next run's diff is accurate.
 
 ## Reporting back to the user
 
 Whatever the outcome, say plainly in your final summary which mode ran (full
-vs incremental), which modules were re-traced vs left alone, and what (if
-anything) got removed. This is short to write and it's the difference
-between the user trusting an "up to date" claim versus wondering whether the
-skill actually looked.
+vs incremental), which modules were re-traced vs left alone, what (if
+anything) got removed, and whether any edges-into-a-changed-module check
+turned up a stale "Depends on"/"Used by" line worth calling out. This is
+short to write and it's the difference between the user trusting an "up to
+date" claim versus wondering whether the skill actually looked.

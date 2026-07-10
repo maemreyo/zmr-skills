@@ -1,12 +1,22 @@
 # Output templates
 
-Three kinds of file get written under the output root (default
-`docs/system-trace/`, see SKILL.md for how that root is chosen):
+Contents: [module file](#module-file-modulesslugmd) · [index.md](#indexmd) ·
+[system-diagram.md](#system-diagrammd) · [entry-points.md](#entry-pointsmd) ·
+[data-model.md](#data-modelmd-conditional) ·
+[deployment.md](#deploymentmd-conditional) ·
+[system-diagram.html](#system-diagramhtml)
+
+Several kinds of file get written under the output root (default
+`docs/anatomy/`, see SKILL.md for how that root is chosen):
 
 ```
-docs/system-trace/
-├── index.md              <- entry point, table of modules, links out
-├── system-diagram.md     <- Mermaid diagrams + flows, links to modules/*.md
+docs/anatomy/
+├── index.md              <- entry point, tech stack, table of modules, links out
+├── system-diagram.md     <- Mermaid: optional system-context + module graph + flows
+├── system-diagram.html   <- same content, standalone + interactive (see its own section below)
+├── entry-points.md       <- every route/CLI command/queue consumer/cron job, rolled up
+├── data-model.md         <- ERD-style data model -- only if the project has a real datastore
+├── deployment.md         <- deployment/infra topology -- only if compose/k8s manifests exist
 ├── modules/
 │   ├── <module-slug>.md  <- one per module
 │   └── ...
@@ -17,6 +27,16 @@ docs/system-trace/
                               index.md that deleting it forces a full
                               re-trace next time, as an escape hatch.
 ```
+
+`data-model.md` and `deployment.md` are conditional -- see their own
+sections below for exactly when to write them versus skip them.
+
+Every file should link to the others it relates to: `index.md` links out to
+all of them, module docs link to each other (via "Depends on"/"Used by") and
+are linked from `system-diagram.md`/`.html`/`entry-points.md`, and
+`data-model.md` entities link back to the module that owns them. Nothing in
+`docs/anatomy/` should be a dead end -- if you're writing a fact in one file
+that a reader would want to follow up on elsewhere, link it.
 
 Use `scripts/_common.py`'s `slugify()` for module slugs so filenames stay
 predictable and stable across runs (stability matters for incremental
@@ -77,6 +97,21 @@ engineer could read to understand the module without opening the code --
 don't force sections that don't apply, but don't silently drop something
 just because it's inconvenient to describe either.
 
+If a "Depends on" or "Used by" edge is resolved at runtime rather than
+visible as a static import -- a DI container, a plugin registry, dynamic
+`importlib`/reflection loading -- say so explicitly rather than describing
+it the same way as a normal call: e.g. "**`payment-plugins`** -- resolved at
+runtime via the plugin registry in `plugins/registry.py`; not visible to
+static analysis, confirmed by reading the registration call." This is the
+one category of edge that `references/tracing-methodology.md` calls out
+specifically, because it's the one a reader (and a future run of this
+skill) can't rediscover just by grepping imports.
+
+Every route, CLI command, queue consumer, and cron job listed under "Public
+interface" is also a candidate row for the system-wide `entry-points.md` --
+keep that in mind while writing this section so Phase 5's rollup can lift
+these directly rather than needing you to re-derive them.
+
 ## `index.md`
 
 ```markdown
@@ -86,6 +121,21 @@ just because it's inconvenient to describe either.
 what you actually found, not copied from an existing README>
 
 **Generated:** <date> · **Mode:** <full trace | incremental update> · **Source commit:** <hash, or "not a git repo">
+
+## Tech stack & key dependencies
+<Derived from scripts/inventory.py's manifest parsing (package.json,
+pyproject.toml, go.mod, Cargo.toml, pom.xml, docker-compose.yml, etc.), but
+only include a framework/library here if you actually confirmed it's used
+somewhere in Phase 4 -- a dependency that's declared but never imported
+doesn't belong in an accurate picture of the stack.>
+- **Language(s):** <from the inventory language histogram>
+- **Framework(s):** <e.g. "Express 4 (confirmed in `api`)">
+- **Datastore(s):** <if any -- see data-model.md>
+- **Message broker / queue:** <if any>
+- **Key third-party libraries:** <3-8 that actually matter architecturally,
+  not a full dependency dump>
+- **Infra / deployment:** <Docker, docker-compose, k8s, serverless -- see
+  deployment.md if written>
 
 ## Modules
 
@@ -99,10 +149,14 @@ what you actually found, not copied from an existing README>
 - How to run: <command, verified against actual scripts/manifests>
 - How to build/test: <...>
 - Composition root: `<path>` -- wires <modules> together
+- Full inventory of every route/CLI command/consumer/cron job: [entry-points.md](entry-points.md)
 
 ## Architecture at a glance
-See [system-diagram.md](system-diagram.md) for the full interaction diagram
-and key flows.
+See [system-diagram.md](system-diagram.md) (or
+[system-diagram.html](system-diagram.html) for the interactive version) for
+the full interaction diagram and key flows.
+<If written:> [data-model.md](data-model.md) covers the data model.
+<If written:> [deployment.md](deployment.md) covers deployment topology.
 
 ## How this was generated
 This documentation was generated by tracing the actual source code, not by
@@ -121,6 +175,18 @@ node label.
 
 ```markdown
 # System Diagram: <Project Name>
+
+## System context
+<!-- Optional -- see criteria below. Omit this whole section (not just the
+     diagram) for a small project or a library with no meaningful external
+     surface. -->
+
+\`\`\`mermaid
+graph LR
+  user((End user)) --> sys[<Project Name>]
+  sys --> pay[Payment Gateway]
+  sys --> mail[Email Provider]
+\`\`\`
 
 ## Module dependency graph
 
@@ -163,6 +229,19 @@ Modules involved: [services](modules/services.md),
 ...
 ```
 
+**When to include "System context":** this is a zoomed-out view borrowed
+from the C4 model's "Context" layer -- just your system as a single box,
+plus the actors and external systems it talks to, with zero internal module
+detail. Include it when the project has a real external surface worth
+orienting a reader to (end users, other internal systems, third-party
+APIs/services it calls) -- typically anything beyond a small single-package
+library. For a 30-40-module system, this is often the more useful "first
+diagram" precisely because the full module graph below is a hairball at
+that size; the context diagram gives a reader something legible before they
+descend into it. Skip it outright for small projects or libraries with
+nothing external to show -- an empty or trivial context diagram (just one
+box, nothing around it) isn't worth the section.
+
 Pick 2-6 "key flows" that represent the most important or most illustrative
 things the system does end-to-end (a request lifecycle, a background job, a
 startup sequence) -- not every possible call path. Each flow's participants
@@ -174,4 +253,224 @@ Every edge and every flow in this file should be something you can trace
 back to a specific place in a specific module doc. If a diagram edge has no
 corresponding "Depends on" / "Used by" entry anywhere, that's a sign either
 the diagram or the module doc is missing something -- reconcile them before
-finishing.
+finishing. Don't rely on eyeballing this: `scripts/verify_diagram.py
+<output_root>`, run once module docs and this file both exist, checks it
+mechanically and lists exactly which edges don't have a corresponding
+module-doc entry (see SKILL.md's Phase 5 for when to run it).
+
+## `entry-points.md`
+
+```markdown
+# Entry Points: <Project Name>
+
+Every route, CLI command, queue consumer, and cron/scheduled job in the
+system, rolled up in one place -- lifted from each module's "Public
+interface" section (see `modules/*.md` for full detail; this file is the
+flat index, not a re-trace of its own).
+
+## HTTP routes
+| Method | Path | Module | Handler | File |
+|---|---|---|---|---|
+| POST | `/orders/:id/ship` | `api` | `ship_order()` | [api.md](modules/api.md) |
+| ... | ... | ... | ... | ... |
+
+## CLI commands
+| Command | Module | What it does | File |
+|---|---|---|---|
+| `ship` | `cli` | Marks an order shipped and triggers notification | [cli.md](modules/cli.md) |
+
+## Queue / event consumers
+| Topic / event | Module | Triggered by | File |
+|---|---|---|---|
+| `orders.shipped` | `notifications` | Published by `services` on ship | [notifications.md](modules/notifications.md) |
+
+## Scheduled / cron jobs
+| Schedule | Module | What it does | File |
+|---|---|---|---|
+| `0 2 * * *` | `reports` | Nightly reconciliation report | [reports.md](modules/reports.md) |
+```
+
+Omit any of the four sections entirely if the project genuinely has none of
+that kind -- don't write empty tables just to keep the shape uniform.
+
+For a large system where one category runs into the hundreds of
+near-identical entries (dozens of CRUD routes following the same generated
+pattern, for instance), it's fine to collapse the repetitive ones into a
+single row with a count and a pointer to a representative sample --
+`"38 routes under /api/v1/resources/* -- standard REST CRUD via the generic
+resource controller, see api.md"` -- rather than listing all 38 individually.
+State plainly that you did this. This is the same honesty-about-coverage
+standard as sampling a large module in Phase 4: say what you covered versus
+what you grouped, don't imply exhaustive detail you don't actually have.
+
+This file (along with `index.md`, `system-diagram.md`, and
+`system-diagram.html`) is always regenerated in full regardless of mode --
+see `references/incremental-updates.md` for how to carry forward the rows
+belonging to unchanged modules without re-deriving them.
+
+## `data-model.md` (conditional)
+
+Write this file only if the project has a real datastore -- confirmed by
+actual ORM models, migration files, a `schema.sql`, or module docs whose
+"Data & side effects" sections name persistent tables/collections, not just
+"reads a config file" or "writes to a log." Skip it outright otherwise; a
+`data-model.md` that says "this project has no database" is not worth a
+file.
+
+```markdown
+# Data Model: <Project Name>
+
+\`\`\`mermaid
+erDiagram
+  ORDER ||--o{ LINE_ITEM : contains
+  ORDER }o--|| CUSTOMER : belongs_to
+\`\`\`
+
+## Order
+**Owned by:** [models](modules/models.md)
+- `id`, `status`, `total`, ...
+- Relations: belongs to `Customer`; has many `LineItem`
+
+## Customer
+**Owned by:** [models](modules/models.md)
+- `id`, `email`, ...
+```
+
+Derive entities/fields/relations from the actual migrations/ORM
+models/schema, not from a stale ERD image or wiki page if one exists --
+same verify-from-source discipline as everything else this skill writes.
+Only list fields that matter for understanding the shape of the data
+(primary/foreign keys, anything referenced elsewhere in the docs) rather
+than reproducing every column of a wide table. Link every entity back to
+the module that owns/primarily touches it.
+
+## `deployment.md` (conditional)
+
+Write this file only if the project has container/orchestration manifests
+to draw from -- a `docker-compose.yml`/`.yaml` (parsed structurally by
+`scripts/inventory.py`), Dockerfiles, or Kubernetes manifests. Skip it
+outright for a project with none of these (a bare script, a library, a
+single-process app with no deployment config in the repo).
+
+```markdown
+# Deployment: <Project Name>
+
+\`\`\`mermaid
+graph LR
+  api[api service] --> db[(postgres)]
+  api --> redis[(redis)]
+  worker[worker service] --> redis
+  worker --> db
+\`\`\`
+
+## Services
+| Service | Module(s) | Ports | Depends on | File |
+|---|---|---|---|---|
+| `api` | `api` | `8080:8080` | `db`, `redis` | [api.md](modules/api.md) |
+| `worker` | `notifications`, `reports` | -- | `redis`, `db` | ... |
+```
+
+A deployable service and a code module aren't always the same thing -- one
+container can bundle several modules, or one module's code can be split
+across services (rare, but note it if so). If the project has Kubernetes
+manifests in addition to (or instead of) `docker-compose.yml`,
+`inventory.py` doesn't parse those structurally, but they're already
+visible in the Phase 1 file tree -- read them directly (`kind: Deployment`/
+`Service`/`Ingress`/`CronJob` are the ones worth pulling into this file) the
+same way you'd read any other source file, rather than skipping this
+section for lack of automated parsing.
+
+## `system-diagram.html`
+
+A standalone, interactive rendering of the same information in
+`system-diagram.md`, built by filling in `assets/diagram-template.html` --
+never improvised as new HTML/CSS/JS from scratch. Two reasons both formats
+exist: Mermaid in `system-diagram.md` only renders as a diagram on
+GitHub/GitLab and a handful of Markdown viewers that support it -- open the
+same file in a plain text editor, paste it into Slack, or open it directly
+in a browser, and it's just a fenced code block. The `.html` file has no
+such dependency: it's fully self-contained (no CDN, no external fonts, no
+network access required) and renders and is interactive in any browser the
+moment it's opened. And because it's a fixed template rather than something
+regenerated freehand each run, output stays visually consistent across
+every codebase this skill ever runs against, rather than drifting in
+quality run to run.
+
+**How to fill it in:**
+
+1. Read `assets/diagram-template.html`. Don't edit the template in place --
+   copy it, or build the final string in memory, then write the result to
+   `system-diagram.html`.
+2. Build one JSON object from the same module/edge/flow/context/data-model/
+   deployment information you already assembled for `system-diagram.md` and
+   `entry-points.md` (don't re-derive it independently -- that's exactly how
+   the two diagram formats would quietly drift apart from each other over
+   successive runs). Schema:
+
+   ```json
+   {
+     "project_name": "Acme Order Service",
+     "generated_at": "2026-07-10",
+     "mode": "full trace",
+     "source_commit": "abc123def4567890",
+     "modules": [
+       {"slug": "api", "name": "api", "role": "HTTP layer, composition root",
+        "path": "src/api", "doc": "modules/api.md"}
+     ],
+     "edges": [
+       {"from": "api", "to": "services",
+        "label": "calls ship_order() synchronously", "kind": "sync"}
+     ],
+     "context": {
+       "actors": ["End user"],
+       "external_systems": ["Payment Gateway"],
+       "edges": [{"from": "End user", "to": "Acme Order Service", "label": "HTTPS"}]
+     },
+     "flows": [
+       {"name": "Order shipped notification",
+        "steps": [{"from": "Client", "to": "api", "label": "POST /orders/:id/ship"}]}
+     ],
+     "data_model": {
+       "entities": [{"name": "Order", "fields": ["id", "status"], "module": "models"}],
+       "relations": [{"from": "Order", "to": "Customer", "label": "belongs_to"}]
+     },
+     "deployment": {
+       "services": [{"name": "api", "module": "api", "ports": ["8080:8080"], "depends_on": ["db"]}]
+     }
+   }
+   ```
+
+   `context`, `data_model`, and `deployment` should be `null` (not omitted,
+   not an empty-but-present object) whenever you didn't write the
+   corresponding `.md` file for this project -- the template uses their
+   presence to decide which tabs to show, and a present-but-empty object
+   will render an empty tab instead of hiding it. `edges[].kind` is
+   `"sync"` unless you know otherwise; use `"async"` for fire-and-forget/
+   event-driven/queued interactions, which the template renders as a dashed
+   line instead of solid, matching `system-diagram.md`'s own sync/async
+   convention.
+
+3. In the template's `<script>` block there is exactly one occurrence of
+   the literal token `__ANATOMY_DATA_JSON__` (inside `const DATA =
+   __ANATOMY_DATA_JSON__;`) and exactly two occurrences of
+   `__PROJECT_NAME__` (the `<title>` and the header). Replace
+   `__ANATOMY_DATA_JSON__` with your JSON object serialized to text, and
+   `__PROJECT_NAME__` with the project name. Do this replacement
+   programmatically (e.g. read the template, do the string substitution in
+   Python, write the result) rather than retyping the template by hand.
+4. Before substituting, escape any literal `</script` sequence inside your
+   JSON's string values (case-insensitively) as `<\/script` -- if any file
+   path, role description, or label happens to contain that substring
+   verbatim, it would otherwise prematurely close the script tag and break
+   the page. This is a one-line safety step, not a sign anything is wrong
+   with the data.
+5. Sanity-check the result opens cleanly (or at minimum, that the
+   substitution left valid JSON in place -- `python3 -m json.tool` on the
+   extracted blob is a quick way to check) before moving on.
+
+Don't add a new tab, remove the pan/zoom/search behavior, or otherwise
+restructure the template's HTML/CSS/JS as part of a normal run -- the
+template is meant to be filled in with data, not redesigned per project.
+If a genuine improvement to the template itself would help future runs,
+that's a change to make to `assets/diagram-template.html` in the skill
+itself, not a one-off tweak to a single project's generated output.

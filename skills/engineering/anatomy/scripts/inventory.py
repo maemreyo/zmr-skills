@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 """
-inventory.py -- structural overview of a codebase, for Phase 1 of system-trace.
+inventory.py -- structural overview of a codebase, for Phase 1 of the
+anatomy skill's tracing workflow.
 
 Usage:
     python3 inventory.py <repo_root> [--max-depth N] [--top-n-largest N]
 
 Prints JSON to stdout with:
   - total_files, languages (histogram)
-  - manifests found (with a few parsed key fields, best-effort)
+  - manifests found (with a few parsed key fields, best-effort -- including
+    docker-compose.yml/.yaml services/ports/depends_on, which feeds
+    deployment.md)
   - a bounded-depth directory tree annotated with file counts
   - top-level directories with file counts (candidate module roots)
   - the largest source files by line count (likely-central "hotspot" files,
@@ -74,6 +77,37 @@ def parse_manifest(path: Path):
             fields["name"] = data.get("name")
         elif name in {"pom.xml", "build.gradle", "build.gradle.kts"}:
             fields["note"] = "JVM build file -- read directly for module/dependency layout"
+        elif name in {"docker-compose.yml", "docker-compose.yaml"}:
+            # Structured parsing needs a real YAML parser, which breaks the
+            # stdlib-only/no-installs guarantee the rest of this script
+            # keeps -- so this is opportunistic: use PyYAML if it happens to
+            # already be installed, and fall back to a plain note (never
+            # raise) if it isn't. Either way Claude can read the file
+            # directly; this just saves that step when it's available.
+            try:
+                import yaml
+                data = yaml.safe_load(path.read_text(errors="ignore")) or {}
+                services = data.get("services", {}) or {}
+                summary = {}
+                for svc_name, svc in services.items():
+                    if not isinstance(svc, dict):
+                        continue
+                    depends_on = svc.get("depends_on")
+                    if isinstance(depends_on, dict):
+                        depends_on = list(depends_on.keys())
+                    summary[svc_name] = {
+                        "image": svc.get("image"),
+                        "build": bool(svc.get("build")),
+                        "ports": svc.get("ports", []),
+                        "depends_on": depends_on or [],
+                    }
+                fields["services"] = summary
+            except ImportError:
+                fields["note"] = ("PyYAML not available in this environment -- "
+                                   "read this file directly for services/ports/depends_on")
+            except Exception as e:
+                fields["note"] = "could not parse compose file structurally; read it directly"
+                fields["parse_error"] = str(e)
     except Exception as e:
         fields["parse_error"] = str(e)
     return fields
