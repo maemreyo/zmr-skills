@@ -70,8 +70,17 @@ load-bearing):
   - "depends_on"/"used_by" internal/external classification is purely a
     convention check (does the bullet start with "**`slug`**" or
     "external:`name`" per output-templates.md's template) -- a module doc
-    that doesn't follow the template's exact bullet format won't be
-    captured here, the same brittleness rollup.py already has.
+    that doesn't follow that bullet format won't be captured here, the
+    same brittleness rollup.py already has. The separator between the
+    name and the description (output-templates.md's literal "--" versus
+    the em dash real output actually writes) is deliberately NOT part of
+    that convention check -- only the "**`slug`**"/"external:`name`"
+    prefix is required, and whatever separator follows gets stripped by
+    LEADING_SEP_RE rather than gating the match. If module docs somehow
+    end up written without any bold-name/external-name prefix at all,
+    this script fails loudly (parsed N modules, 0 edges) instead of
+    silently emitting an empty graph -- see the --allow-empty-graph gate
+    in main().
   - Outbound cross-service calls (an HTTP client hitting another service,
     a gRPC stub) don't currently have a guaranteed structured field the way
     queue topics do -- they show up as prose inside a "Depends on" bullet's
@@ -98,8 +107,23 @@ from verify_entry_points import extract_entry_point_rows  # noqa: E402
 DEPENDS_HEADING_RE = re.compile(r"^#{1,6}\s*Depends on", re.IGNORECASE)
 USED_BY_HEADING_RE = re.compile(r"^#{1,6}\s*Used by", re.IGNORECASE)
 ANY_HEADING_RE = re.compile(r"^#{1,6}\s")
-INTERNAL_LINE_RE = re.compile(r"^\s*-\s+\*\*`([^`]+)`\*\*\s*--\s*(.*)$")
-EXTERNAL_LINE_RE = re.compile(r"^\s*-\s+external:\s*`([^`]+)`\s*--\s*(.*)$")
+# Only the bold module name (or "external:`name`") is load-bearing here --
+# the separator between it and the description text is NOT, and must not
+# be required as a literal ASCII "--". output-templates.md's own template
+# shows "--", but real output (and an LLM's natural writing style)
+# reliably uses a typographic em dash instead -- the same looser
+# convention rollup.py's/verify_diagram.py's MODULE_REF_RE already
+# tolerates by not anchoring on any separator at all. Capture everything
+# after the name and strip whatever separator actually shows up with
+# LEADING_SEP_RE below, rather than baking one specific dash into the
+# match itself.
+INTERNAL_LINE_RE = re.compile(r"^\s*-\s+\*\*`([^`]+)`\*\*\s*(.*)$")
+EXTERNAL_LINE_RE = re.compile(r"^\s*-\s+external:\s*`([^`]+)`\s*(.*)$")
+# Strips a single leading separator of whatever flavor got written: ASCII
+# double-hyphen (the template's literal example), em dash, en dash, a
+# lone hyphen, or a colon -- optionally followed by whitespace. Applied
+# once, to the text captured after the module name.
+LEADING_SEP_RE = re.compile(r"^\s*(?:--|[\-\u2013\u2014:])\s*")
 TRAILING_CITATION_RE = re.compile(r"\(`([^`]+)`\)\s*\.?\s*$")
 
 FOOTER_RE = re.compile(r"Files examined in depth:\s*(.+?)\.?\s*$", re.IGNORECASE)
@@ -130,6 +154,7 @@ def extract_edges(text, heading_re):
         if not m:
             continue
         target, rest = m.group(1).strip(), m.group(2).strip()
+        rest = LEADING_SEP_RE.sub("", rest, count=1)
         cm = TRAILING_CITATION_RE.search(rest)
         citation = cm.group(1) if cm else None
         detail = TRAILING_CITATION_RE.sub("", rest).strip().rstrip(".").strip()
@@ -207,6 +232,12 @@ def main():
     ap.add_argument("--top-n", type=int, default=10, help="how many modules to list under most_connected")
     ap.add_argument("--write", action="store_true",
                      help="write _graph.json into output_root instead of only printing to stdout")
+    ap.add_argument("--allow-empty-graph", action="store_true",
+                     help="don't fail if N modules were parsed but zero total edges were found. "
+                          "Only use this if you've confirmed by hand that the system really has no "
+                          "internal module-to-module edges -- for more than one module, that's rare "
+                          "enough that the default assumption is a parser/template mismatch, not a "
+                          "genuinely edgeless system.")
     args = ap.parse_args()
 
     root = Path(args.output_root).resolve()
@@ -230,6 +261,31 @@ def main():
             "used_by": used_by,
             "trace_coverage": {"status": status, "detail": fragment},
         }
+
+    # Hard gate: for more than one module, zero total edges is almost
+    # never a real finding -- it's almost always this script's parser
+    # failing to recognize the "Depends on"/"Used by" bullet format the
+    # module docs actually used (see the em-dash-vs-"--" bug this replaced).
+    # Fail loudly here rather than writing/printing a structurally valid
+    # but semantically empty _graph.json that a downstream consumer would
+    # silently misread as "this system has no dependencies."
+    total_edges = sum(len(info["depends_on"]) + len(info["used_by"]) for info in modules.values())
+    if len(modules) > 1 and total_edges == 0 and not args.allow_empty_graph:
+        print(json.dumps({
+            "error": (
+                f"parsed {len(modules)} module docs but found 0 total 'Depends on'/'Used by' "
+                "edges across all of them. For a multi-module system this almost always means "
+                "the parser didn't recognize the bullet format actually used in modules/*.md "
+                "(e.g. a dash/separator this script's regex doesn't expect), not that the "
+                "system genuinely has zero internal edges. Inspect a module doc's 'Depends on' "
+                "section by eye and compare it against this script's INTERNAL_LINE_RE/"
+                "EXTERNAL_LINE_RE before assuming the graph is really empty. If you've confirmed "
+                "it really is empty, re-run with --allow-empty-graph."
+            ),
+            "modules_found": len(modules),
+            "total_edges_found": 0,
+        }, indent=2))
+        sys.exit(1)
 
     entry_points_path = root / "entry-points.md"
     entry_points = {"http_routes": [], "cli_commands": [], "queue_consumers": [], "cron_jobs": []}
