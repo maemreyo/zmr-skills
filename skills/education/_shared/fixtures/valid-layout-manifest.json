@@ -1,0 +1,21 @@
+{
+  "layout_version": "zamery-layout.v2",
+  "artifact_id": "teacher-guide-1",
+  "artifact_type": "teacher_guide",
+  "audience": "teacher",
+  "page_roles": ["command_center", "teach", "respond", "answers"],
+  "visible_text": [
+    "Present perfect vs past simple",
+    "What clue forced your choice?"
+  ],
+  "brand": {
+    "system_id": "zamery-core.v2",
+    "applications": ["opening_block", "section_accents", "page_furniture"]
+  },
+  "pages": [
+    {"role": "command_center", "occupied_ratio": 0.58, "intentional_sparse": false},
+    {"role": "teach", "occupied_ratio": 0.62, "intentional_sparse": false},
+    {"role": "respond", "occupied_ratio": 0.54, "intentional_sparse": false},
+    {"role": "answers", "occupied_ratio": 0.66, "intentional_sparse": false}
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "system_id": "zamery-core.v2",
+  "brand_name": "zamery",
+  "tagline": "rooted in strength",
+  "wordmark": {
+    "text": "zamery",
+    "case": "lowercase",
+    "weight": "bold",
+    "alignment": "left"
+  },
+  "palette": {
+    "ink_navy": "#17324D",
+    "root_terracotta": "#B85435",
+    "growth_teal": "#2B746F",
+    "warm_sand": "#F4EEE4",
+    "sky_mist": "#DCEAF2",
+    "charcoal": "#202B33",
+    "paper_white": "#FFFFFF"
+  },
+  "typography": {
+    "primary_family": "Arial",
+    "fallback_family": "sans-serif",
+    "print_body_min_pt": 9.5,
+    "document_body_pt": 10.5,
+    "document_title_pt": 24,
+    "section_heading_pt": 15
+  },
+  "logo": null,
+  "policy": "Use Zamery Core V2 as the approved default visual system; do not invent a pictorial logo or mascot."
+}

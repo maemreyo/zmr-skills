@@ -1,0 +1,54 @@
+{
+  "student_artifact": {
+    "artifact_id": "quiz-1",
+    "artifact_type": "quiz",
+    "audience": "student",
+    "version": 1,
+    "brief_id": "brief-grade12-past-tenses",
+    "grade_band": "grades_9_12",
+    "cefr": null,
+    "target_language": "en",
+    "instruction_language": "vi",
+    "objective_ids": ["obj-1"],
+    "methodology_lineage": ["inverse_thinking"],
+    "source_references": [],
+    "authority": "approved_blueprint",
+    "accessibility": {"reading_order": "linear"},
+    "brand": {"name": "zamery", "tagline": "rooted in strength", "color": null, "logo": null},
+    "dependencies": [],
+    "questions": [
+      {
+        "question_id": "q1",
+        "prompt": "Which sentence correctly uses the past perfect?",
+        "options": ["I left after she arrived.", "I left after she had arrived."]
+      }
+    ]
+  },
+  "answer_set": {
+    "artifact_id": "answers-quiz-1",
+    "artifact_type": "answer_set",
+    "answer_set_id": "answers-quiz-1",
+    "source_artifact_id": "quiz-1",
+    "audience": "teacher",
+    "version": 1,
+    "brief_id": "brief-grade12-past-tenses",
+    "grade_band": "grades_9_12",
+    "cefr": null,
+    "target_language": "en",
+    "instruction_language": "vi",
+    "objective_ids": ["obj-1"],
+    "methodology_lineage": ["inverse_thinking"],
+    "source_references": [],
+    "authority": "derived_from_quiz-1",
+    "accessibility": {"reading_order": "linear"},
+    "brand": {"name": "zamery", "tagline": "rooted in strength", "color": null, "logo": null},
+    "dependencies": [{"artifact_id": "quiz-1", "version": 1}],
+    "answers": [
+      {
+        "question_id": "q1",
+        "answer": "I left after she had arrived.",
+        "explanation": "The earlier past action takes the past perfect."
+      }
+    ]
+  }
+}

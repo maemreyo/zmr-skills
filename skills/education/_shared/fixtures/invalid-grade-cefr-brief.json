@@ -1,0 +1,15 @@
+{
+  "brief_id": "brief-grade12-past-tenses",
+  "raw_request": "Create a 45-minute Grade 12 past-tenses review lesson",
+  "grade_band": "grades_9_12",
+  "cefr": "B2",
+  "target_language": "en",
+  "instruction_language": "vi",
+  "artifact_types": ["lesson", "worksheet", "quiz", "slide_deck"],
+  "methodology": "inverse_thinking",
+  "provenance": {
+    "grade_band": "explicit",
+    "cefr": "derived_from_grade",
+    "methodology": "explicit"
+  }
+}

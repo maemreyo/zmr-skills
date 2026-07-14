@@ -1,0 +1,18 @@
+{
+  "layout_version": "zamery-layout.v2",
+  "artifact_id": "teacher-guide-bad",
+  "artifact_type": "teacher_guide",
+  "audience": "teacher",
+  "page_roles": ["command_center", "teach", "respond", "answers"],
+  "visible_text": [
+    "Route plan",
+    "review_publish -> printable files"
+  ],
+  "brand": {
+    "system_id": "zamery-core.v2",
+    "applications": ["footer_text"]
+  },
+  "pages": [
+    {"role": "command_center", "occupied_ratio": 0.6, "intentional_sparse": false}
+  ]
+}
