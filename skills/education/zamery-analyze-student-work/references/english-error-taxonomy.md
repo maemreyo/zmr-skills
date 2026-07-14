@@ -1,0 +1,3 @@
+# English Error Taxonomy
+
+Classify the observed feature before inferring cause: lexical choice; morphology; tense/aspect; agreement; word order; clause structure; cohesion/reference; register/pragmatics; pronunciation/phonology; reading-evidence use; writing organization; task misunderstanding; or careless slip. Quote only the minimum redacted evidence needed. An observation states what appears in the response. A root-cause hypothesis explains why and always carries low, medium, or high confidence plus competing explanations when plausible. Repetition across comparable items raises confidence; one isolated error rarely proves a misconception.

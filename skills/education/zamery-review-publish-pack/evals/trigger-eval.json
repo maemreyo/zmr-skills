@@ -1,0 +1,27 @@
+[
+  {
+    "query": "Review this lesson, worksheet, quiz, answer key, and slides for coherence, then give me print-ready DOCX, PDF, and PPTX files.",
+    "should_trigger": true,
+    "note": "Cross-artifact QA plus supported delivery."
+  },
+  {
+    "query": "Check this student worksheet for hidden answers before I print it.",
+    "should_trigger": true,
+    "note": "Safety and presentation review of an existing artifact."
+  },
+  {
+    "query": "Can you make these existing classroom materials ready for tomorrow? I have not chosen the final file formats.",
+    "should_trigger": true,
+    "note": "Ambiguous delivery details remain an existing-artifact review and publish job."
+  },
+  {
+    "query": "Teach this vocabulary set using inverse thinking, but do not create files yet.",
+    "should_trigger": false,
+    "note": "Concept teaching owns pre-artifact pedagogy."
+  },
+  {
+    "query": "Create a new Grade 7 lesson plan from this one-sentence idea.",
+    "should_trigger": false,
+    "note": "Design owns initial planning."
+  }
+]

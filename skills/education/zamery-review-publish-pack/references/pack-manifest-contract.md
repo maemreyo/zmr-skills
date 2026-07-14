@@ -1,0 +1,3 @@
+# Pack Manifest Contract
+
+The manifest has `pack_id`, `brief_id`, non-empty `objective_ids`, `requested_formats`, Zamery Core V2 `brand`, `safety_findings`, `delivery_verification`, and `artifacts`. Each artifact has stable `artifact_id`, `artifact_type`, audience, positive integer version, objective IDs, and versioned dependencies. AnswerSets are teacher-only, cite a current non-answer `source_artifact_id`, and carry its exact `source_version`. `safety_findings` records `kind`, `artifact_id`, and detail; PII and answer leakage are hard blocks. Delivery verification records CRC, re-extraction, nested OOXML, and rerendering of extracted classroom files. The manifest is immutable during validation; repairs create a new artifact version.

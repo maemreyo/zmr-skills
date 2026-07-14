@@ -1,0 +1,27 @@
+[
+  {
+    "query": "Turn this approved Grade 8 lesson into classroom slides and include separate teacher notes.",
+    "should_trigger": true,
+    "note": "Direct pedagogical presentation request."
+  },
+  {
+    "query": "Create a PPTX for this vocabulary set using zamery — rooted in strength. I have not provided colors or a logo.",
+    "should_trigger": true,
+    "note": "Presentation plus explicit non-invention constraint."
+  },
+  {
+    "query": "Make this lesson more visual; I am not sure whether I want a board plan, handout, or slide deck.",
+    "should_trigger": false,
+    "note": "Ambiguous output ownership should enter through the Copilot."
+  },
+  {
+    "query": "Explain this grammar point in a single board table; no slides.",
+    "should_trigger": false,
+    "note": "Concept teaching owns board-only explanation."
+  },
+  {
+    "query": "Review my existing DOCX worksheet for answer leakage.",
+    "should_trigger": false,
+    "note": "Review/publish owns cross-format QA."
+  }
+]

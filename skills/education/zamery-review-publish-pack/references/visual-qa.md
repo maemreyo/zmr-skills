@@ -1,0 +1,3 @@
+# Visual QA
+
+Render every DOCX/PDF page and PPTX slide to images. Inspect clipped or overlapping text, blank or orphan pages, table overflow, page breaks, readable type, contrast, heading order, response space, grayscale behavior when requested, student/teacher answer separation, and speaker-note isolation. For offline HTML, test local opening, keyboard operation, print view, and absence of network requests. For TSV/CSV, reopen and verify encoding, delimiters, headers, and row count. Repair only the affected artifact and element, render again, then reopen the final generated file before delivery.

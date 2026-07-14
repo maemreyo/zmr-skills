@@ -1,0 +1,12 @@
+interface:
+  display_name: Zamery Analyze Student Work
+  short_description: Diagnose student work and plan targeted reteaching
+  default_prompt: Use $zamery-analyze-student-work to review this student work, diagnose
+    errors, and propose probing questions.
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

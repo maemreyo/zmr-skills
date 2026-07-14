@@ -1,0 +1,11 @@
+item_type,expected_response_lines,min_height_mm,preferred_layout
+selected_response,1,8,inline
+short_answer,2,14,ruled_lines
+explanation,4,28,response_box
+two_sentence_transfer,5,34,response_box
+single_choice,1,10,options_below_prompt
+multiple_choice,2,14,options_below_prompt
+ordering,2,16,numbered_sequence
+matching,1,20,two_column_match
+essay,18,120,continued_response_pages
+oral_response,0,18,teacher_observation_box

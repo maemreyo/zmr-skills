@@ -1,0 +1,12 @@
+interface:
+  display_name: Zamery Review and Publish Pack
+  short_description: Review and publish coherent English teaching packs
+  default_prompt: Use $zamery-review-publish-pack to review this teaching pack and
+    deliver verified classroom files.
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

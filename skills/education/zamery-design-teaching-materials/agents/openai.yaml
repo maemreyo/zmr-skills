@@ -1,0 +1,12 @@
+interface:
+  display_name: Zamery Design Teaching Materials
+  short_description: Design branded teacher packs and student materials
+  default_prompt: Use $zamery-design-teaching-materials to turn these approved materials
+    into a branded teacher guide, student worksheet, and answer key.
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

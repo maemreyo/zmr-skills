@@ -1,0 +1,12 @@
+interface:
+  display_name: Zamery Create English Presentations
+  short_description: Create classroom-ready English lesson presentations
+  default_prompt: Use $zamery-create-english-presentations to turn approved English
+    teaching content into a classroom-ready slide deck.
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

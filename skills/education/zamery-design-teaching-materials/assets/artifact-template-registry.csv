@@ -1,0 +1,11 @@
+template_id,artifact_type,audience,page_budget,color_mode,required_page_roles,asset_path
+teacher_guide_core,teacher_guide,teacher,3-4,color_and_grayscale,command_center|teach|respond|answers,templates/teacher-guide-template.docx
+student_worksheet_core,worksheet,student,1-2,color_and_grayscale,practice|transfer|exit,templates/student-worksheet-template.docx
+answer_key_core,answer_key,teacher,1-2,color_and_grayscale,answers,templates/answer-key-template.docx
+classroom_slides_core,slide_deck,student,5-20,color,classroom_flow,templates/classroom-slides-template.pptx
+offline_html_core,offline_html,mixed,1,color_and_grayscale,teacher|student,templates/offline-html/index.html
+question_bank_core,question_bank,teacher,unbounded,data_only,records,templates/question-bank-template.csv
+student_workbook_core,student_workbook,student,unbounded,color_and_grayscale,cover|section|practice|checkpoint,templates/student-workbook-template.docx
+exam_paper_core,exam_paper,student,unbounded,color_and_grayscale,cover|instructions|section|items,templates/exam-paper-template.docx
+answer_sheet_core,answer_sheet,student,unbounded,color_and_grayscale,identity|selected_responses|constructed_responses,templates/answer-sheet-template.docx
+administration_guide_core,administration_guide,teacher,2-6,color_and_grayscale,security|before|during|after|incidents,templates/administration-guide-template.docx

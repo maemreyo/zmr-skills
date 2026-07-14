@@ -1,0 +1,27 @@
+[
+  {
+    "query": "Check this student's past-tenses homework, explain the misconception behind each error, and give me five probing questions for tomorrow.",
+    "should_trigger": true,
+    "note": "Submitted work plus diagnosis and follow-up."
+  },
+  {
+    "query": "Use this rubric to mark the attached Grade 9 paragraph and suggest one targeted reteaching activity.",
+    "should_trigger": true,
+    "note": "Authority-backed marking and reteaching."
+  },
+  {
+    "query": "Please check this attached page; it may be a student's response, but the name and original question are visible.",
+    "should_trigger": true,
+    "note": "Ambiguous attachment still contains submitted work and requires privacy-first local intake."
+  },
+  {
+    "query": "Create a blank Grade 9 writing worksheet for my class.",
+    "should_trigger": false,
+    "note": "No submitted student work; practice owns it."
+  },
+  {
+    "query": "Create a model answer and scoring rubric for a future test.",
+    "should_trigger": false,
+    "note": "Assessment design owns it."
+  }
+]

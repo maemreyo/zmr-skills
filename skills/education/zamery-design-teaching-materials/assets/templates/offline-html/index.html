@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zamery classroom material</title>
+  <link rel="stylesheet" href="zamery.css">
+</head>
+<body>
+  <header class="brand-bar">
+    <div><strong class="wordmark">zamery</strong><span class="tagline">rooted in strength</span></div>
+    <span class="audience">STUDENT MATERIAL</span>
+  </header>
+  <main>
+    <p class="eyebrow">CLUE DETECTIVE</p>
+    <h1>{{ material_title }}</h1>
+    <p class="lead">{{ direct_student_instruction }}</p>
+    <section aria-labelledby="notice-title">
+      <h2 id="notice-title">1 · Notice</h2>
+      <div class="callout">{{ contrast_or_bad_example }}</div>
+    </section>
+    <section aria-labelledby="practice-title">
+      <h2 id="practice-title">2 · Test the clue</h2>
+      <ol class="question-list">
+        <li><p>{{ prompt }}</p><label>Answer <textarea rows="2"></textarea></label></li>
+      </ol>
+    </section>
+  </main>
+  <footer>zamery · rooted in strength</footer>
+</body>
+</html>

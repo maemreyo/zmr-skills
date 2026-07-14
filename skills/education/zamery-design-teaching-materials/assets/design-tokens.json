@@ -1,0 +1,44 @@
+{
+  "system_id": "zamery-core.v2",
+  "brand": {
+    "name": "zamery",
+    "tagline": "rooted in strength",
+    "wordmark_case": "lowercase",
+    "pictorial_logo": null
+  },
+  "palette": {
+    "ink_navy": "#17324D",
+    "root_terracotta": "#B85435",
+    "growth_teal": "#2B746F",
+    "warm_sand": "#F4EEE4",
+    "sky_mist": "#DCEAF2",
+    "charcoal": "#202B33",
+    "paper_white": "#FFFFFF"
+  },
+  "typography": {
+    "primary_family": "Arial",
+    "fallback_family": "sans-serif",
+    "wordmark_weight": 700,
+    "document_title_pt": 24,
+    "section_heading_pt": 15,
+    "document_body_pt": 10.5,
+    "print_body_min_pt": 9.5,
+    "slide_deck_title_pt": 50,
+    "slide_title_pt": 35,
+    "slide_subheading_pt": 24,
+    "slide_body_min_pt": 16
+  },
+  "document": {
+    "page_size": "letter",
+    "margin_top_in": 0.65,
+    "margin_right_in": 0.7,
+    "margin_bottom_in": 0.65,
+    "margin_left_in": 0.7,
+    "footer_page_number": true
+  },
+  "accessibility": {
+    "grayscale_safe": true,
+    "color_never_sole_signal": true,
+    "minimum_contrast": "WCAG_AA"
+  }
+}

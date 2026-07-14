@@ -1,0 +1,27 @@
+[
+  {
+    "query": "Turn this approved lesson, worksheet content, and answer key into a branded teacher guide, student worksheet, and print-ready PDF pack.",
+    "should_trigger": true,
+    "note": "Approved content needs visual composition and classroom files."
+  },
+  {
+    "query": "Redesign this ugly worksheet so the response space fits each question and the Zamery branding feels intentional.",
+    "should_trigger": true,
+    "note": "Existing classroom material needs document UX and brand treatment."
+  },
+  {
+    "query": "Make these approved materials classroom-ready; I am unsure whether the final result should be a teacher guide, worksheet, or both.",
+    "should_trigger": true,
+    "note": "Ambiguous artifact scope but clearly a visual-composition request."
+  },
+  {
+    "query": "Write twelve new questions about present perfect for Grade 7.",
+    "should_trigger": false,
+    "note": "Practice owns new exercise content before visual composition."
+  },
+  {
+    "query": "Review this finished ZIP and confirm every file opens.",
+    "should_trigger": false,
+    "note": "Review and publish owns final verification."
+  }
+]

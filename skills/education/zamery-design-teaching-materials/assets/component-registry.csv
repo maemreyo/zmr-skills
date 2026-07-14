@@ -1,0 +1,13 @@
+component_id,audience,artifact_type,purpose,min_height_mm,allowed_page_roles,required_fields,column_ratios
+lesson_at_glance,teacher,teacher_guide,orient the teacher,32,command_center,title|grade|duration|objectives|materials,
+lesson_timeline,teacher,teacher_guide,control lesson pacing,48,teach,stage|minutes|teacher_move|student_evidence,0.18|0.12|0.40|0.30
+question_block,student,worksheet,present one task and its response surface,12,practice|transfer|exit,item_id|prompt|response_type,
+prompt_response_grid,student,worksheet,compare repeated short tasks,24,practice|exit,item_id|prompt|response_type,0.08|0.55|0.37
+response_box,student,worksheet,capture extended written response,12,practice|transfer|exit,item_id|expected_response_lines,
+answer_key_grid,teacher,answer_key,mark quickly with evidence,30,answers,item_id|answer|rationale,0.10|0.28|0.62
+workbook_progress_map,student,student_workbook,orient long-form practice,44,cover|checkpoint,section|objective|item_range|status,0.20|0.40|0.18|0.22
+section_opener,student,student_workbook,reset goal and page rhythm,30,section,section_title|success_evidence,
+exam_identity_block,student,exam_paper,capture candidate and form identity,24,cover,name|candidate_id|class|form_id,0.14|0.36|0.14|0.36
+exam_item_block,student,exam_paper,present numbered scored item,14,items,item_id|version|prompt|marks,
+answer_sheet_grid,student,answer_sheet,capture aligned responses,48,selected_responses|constructed_responses,item_id|response_surface,0.12|0.88
+administration_timeline,teacher,administration_guide,standardize delivery,44,during,time|script|incident,0.18|0.54|0.28

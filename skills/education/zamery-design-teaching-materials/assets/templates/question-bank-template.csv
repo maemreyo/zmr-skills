@@ -1,0 +1,2 @@
+item_id,objective_id,item_type,prompt,options,response_type,expected_response_lines,difficulty,source_id
+Q001,OBJ-1,selected_response,"{{ prompt }}","{{ option_a }}|{{ option_b }}",selected_response,1,core,{{ source_id }}
