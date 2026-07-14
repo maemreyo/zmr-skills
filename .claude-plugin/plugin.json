@@ -21,6 +21,18 @@
     "./skills/productivity/grilling",
     "./skills/productivity/handoff",
     "./skills/productivity/teach",
-    "./skills/productivity/writing-great-skills"
+    "./skills/productivity/writing-great-skills",
+    "./skills/education/zamery-teacher-copilot",
+    "./skills/education/zamery-design-english-learning",
+    "./skills/education/zamery-teach-english-concepts",
+    "./skills/education/zamery-build-english-practice",
+    "./skills/education/zamery-build-english-item-banks",
+    "./skills/education/zamery-compose-english-assessments",
+    "./skills/education/zamery-create-ielts-practice",
+    "./skills/education/zamery-build-video-learning",
+    "./skills/education/zamery-design-teaching-materials",
+    "./skills/education/zamery-create-english-presentations",
+    "./skills/education/zamery-analyze-student-work",
+    "./skills/education/zamery-review-publish-pack"
   ]
 }

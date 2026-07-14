@@ -183,3 +183,25 @@ General workflow tools, not code-specific.
 **Model-invoked**
 
 - **[grilling](./skills/productivity/grilling/SKILL.md)** — Interview the user relentlessly about a plan or design until every branch of the decision tree is resolved. The reusable loop behind `grill-me` and `grill-with-docs`.
+
+### Education
+
+English K–12 teaching skills: lesson design, concept teaching, practice, assessments, IELTS, video learning, materials, presentations, student-work analysis, and publishing.
+
+**User-invoked**
+
+- **[zamery-teacher-copilot](./skills/education/zamery-teacher-copilot/SKILL.md)** — Route broad, ambiguous, or multi-artifact English K–12 teaching requests to the right specialist skill.
+
+**Model-invoked**
+
+- **[zamery-design-english-learning](./skills/education/zamery-design-english-learning/SKILL.md)** — Plan, structure, sequence, or redesign an English K–12 lesson or unit blueprint.
+- **[zamery-teach-english-concepts](./skills/education/zamery-teach-english-concepts/SKILL.md)** — Teach English K–12 concepts with memorable examples and comprehension checks.
+- **[zamery-build-english-practice](./skills/education/zamery-build-english-practice/SKILL.md)** — Create one-off worksheets, drills, homework sets, and differentiated exercises.
+- **[zamery-build-english-item-banks](./skills/education/zamery-build-english-item-banks/SKILL.md)** — Build reusable 80–400+ item banks with deduplication, version control, and JSONL/SQLite/CSV exports.
+- **[zamery-compose-english-assessments](./skills/education/zamery-compose-english-assessments/SKILL.md)** — Compose blueprint-exact quizzes, tests, exams, and QTI exports from approved item banks.
+- **[zamery-create-ielts-practice](./skills/education/zamery-create-ielts-practice/SKILL.md)** — Generate IELTS Academic or General Training aligned practice with official task-family constraints.
+- **[zamery-build-video-learning](./skills/education/zamery-build-video-learning/SKILL.md)** — Turn authorised video into timestamped English-learning sequences with H5P export.
+- **[zamery-design-teaching-materials](./skills/education/zamery-design-teaching-materials/SKILL.md)** — Compose approved content into branded worksheets, workbooks, exam papers, and print-ready DOCX/PDF.
+- **[zamery-create-english-presentations](./skills/education/zamery-create-english-presentations/SKILL.md)** — Convert approved teaching content into classroom slides and speaker notes.
+- **[zamery-analyze-student-work](./skills/education/zamery-analyze-student-work/SKILL.md)** — Mark, diagnose, and provide feedback on student submissions with PII redaction.
+- **[zamery-review-publish-pack](./skills/education/zamery-review-publish-pack/SKILL.md)** — Gate, finalise, package, and export teaching packs through six quality gates.
