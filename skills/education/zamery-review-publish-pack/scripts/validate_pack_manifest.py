@@ -8,7 +8,7 @@ SUPPORTED_FORMATS = {
     "docx", "pdf", "pptx", "html", "tsv", "csv", "jsonl", "sqlite", "qti", "h5p"
 }
 STRUCTURED_FORMATS = {"jsonl", "sqlite", "qti", "h5p"}
-BLOCKING_SAFETY_KINDS = {"pii", "answer_leakage"}
+BLOCKING_SAFETY_KINDS = {"pii", "answer_leakage", "student_card_leakage", "prohibited_learner_label"}
 
 
 def validate_pack_manifest(data: dict[str, object]) -> list[str]:

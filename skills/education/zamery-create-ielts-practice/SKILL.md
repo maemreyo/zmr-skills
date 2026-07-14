@@ -9,13 +9,13 @@ Apply an explicit IELTS profile to English-learning content. Preserve official f
 
 ## Workflow
 
-1. Confirm Academic or General Training, target section(s), full mock or partial practice, learner goal, time, source material, and desired output.
+1. Confirm Academic or General Training, target section(s), full mock or partial practice, learner goal, time, source material, and desired output. Apply `../_shared/references/brief-version-contract.md` to the approved brief and every source, profile, exemplar, and authority dependency; reject stale or unapproved input even when invoked directly.
 2. Build `zamery-ielts-blueprint.v3` using `references/ielts-profile.md`.
 3. Use only task families valid for that section. Read `references/listening-reading-task-families.md`.
 4. For completion items, store `max_words`, `max_numbers`, accepted alternatives, case sensitivity, and spelling policy as data fields.
-5. For Writing and Speaking, gather observable evidence under all four criteria before giving any estimated range. Read `references/writing-speaking-feedback.md`.
+5. For Writing and Speaking, gather observable evidence under all four criteria before giving any estimated range. Use benchmarked exemplars and teacher rater calibration; read `references/writing-speaking-feedback.md`.
 6. Validate blueprints, objective items, and criterion feedback with `scripts/ielts_profile.py`.
-7. When creating many reusable items, hand the approved IELTS profile to `zamery-build-english-item-banks`. For a mock form, hand it to `zamery-compose-english-assessments`. For visual files, hand approved content to `zamery-design-teaching-materials`.
+7. Export teacher-approved criterion evidence to `zamery-monitor-english-learning`. Route reusable items, mock forms, and visual files to their existing owners.
 
 ## Non-negotiable labeling
 

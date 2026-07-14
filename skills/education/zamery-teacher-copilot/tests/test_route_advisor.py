@@ -17,6 +17,30 @@ class RouteAdvisorTests(unittest.TestCase):
     def test_small_ungraded_worksheet_stays_practice(self) -> None:
         self.assertEqual(advise_route("Make a 20-question ungraded worksheet"), "practice")
 
+    def test_learner_discovery_routes_to_understand_learners(self) -> None:
+        self.assertEqual(
+            advise_route("Create a StudentCard from student voice and teacher observations"),
+            "understand_learners",
+        )
+
+    def test_progress_request_routes_to_monitor_learning(self) -> None:
+        self.assertEqual(
+            advise_route("Show this learner's objective progress over the last six weeks"),
+            "monitor_learning",
+        )
+
+    def test_confirmed_gap_routes_to_reteaching(self) -> None:
+        self.assertEqual(
+            advise_route("They still don't understand since and for; plan corrective reteaching"),
+            "reteach",
+        )
+
+    def test_term_plan_routes_to_sequence_design(self) -> None:
+        self.assertEqual(
+            advise_route("Design a 16-week spiral curriculum with spaced review"),
+            "sequence_design",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -2,6 +2,9 @@
 
 | Intent | Skill | Enter when | Exit when |
 |---|---|---|---|
+| understand_learners | zamery-understand-learners | learner discovery, StudentCard, student voice, or governed context is requested | StudentCard and approved ClassProfile/snapshot are reviewed |
+| monitor_learning | zamery-monitor-english-learning | teacher asks for objective evidence, growth, review due-state, or class progress | teacher-reviewed trajectory or progress facts delivered |
+| sequence_design | zamery-design-english-learning-sequences | multi-week, term, course, curriculum map, or spiral review plan is requested | LearningSequenceMap approved |
 | design | zamery-design-english-learning | objectives or lesson/unit sequence need design | blueprint approved |
 | concept_teaching | zamery-teach-english-concepts | teacher needs explanation, method, or board plan | concept model/checks approved |
 | practice | zamery-build-english-practice | one-off ungraded rehearsal requested | student-safe practice validated |
@@ -12,6 +15,7 @@
 | material_design | zamery-design-teaching-materials | approved content needs branded worksheet/workbook/exam/DOCX/PDF/HTML/CSV | rendered artifacts pass |
 | presentation | zamery-create-english-presentations | approved content needs slides/PPTX | deck rendered and inspected |
 | student_work_analysis | zamery-analyze-student-work | actual student response is supplied | privacy-safe evidence/feedback complete |
+| reteach | zamery-plan-english-reteaching | evidence confirms an unresolved objective or misconception after the smallest first move | corrective plan, teacher action, and reassessment approved |
 | review_publish | zamery-review-publish-pack | existing artifacts need QA, export, print, or packaging | gates and delivery verification pass |
 
-Route by workflow intent, not count alone. A 300-question pool routes to item-bank construction; a 100-question end-of-term exam routes to assessment composition; a long ungraded worksheet can use item-bank construction followed by material-design workbook projection. IELTS profile and video grounding run before downstream bank/form/layout work. Review/publish is last.
+Route by workflow intent, not count alone. Learner discovery precedes learner-sensitive design; monitoring precedes reteaching or progress communication; sequence design precedes lesson/unit design for long horizons. A 300-question pool routes to item banks, while a 100-question exam routes to assessment composition. Review/publish is last.

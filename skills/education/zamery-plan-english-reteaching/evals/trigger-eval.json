@@ -1,0 +1,32 @@
+[
+  {
+    "query": "The monitoring data shows flat performance on subject-verb agreement over four weeks. Plan a reteaching intervention for this student.",
+    "should_trigger": true,
+    "note": "Monitoring trajectory triggers reteaching planning."
+  },
+  {
+    "query": "Here is the probing output: Student A conflates finished-time and present-relevance across three items. Plan the smallest corrective move.",
+    "should_trigger": true,
+    "note": "High-confidence diagnostic from probing directs reteaching planning."
+  },
+  {
+    "query": "Two analyses of different homework sets both show the same article (a/an/the) misuse pattern. Design a reteaching plan.",
+    "should_trigger": true,
+    "note": "Independent observations across items meet the minimum evidence bar."
+  },
+  {
+    "query": "Mark this student's composition using the rubric and suggest one targeted reteaching activity.",
+    "should_trigger": false,
+    "note": "Analysis owns marking; reteaching-activity suggestion is a second step routed by teacher-copilot."
+  },
+  {
+    "query": "Create a practice worksheet for passive-voice transformations.",
+    "should_trigger": false,
+    "note": "No prior analysis evidence — practice construction owns this."
+  },
+  {
+    "query": "I noticed one student in my class wrote 'goed' instead of 'went' once. Should I reteach irregular past tense?",
+    "should_trigger": true,
+    "note": "Ambiguous — a single observation is below the evidence bar. The plan would be provisional."
+  }
+]

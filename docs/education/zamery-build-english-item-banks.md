@@ -1,18 +1,18 @@
 Quickstart:
 
 ```bash
-npx skills add mattpocock/skills --skill=zamery-build-english-item-banks
+npx skills add maemreyo/zmr-skills@zmr-dev --skill=zamery-build-english-item-banks
 ```
 
 ```bash
 npx skills update zamery-build-english-item-banks
 ```
 
-[Source](https://github.com/mattpocock/skills/tree/main/skills/education/zamery-build-english-item-banks)
+[Source](https://github.com/maemreyo/zmr-skills/tree/zmr-dev/skills/education/zamery-build-english-item-banks)
 
 ## What it does
 
-Build reusable, governed collections of atomic assessment or practice items -- 80 to 400+ items in a single run. The defining constraint is that this skill treats the bank as structured curriculum data (JSONL to SQLite to CSV), not as a very long worksheet. Items get stable IDs, versions, source anchors, and explicit deduplication. The bank is the canonical source of truth that downstream skills draw from.
+Build reusable, governed collections of atomic assessment or practice items -- 80 to 400+ items in a single run. The defining constraint is that this skill treats the bank as structured curriculum data (JSONL to SQLite to CSV), not as a very long worksheet. Items get stable IDs, versions, source anchors, and explicit deduplication. The bank is the canonical source of truth that downstream skills draw from. Direct invocation asserts the approved brief and curriculum, source, blueprint, and authority versions before drafting begins.
 
 ## When to reach for it
 
@@ -33,7 +33,9 @@ This skill operates on three storage tiers, each with a distinct job:
 
 QTI and H5P are downstream interchange packages. They are not the authoring database.
 
-Generation happens in 20 to 50 item chunks. The skill never asks a model to produce 400 final items in one undifferentiated response. Each chunk is validated on ingest: records with missing source anchors, answer evidence, invalid interaction data, or mutated content under an existing `(item_id, version)` are rejected.
+Generation happens in 20 to 50 item chunks. The skill never asks a model to produce 400 final items in one undifferentiated response. Each chunk is validated on ingest: records with missing source anchors, answer evidence, invalid interaction data, or mutated content under an existing `(item_id, version)` are rejected. Bank blueprints can distribute items by misconception family, while validity, bias/DIF review, exposure/security, and oral-language evidence remain explicit metadata.
+
+Reusable banks never encode an individual StudentCard, ClassProfile, behaviour observation, or learner label. Learner context may shape a separate approved task, but it never becomes canonical bank data.
 
 ## It's working if
 
@@ -47,4 +49,4 @@ Generation happens in 20 to 50 item chunks. The skill never asks a model to prod
 
 - **Role.** A build-once, refresh-anytime data skill. It is the canonical source of truth for items that downstream skills consume.
 - **Neighbours.** `zamery-build-english-practice` for one-off worksheet items (no bank required). `zamery-compose-english-assessments` at https://aihero.dev/skills-zamery-compose-english-assessments to select from the bank and assemble exam forms.
-- **The map.** Point to https://aihero.dev/skills-zamery-teacher-copilot.
+- **The map.** Use [zamery-teacher-copilot](https://aihero.dev/skills-zamery-teacher-copilot) for Zamery routing and [ask-matt](https://aihero.dev/skills-ask-matt) for the wider skill set.

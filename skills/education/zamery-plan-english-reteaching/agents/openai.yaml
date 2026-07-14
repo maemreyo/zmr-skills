@@ -1,0 +1,12 @@
+interface:
+  display_name: Zamery Plan English Reteaching
+  short_description: Plan structured reteaching interventions from analysis evidence
+  default_prompt: Use $zamery-plan-english-reteaching to create a reteaching plan
+    for the documented misconception or error pattern. Requires prior analysis evidence.
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

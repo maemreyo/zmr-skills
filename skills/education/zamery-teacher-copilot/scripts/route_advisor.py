@@ -7,6 +7,14 @@ import re
 def advise_route(request: str) -> str:
     """Return the primary V3 specialist intent for common boundary cases."""
     text = " ".join(request.casefold().split())
+    if any(term in text for term in ("studentcard", "student card", "learner profile", "student voice", "teacher observations")):
+        return "understand_learners"
+    if any(term in text for term in ("progress over", "learning trajectory", "objective progress", "class progress", "growth over")):
+        return "monitor_learning"
+    if any(term in text for term in ("still don't understand", "still do not understand", "corrective reteaching", "reteach", "fix this misconception")):
+        return "reteach"
+    if any(term in text for term in ("spiral curriculum", "scheme of work", "semester plan", "term plan", "spaced review", "multi-week")):
+        return "sequence_design"
     if "ielts" in text:
         return "ielts_practice"
     if any(term in text for term in ("youtube", "video link", "transcript", "h5p", "timestamped")):

@@ -56,6 +56,24 @@ class ImpactDiffTests(unittest.TestCase):
             ["practice", "item_bank", "assessment_composition", "ielts_practice", "video_learning", "material_design", "review_publish"],
         )
 
+    def test_approved_snapshot_change_reaches_learner_sensitive_routes(self) -> None:
+        before = {**BEFORE, "learner_context_snapshot_id": "snapshot-1"}
+        result = impact_diff(before, {**before, "learner_context_snapshot_id": "snapshot-2"})
+        self.assertTrue(result["requires_confirmation"])
+        self.assertEqual(
+            result["affected_intents"],
+            ["design", "concept_teaching", "practice", "video_learning", "reteach"],
+        )
+
+    def test_learning_sequence_change_reaches_dependent_design_and_assessment(self) -> None:
+        before = {**BEFORE, "learning_sequence_id": "sequence-1"}
+        result = impact_diff(before, {**before, "learning_sequence_id": "sequence-2"})
+        self.assertTrue(result["requires_confirmation"])
+        self.assertEqual(
+            result["affected_intents"],
+            ["sequence_design", "design", "item_bank", "assessment_composition", "review_publish"],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,20 +1,20 @@
 Quickstart:
 
 ```bash
-npx skills add mattpocock/skills --skill=zamery-review-publish-pack
+npx skills add maemreyo/zmr-skills@zmr-dev --skill=zamery-review-publish-pack
 ```
 
 ```bash
 npx skills update zamery-review-publish-pack
 ```
 
-[Source](https://github.com/mattpocock/skills/tree/main/skills/education/zamery-review-publish-pack)
+[Source](https://github.com/maemreyo/zmr-skills/tree/zmr-dev/skills/education/zamery-review-publish-pack)
 
 ## What it does
 
-`zamery-review-publish-pack` gates, finalises, packages, and exports complete English K-12 teaching packs through six quality gates before delivery.
+`zamery-review-publish-pack` gates, finalises, packages, and exports complete English K-12 teaching packs through seven quality gates before delivery.
 
-A pack does not ship until every gate passes. Brief, Pedagogy, Content, Safety, Presentation, and Pack gates run in sequence; a hard failure at any gate blocks rendering. The skill records evidence for each gate — which artifacts passed, which failed, and on what grounds — so a teacher never receives materials that haven't been checked against the original brief, for pedagogical soundness, for content accuracy, for PII or answer leakage, for visual quality, or for structural integrity.
+A pack does not ship until every gate passes. Brief, Pedagogy, Content, Safety, Accessibility, Presentation, and Pack gates run in sequence; a hard failure blocks rendering. Safety explicitly includes PII, answer leakage, StudentCard leakage, prohibited learner labels, and unsupported claims. CEFR claims require descriptor-level evidence or a non-certified alignment label. Direct invocation rejects stale or unapproved brief, artifact, source, manifest, and authority versions, and student or family communications must also pass the shared audience, consent, grounding, and privacy contract.
 
 ## When to reach for it
 
@@ -24,7 +24,7 @@ Reach for it when the individual artifacts exist and need a final pass before de
 
 ## Gate, don't guess
 
-The six quality gates are the skill's structure. Each has a clear pass-fail criterion.
+The seven quality gates are the skill's structure. Each has a clear pass-fail criterion.
 
 **Brief gate.** The pack is checked against the original teaching brief. Every required artifact is present, every objective is addressed, and no artifact exceeds its defined scope.
 
@@ -33,6 +33,8 @@ The six quality gates are the skill's structure. Each has a clear pass-fail crit
 **Content gate.** Objectives, questions, answers, rubrics, and source references are accurate. Content authority is verified — no question was silently reworded, no objective was dropped.
 
 **Safety gate.** PII and student answer leakage are checked across every artifact. The safety findings from each individual artifact's build are pooled and rechecked at the pack level, because a single artifact may be clean but two artifacts combined may reveal an answer.
+
+**Accessibility gate.** Reading order, headings, alternatives, contrast, captions, response space, and format-specific access requirements are verified before visual polish can pass.
 
 **Presentation gate.** Visual QA runs on every rendered document and slide: DOCX pages are inspected, PPTX slides are reopened, PDFs are checked for correct output. Repairs target only the affected artifact; the gate does not pass until every rendered file is clean.
 
@@ -55,4 +57,4 @@ zamery-create-english-presentations / zamery-build-video-learning →
   zamery-review-publish-pack
 ```
 
-Its upstream neighbours are [zamery-design-teaching-materials](https://aihero.dev/skills-zamery-design-teaching-materials) (composes the documents it gates), [zamery-create-english-presentations](https://aihero.dev/skills-zamery-create-english-presentations) (creates the decks it gates), and [zamery-build-video-learning](https://aihero.dev/skills-zamery-build-video-learning) (creates the video sequences it gates). When you're unsure which skill fits, [zamery-teacher-copilot](https://aihero.dev/skills-zamery-teacher-copilot) routes you.
+Its upstream neighbours are [zamery-design-teaching-materials](https://aihero.dev/skills-zamery-design-teaching-materials), [zamery-create-english-presentations](https://aihero.dev/skills-zamery-create-english-presentations), and [zamery-build-video-learning](https://aihero.dev/skills-zamery-build-video-learning). Use [zamery-teacher-copilot](https://aihero.dev/skills-zamery-teacher-copilot) for Zamery routing and [ask-matt](https://aihero.dev/skills-ask-matt) for the wider skill set.

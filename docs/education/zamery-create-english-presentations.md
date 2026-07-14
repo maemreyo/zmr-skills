@@ -1,20 +1,20 @@
 Quickstart:
 
 ```bash
-npx skills add mattpocock/skills --skill=zamery-create-english-presentations
+npx skills add maemreyo/zmr-skills@zmr-dev --skill=zamery-create-english-presentations
 ```
 
 ```bash
 npx skills update zamery-create-english-presentations
 ```
 
-[Source](https://github.com/mattpocock/skills/tree/main/skills/education/zamery-create-english-presentations)
+[Source](https://github.com/maemreyo/zmr-skills/tree/zmr-dev/skills/education/zamery-create-english-presentations)
 
 ## What it does
 
 `zamery-create-english-presentations` converts approved English K-12 teaching content into classroom slide decks with separate teacher notes.
 
-It preserves the pedagogy the content was designed for. The skill plans each slide by its classroom purpose and the action the teacher or student takes on it — not by how much text fits the box. A slide that drills vocabulary works differently from one that models a reading strategy, and the deck structure reflects that. Teacher notes are a separate surface, never hidden in speaker notes that students could reach.
+It preserves the pedagogy the content was designed for. The skill plans each slide by its classroom purpose and the action the teacher or student takes on it — not by how much text fits the box. A slide that drills vocabulary works differently from one that models a reading strategy, and the deck structure reflects that. Teacher notes are a separate surface, never hidden in speaker notes that students could reach. Direct invocation asserts the approved brief and every source, template, brand, and authority version before deck planning.
 
 ## When to reach for it
 
@@ -28,7 +28,7 @@ The skill opens every session by reading `references/slide-pedagogy.md`, which c
 
 A deck is only as good as its plan, so the skill plans every slide by purpose and action before touching any visual design. The output is a structured deck manifest (validated by `scripts/validate_deck_manifest.py`) that captures each slide's role, its content, and the classroom action it supports. Student slides, teacher notes, and print fallbacks are kept structurally separate throughout.
 
-Rendering goes through the Presentations workflow to produce PPTX. Every slide is then reopened and inspected for two things: **legibility** (overlapping text, wrong font size, broken image, insufficient contrast) and **leakage** (internal metadata, snake-case field names, or generation commentary visible to students). Repairs target only the affected slides, then the deck re-renders from the validated manifest.
+Every slide is reopened and inspected for accessibility, cognitive load, classroom participation, CJK text, legibility, and leakage. Named learner cues and protected profile data are prohibited on projected surfaces. Repairs target only the affected slides, then the deck re-renders from the validated manifest.
 
 ## It's working if
 
@@ -41,4 +41,4 @@ Rendering goes through the Presentations workflow to produce PPTX. Every slide i
 
 `zamery-create-english-presentations` is a chain step in the Zamery flow, producing presentations from settled teaching content.
 
-Its sibling [zamery-design-teaching-materials](https://aihero.dev/skills-zamery-design-teaching-materials) handles page layouts (worksheets, workbooks, exam papers) while this skill handles slide decks. Both feed into [zamery-review-publish-pack](https://aihero.dev/skills-zamery-review-publish-pack) for final gating and delivery. When you're unsure which skill fits, [zamery-teacher-copilot](https://aihero.dev/skills-zamery-teacher-copilot) routes you.
+Its sibling [zamery-design-teaching-materials](https://aihero.dev/skills-zamery-design-teaching-materials) handles page layouts while this skill handles slide decks. Both feed into [zamery-review-publish-pack](https://aihero.dev/skills-zamery-review-publish-pack) for final gating and delivery. Use [zamery-teacher-copilot](https://aihero.dev/skills-zamery-teacher-copilot) for Zamery routing and [ask-matt](https://aihero.dev/skills-ask-matt) for the wider skill set.

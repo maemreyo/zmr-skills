@@ -1,20 +1,20 @@
 Quickstart:
 
 ```bash
-npx skills add mattpocock/skills --skill=zamery-teacher-copilot
+npx skills add maemreyo/zmr-skills@zmr-dev --skill=zamery-teacher-copilot
 ```
 
 ```bash
 npx skills update zamery-teacher-copilot
 ```
 
-[Source](https://github.com/maemreyo/zmr-skills/tree/main/skills/education/zamery-teacher-copilot)
+[Source](https://github.com/maemreyo/zmr-skills/tree/zmr-dev/skills/education/zamery-teacher-copilot)
 
 ## What it does
 
-`zamery-teacher-copilot` is the router over the 11 Zamery specialist skills for English K-12 teaching. You describe the teaching situation you're in; it orients you and dispatches work to the right specialist.
+`zamery-teacher-copilot` is the router over 15 Zamery specialist skills for English K-12 teaching. You describe the teaching situation you're in; it orients you and dispatches work to the right specialist.
 
-It **does no teaching itself**. It doesn't design a lesson, explain a grammar point, build a worksheet, or compose an assessment — it only classifies the intent and hands off to the specialist that owns it. It exists because the 11 specialists are **model-invoked**: the agent might reach for any of them on its own, but only the copilot holds the full map of which intents route to which skills and in what order to run them when a request spans multiple artifacts.
+It **does no teaching itself**. It classifies intent, governs the Teaching Brief, and hands off to the specialist that owns each result. Full StudentCards remain outside downstream context; only approved snapshots and summaries cross boundaries.
 
 ## When to reach for it
 
@@ -24,10 +24,10 @@ Reach for it when the request is broad, ambiguous, or crosses more than one arti
 
 ## The routing discipline
 
-The routing table maps 11 intents to 11 specialists. The idea to hold onto is **intent before count**: a 300-question drill pool routes to the item bank constructor, but a 100-question end-of-term exam routes to the assessment composer, and a long ungraded worksheet might pass through the item bank constructor first and then the materials designer for layout. The copilot follows ordering rules — design before generation, bank before form assembly, materials and presentations after approved content, review and publish last — and passes the same brief ID, objectives, and constraints across every handoff so nothing is lost.
+The routing table maps 15 intents to 15 specialists. The idea to hold onto is **intent before count**: learner discovery precedes learner-sensitive design, monitoring precedes reteaching or progress communication, long-horizon sequence design precedes lesson design, bank generation precedes form assembly, and review/publish remains last. Before every handoff, the copilot asserts the approved brief and dependency versions. If evidence is missing, stale, contradictory, or needs protected human judgment, it stops the affected path and names the evidence, human owner, and safe next action instead of filling the gap with model inference. A specialist failure preserves valid partial state and retries only from the failed boundary.
 
 It never emulates a missing specialist. If a required specialist isn't installed, the copilot states the blocker instead of trying to fill in.
 
 ## Where it fits
 
-`zamery-teacher-copilot` is the **router** — the entry point into the whole Zamery suite, sitting at the top rather than inside any chain. From here you land on any of the 11 specialists: [zamery-design-english-learning](https://aihero.dev/skills-zamery-design-english-learning) for lesson/unit blueprints, [zamery-teach-english-concepts](https://aihero.dev/skills-zamery-teach-english-concepts) for concept explanations, [zamery-build-english-practice](https://aihero.dev/skills-zamery-build-english-practice) for one-off worksheets, [zamery-build-english-item-banks](https://aihero.dev/skills-zamery-build-english-item-banks) for reusable item pools, [zamery-compose-english-assessments](https://aihero.dev/skills-zamery-compose-english-assessments) for graded exams, [zamery-create-ielts-practice](https://aihero.dev/skills-zamery-create-ielts-practice) for IELTS prep, [zamery-build-video-learning](https://aihero.dev/skills-zamery-build-video-learning) for video-based sequences, [zamery-design-teaching-materials](https://aihero.dev/skills-zamery-design-teaching-materials) for branded worksheets and print-ready output, [zamery-create-english-presentations](https://aihero.dev/skills-zamery-create-english-presentations) for classroom slides, [zamery-analyze-student-work](https://aihero.dev/skills-zamery-analyze-student-work) for marking and feedback, and [zamery-review-publish-pack](https://aihero.dev/skills-zamery-review-publish-pack) for final QA and packaging. When you're unsure which specialist fits, the copilot is the node to start from.
+`zamery-teacher-copilot` is the **router** at the top of the suite. Its four new neighbours are [zamery-understand-learners](https://aihero.dev/skills-zamery-understand-learners), [zamery-monitor-english-learning](https://aihero.dev/skills-zamery-monitor-english-learning), [zamery-plan-english-reteaching](https://aihero.dev/skills-zamery-plan-english-reteaching), and [zamery-design-english-learning-sequences](https://aihero.dev/skills-zamery-design-english-learning-sequences); the existing eleven owners still handle lesson design, concepts, practice, item banks, assessments, IELTS, video, materials, presentations, student-work analysis, and publication. For the wider repository map, see [ask-matt](https://aihero.dev/skills-ask-matt).

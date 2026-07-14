@@ -1,18 +1,18 @@
 Quickstart:
 
 ```bash
-npx skills add mattpocock/skills --skill=zamery-create-ielts-practice
+npx skills add maemreyo/zmr-skills@zmr-dev --skill=zamery-create-ielts-practice
 ```
 
 ```bash
 npx skills update zamery-create-ielts-practice
 ```
 
-[Source](https://github.com/mattpocock/skills/tree/main/skills/education/zamery-create-ielts-practice)
+[Source](https://github.com/maemreyo/zmr-skills/tree/zmr-dev/skills/education/zamery-create-ielts-practice)
 
 ## What it does
 
-Generate IELTS Academic or General Training aligned practice materials for Listening, Reading, Writing, and Speaking. The defining constraint is that every output is labelled as practice or mock, never "official IELTS" or a definitive band score. Official format distinctions -- Academic versus General Training Reading and Writing profiles, Speaking Part 1/2/3 structure -- are preserved exactly, while all generated material explicitly disclaims equivalence to a live test.
+Generate IELTS Academic or General Training aligned practice materials for Listening, Reading, Writing, and Speaking. The defining constraint is that every output is labelled as practice or mock, never "official IELTS" or a definitive band score. Official format distinctions -- Academic versus General Training Reading and Writing profiles, Speaking Part 1/2/3 structure -- are preserved exactly, while all generated material explicitly disclaims equivalence to a live test. Direct invocation asserts the approved brief and every source, IELTS profile, exemplar, and authority version before generation.
 
 ## When to reach for it
 
@@ -27,7 +27,7 @@ You need `scripts/ielts_profile.py` in your environment. For Writing and Speakin
 
 Each IELTS section has distinct task families and rules that the skill enforces. Listening and Reading award one mark per correct answer -- the skill reports a raw score but never applies a hard-coded raw-to-band table, because that conversion varies across test versions and between Academic and General Training Reading. For completion items, `max_words`, `max_numbers`, accepted alternatives, case sensitivity, and spelling policy are stored as machine-readable data fields, not hidden only in instructions.
 
-Writing and Speaking feedback follows all four criteria (Task Achievement or Task Response, Coherence and Cohesion, Lexical Resource, Grammatical Range and Accuracy) and remains explicitly provisional. The skill estimates a range from observable evidence and never guarantees a band.
+Writing and Speaking feedback follows all four criteria (Task Achievement or Task Response, Coherence and Cohesion, Lexical Resource, Grammatical Range and Accuracy), uses benchmarked exemplars and teacher rater calibration, and remains explicitly provisional. The skill estimates a range from observable evidence and never guarantees a band. Teacher-approved criterion evidence can be exported to [zamery-monitor-english-learning](https://aihero.dev/skills-zamery-monitor-english-learning).
 
 The non-negotiable labelling rules are simple: you can say "IELTS-aligned practice", "IELTS-aligned mock", "estimated practice feedback", and "practice raw score". You cannot say "official IELTS", "official band", "equivalent to a live test", or any guaranteed score prediction.
 
@@ -43,4 +43,4 @@ The non-negotiable labelling rules are simple: you can say "IELTS-aligned practi
 
 - **Role.** A standalone profile skill that applies IELTS structure to content. It can hand off upstream to item-bank building for large reusable item sets, or downstream to assessment composition for mock exam forms.
 - **Neighbours.** `zamery-build-english-item-banks` at https://aihero.dev/skills-zamery-build-english-item-banks for large reusable IELTS item sets. `zamery-compose-english-assessments` at https://aihero.dev/skills-zamery-compose-english-assessments for assembling mock exam forms from approved IELTS items.
-- **The map.** Point to https://aihero.dev/skills-zamery-teacher-copilot.
+- **The map.** Use [zamery-teacher-copilot](https://aihero.dev/skills-zamery-teacher-copilot) for Zamery routing and [ask-matt](https://aihero.dev/skills-ask-matt) for the wider skill set.

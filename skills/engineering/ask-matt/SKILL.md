@@ -71,6 +71,20 @@ Off the main flow entirely.
 - **`/teach`** — learn a concept over multiple sessions, using the current directory as a stateful workspace.
 - **`/writing-great-skills`** — reference for writing and editing skills well.
 
+## English K–12 teaching: Zamery
+
+Start broad or multi-artifact teaching work at **`/zamery-teacher-copilot`**. It turns the request into a Teaching Brief and routes across fifteen specialist owners without letting one skill silently absorb another's job. Every route rejects stale or unapproved brief and dependency versions, including when a specialist is invoked directly. Evidence-sensitive routes stop for a named human handoff instead of filling missing or protected judgments with model inference.
+
+- **Understand the learners** → `/zamery-understand-learners` for governed StudentCards, ClassProfiles, and approved Learner Context Snapshots.
+- **Monitor progress over time** → `/zamery-monitor-english-learning` for objective-level trajectories and evidence gaps, never predictive scores.
+- **Map a term, semester, course, or year** → `/zamery-design-english-learning-sequences`; for one lesson or unit, use `/zamery-design-english-learning`.
+- **Explain a language concept** → `/zamery-teach-english-concepts`; for ungraded rehearsal, use `/zamery-build-english-practice`.
+- **Build a reusable 80–400+ item pool** → `/zamery-build-english-item-banks`; to compose a quiz, test, exam, or QTI form from approved items, use `/zamery-compose-english-assessments`.
+- **Create IELTS-specific practice** → `/zamery-create-ielts-practice`; for transcript-authorised video learning, use `/zamery-build-video-learning`.
+- **Analyse actual student responses** → `/zamery-analyze-student-work`; when evidence confirms a misconception and the next move needs planning, use `/zamery-plan-english-reteaching`.
+- **Turn approved content into printable documents** → `/zamery-design-teaching-materials`; for slides and speaker notes, use `/zamery-create-english-presentations`.
+- **Finalise and publish an existing pack** → `/zamery-review-publish-pack`, which owns the publication safety gates.
+
 ## Precondition
 
 **`/setup-matt-pocock-skills`** — run before your first engineering flow to configure the issue tracker, triage labels, and doc layout the other skills assume. Custom issue trackers also work.

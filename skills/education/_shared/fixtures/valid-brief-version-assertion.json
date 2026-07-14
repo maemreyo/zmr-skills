@@ -1,0 +1,14 @@
+{
+  "schema_version": "zamery-brief-version-assertion.v1",
+  "brief_id": "brief-grade12-past-tenses",
+  "brief_version": 3,
+  "teacher_approved": true,
+  "objective_ids": ["obj-past-simple", "obj-past-continuous"],
+  "dependencies": [
+    {
+      "artifact_id": "sequence-term-1",
+      "approved_version": 2,
+      "current_version": 2
+    }
+  ]
+}

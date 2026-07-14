@@ -21,10 +21,10 @@ Never imply that a public YouTube link grants caption-download rights. Official 
 
 ## Workflow
 
-1. Parse and normalize the media URL. For YouTube, use `parse_youtube_url` in `scripts/video_learning.py`.
+1. Parse and normalize the media URL. Apply `../_shared/references/brief-version-contract.md` to the approved brief and every media, transcript, ClassProfile, snapshot, and authority dependency; reject stale or unapproved input even when invoked directly. For YouTube, use `parse_youtube_url` in `scripts/video_learning.py`.
 2. Create `zamery-media.v3` using `references/media-source-contract.md`. Record duration, language, transcript authority/grounding, segments, and accessibility.
 3. Validate the media manifest before drafting source-dependent questions.
-4. Build a pre/during/post sequence using `references/learning-sequence.md`.
+4. Build a pre/during/post sequence using `references/learning-sequence.md`, `../_shared/references/learning-science-protocols.md`, and `../_shared/references/english-oral-language-playbook.md`. Use a ClassProfile only for chunking, access, and contextual choices.
 5. Give each source-dependent item a stable ID, phase, timestamp, interaction, prompt, answer/rubric, and `source_anchor` with exact transcript segment IDs.
 6. Validate timestamps, segment IDs, answer structures, and bounds with `validate_timed_items`.
 7. Optionally export H5P with `export_h5p`. The exporter creates a standards-structured host-resolved content package; the target H5P platform must already have the declared libraries.
@@ -43,7 +43,7 @@ Never imply that a public YouTube link grants caption-download rights. Official 
 - Every timestamp and anchor stays within media duration.
 - Every cited segment exists.
 - Public-link-only media cannot be marked verified and must retain teacher verification.
-- Captions and a non-audio alternative are recorded; unsupported accessibility is surfaced.
+- Captions, transcript support, learner control, and a non-audio alternative follow `../_shared/references/accessibility-assessment-ai-safety.md`; unsupported accessibility is surfaced.
 - During-viewing questions are sparse enough to preserve comprehension flow.
 - Questions target listening evidence, inference, language noticing, or transfer—not trivia unrelated to objectives.
 - IELTS-style use routes through `zamery-create-ielts-practice` for profile constraints.

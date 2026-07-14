@@ -1,0 +1,47 @@
+[
+  {
+    "query": "Design a 16-week Grade 7 term sequence: objectives, prerequisite map, spaced retrieval schedule, and assessment windows.",
+    "should_trigger": true,
+    "note": "Explicit long-horizon term sequence with map and schedule."
+  },
+  {
+    "query": "Plan a year-long Grade 5 English scope and sequence with standards coverage, transfer design, and revision history.",
+    "should_trigger": true,
+    "note": "Year-long scope and sequence with curriculum map and revision."
+  },
+  {
+    "query": "I need to re-sequence my Grade 9 term — assessment data shows students are not secure on reported speech before conditionals.",
+    "should_trigger": true,
+    "note": "Revision triggered by assessment evidence."
+  },
+  {
+    "query": "Redesign my Grade 6 semester map: I want to interleave grammar and writing objectives with spaced retrieval every 4 sessions.",
+    "should_trigger": true,
+    "note": "Redesign request with interleaving and spaced schedule."
+  },
+  {
+    "query": "Give me a curriculum map for a Grade 10 IELTS prep course with practice tests every 3 weeks.",
+    "should_trigger": true,
+    "note": "Course-length scope with periodic assessment windows."
+  },
+  {
+    "query": "I need a 45-minute Grade 8 lesson on the present perfect for this Friday.",
+    "should_trigger": false,
+    "note": "Single lesson blueprint belongs to zamery-design-english-learning."
+  },
+  {
+    "query": "Here is my approved lesson plan. Turn it into a printable worksheet with 12 fill-in-the-blank questions.",
+    "should_trigger": false,
+    "note": "One-off worksheet belongs to zamery-build-english-practice."
+  },
+  {
+    "query": "Mark this student's essay and identify which grammar objectives are not yet secure.",
+    "should_trigger": false,
+    "note": "Individual student analysis belongs to zamery-analyze-student-work."
+  },
+  {
+    "query": "I want to plan something for next term but I do not know whether I need a full course map or just a lesson sequence.",
+    "should_trigger": false,
+    "note": "Ambiguous scope should enter through the Copilot."
+  }
+]

@@ -1,20 +1,20 @@
 Quickstart:
 
 ```bash
-npx skills add mattpocock/skills --skill=zamery-design-english-learning
+npx skills add maemreyo/zmr-skills@zmr-dev --skill=zamery-design-english-learning
 ```
 
 ```bash
 npx skills update zamery-design-english-learning
 ```
 
-[Source](https://github.com/maemreyo/zmr-skills/tree/main/skills/education/zamery-design-english-learning)
+[Source](https://github.com/maemreyo/zmr-skills/tree/zmr-dev/skills/education/zamery-design-english-learning)
 
 ## What it does
 
 `zamery-design-english-learning` produces a structured instructional blueprint for an English K-12 lesson or unit — the objectives, evidence criteria, timed phases, methodology, differentiation, and assessment plan — before any worksheet, slide, or exam is created.
 
-It **stops at the blueprint boundary**. The skill will not generate finished student-facing or teacher-facing artifacts. It exits with an approved blueprint and a short list of unresolved decisions, leaving downstream specialists to handle the actual content generation. This is the design-before-build discipline applied to teaching: settle the structure and the evidence criteria first, so everything downstream builds against a fixed target.
+It **stops at the blueprint boundary**. The skill will not generate finished student-facing or teacher-facing artifacts. It exits with an approved blueprint and a short list of unresolved decisions, leaving downstream specialists to handle the actual content generation. This is the design-before-build discipline applied to teaching: settle the structure and the evidence criteria first, so everything downstream builds against a fixed target. Direct invocation asserts the approved brief and every learner-context, sequence, curriculum, and authority version before design begins.
 
 ## When to reach for it
 
@@ -24,7 +24,7 @@ Reach for it when you need a lesson sequence or unit laid out before creating th
 
 ## The blueprint before the build
 
-The leading idea is the **blueprint** — a structured plan with stable objective IDs, observable success evidence, prerequisite and misconception notes, timed phases, methodology with rationale, differentiation tracks, and a downstream artifact map. The skill builds a Teaching Brief from the conversation context, marks each field as explicitly given, inferred, defaulted, or unresolved, and asks exactly one question at a time only when a material gap would change the objectives, grade or CEFR adaptation, methodology, assessment scope, or duration.
+The leading idea is the **blueprint** — a structured plan with stable objective IDs, observable success evidence, prior-knowledge activation, worked examples, prerequisite and misconception notes, timed phases, methodology with rationale, differentiation, spacing hooks, near and far transfer, and a downstream artifact map. It may consume a ClassProfile for whole-class planning or an approved Learner Context Snapshot for individual work, but never a full StudentCard.
 
 Grade band and CEFR level are kept independent. CEFR is never assumed from grade alone.
 
@@ -36,4 +36,4 @@ Grade band and CEFR level are kept independent. CEFR is never assumed from grade
 zamery-teacher-copilot (optional) → blueprint → practice / assessments / materials / slides
 ```
 
-Once the blueprint is approved, the baton passes to specialists that build against it: [zamery-build-english-practice](https://aihero.dev/skills-zamery-build-english-practice) for one-off rehearsal, [zamery-compose-english-assessments](https://aihero.dev/skills-zamery-compose-english-assessments) for graded tests, [zamery-design-teaching-materials](https://aihero.dev/skills-zamery-design-teaching-materials) for branded worksheets and print-ready output, or [zamery-create-english-presentations](https://aihero.dev/skills-zamery-create-english-presentations) for classroom slides. When the request is broad or ambiguous, route through [zamery-teacher-copilot](https://aihero.dev/skills-zamery-teacher-copilot) first.
+For course, term, or year planning, [zamery-design-english-learning-sequences](https://aihero.dev/skills-zamery-design-english-learning-sequences) owns the parent map; each lesson blueprint must align with its objectives, prerequisites, review schedule, transfer, and assessment windows. Once approved, the baton passes to practice, assessment, materials, or presentation specialists. Use [zamery-teacher-copilot](https://aihero.dev/skills-zamery-teacher-copilot) for Zamery routing and [ask-matt](https://aihero.dev/skills-ask-matt) for the wider skill set.

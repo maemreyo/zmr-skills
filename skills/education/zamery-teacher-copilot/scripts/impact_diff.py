@@ -16,8 +16,13 @@ MATERIAL_FIELDS = (
     "media_source_authority",
     "form_ids",
     "seed",
+    "learner_context_snapshot_id",
+    "learning_sequence_id",
 )
 ROUTE_ORDER = (
+    "understand_learners",
+    "monitor_learning",
+    "sequence_design",
     "design",
     "concept_teaching",
     "practice",
@@ -28,6 +33,7 @@ ROUTE_ORDER = (
     "material_design",
     "presentation",
     "student_work_analysis",
+    "reteach",
     "review_publish",
 )
 CONTENT_INTENTS = {
@@ -57,6 +63,8 @@ FIELD_IMPACT = {
     "media_source_authority": {"item_bank", "assessment_composition", "ielts_practice", "video_learning", "material_design", "review_publish"},
     "form_ids": {"assessment_composition", "material_design", "review_publish"},
     "seed": {"item_bank", "assessment_composition", "review_publish"},
+    "learner_context_snapshot_id": {"design", "concept_teaching", "practice", "video_learning", "reteach"},
+    "learning_sequence_id": {"sequence_design", "design", "item_bank", "assessment_composition", "review_publish"},
 }
 ARTIFACT_OWNER = {
     "lesson": "design",

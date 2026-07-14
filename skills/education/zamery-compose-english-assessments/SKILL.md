@@ -17,15 +17,15 @@ Compose reproducible, blueprint-exact assessments from approved content or an ap
 
 ## Workflow
 
-1. Lock purpose, objective IDs, grade band, CEFR claim and provenance, source authority, time, section counts, allowed interactions, difficulty targets, scoring, accommodations, form IDs, and seed.
+1. Lock the intended interpretation/use, objective IDs, grade band, CEFR claim and provenance, source authority, time, section counts, allowed interactions, difficulty targets, scoring, authorised accommodations, form IDs, and seed. Apply `../_shared/references/brief-version-contract.md` to the approved brief and every bank snapshot, item, blueprint, accommodation, and authority dependency; reject stale or unapproved input even when invoked directly.
 2. Create `zamery-assessment-blueprint.v3` using `references/blueprint-and-form-contract.md`. Counts are exact constraints.
 3. If selecting from a bank, accept canonical JSONL or SQLite. Use only the latest approved version of each stable item ID.
 4. Run `scripts/form_composer.py` to allocate disjoint forms. The algorithm is deterministic by seed and balances difficulty across forms.
-5. Review the equivalence report. Counts must match; duplicate IDs are blocked; mean difficulty must remain inside the declared tolerance.
+5. Review validity, accessibility, bias/DIF evidence, construct-preserving accommodations, reliability or decision consistency, form equivalence, and rater calibration using `../_shared/references/accessibility-assessment-ai-safety.md`.
 6. Create a student projection with no answer-bearing fields and a structurally separate teacher AnswerSet. Preserve item IDs and versions in both.
 7. Validate any legacy student/teacher JSON projection with `scripts/validate_assessment_bundle.py`.
 8. Optionally export a composed form with `scripts/qti_export.py`. QTI is an interchange package, not the canonical bank.
-9. Hand the approved composition to the material-design skill for branded files, then to review/publish for certification.
+9. After teacher-approved scoring, export objective evidence to `zamery-monitor-english-learning`; then hand approved composition to material design and review/publish.
 
 ## Required deliverables
 

@@ -1,0 +1,13 @@
+interface:
+  display_name: Zamery Design English Learning Sequences
+  short_description: "Design long-horizon English K\u201312 learning journeys: course/term scope and sequence, objective maps, spaced retrieval, and assessment windows"
+  default_prompt: Use $zamery-design-english-learning-sequences to plan a long-horizon
+    English learning journey — course, term, semester, or year — with objective maps,
+    spaced retrieval scheduling, assessment windows, and transfer design.
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

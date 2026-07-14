@@ -1,0 +1,18 @@
+{
+  "schema_version": "zamery-communication.v1",
+  "communication_id": "communication-term-1",
+  "communication_type": "family_update_letter",
+  "brief_id": "brief-grade12-past-tenses",
+  "audience": "family",
+  "framing": "positive_factual",
+  "source_scope": "approved_progress_facts",
+  "consent_scope_id": "consent-family-progress-2026",
+  "consent_confirmed": true,
+  "approved_fact_ids": ["fact-obj-past-simple-2026-07-01"],
+  "messages": [
+    {
+      "text": "The learner now uses the past simple accurately in familiar narratives and will next practise transferring it to a new context.",
+      "fact_ids": ["fact-obj-past-simple-2026-07-01"]
+    }
+  ]
+}

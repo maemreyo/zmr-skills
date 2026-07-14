@@ -11,14 +11,17 @@ Coordinate broad teaching work conversationally while preserving teacher authori
 ## Workflow
 
 1. Recover conversation context, attachments, and any approved brief or artifact versions before asking questions.
-2. Build the provenance-labelled Teaching Brief with `references/teaching-brief.md`. Show compact sections `Known`, `Inferred`, and `Needs your decision` only when review is useful.
+2. Build the provenance-labelled Teaching Brief with `../_shared/references/teaching-brief.md`. Show compact sections `Known`, `Inferred`, and `Needs your decision` only when review is useful. Full StudentCards remain outside downstream context.
 3. Resolve one material unknown at a time. Continue with labelled assumptions for non-material gaps.
 4. For current, niche, factual, curriculum, or source-sensitive claims, use primary-source research and record authority. Surface conflicts and never claim certified alignment without a governed reference pack.
 5. Classify one or more intents using `references/routing-table.md`. Verify every declared target against `suite-manifest.json`; if a specialist is unavailable, state the exact blocker instead of emulating it.
-6. Route design/profile/grounding before dependent generation; bank generation before form assembly; material design/presentations after approved content; review/publish last. Pass the same brief ID, objectives, constraints, item IDs/versions, seed, language, source authority, and media authority across handoffs.
+6. Route learner discovery before learner-sensitive design, monitoring before reteaching or progress communication, long-horizon sequence design before lesson/unit design, bank generation before form assembly, and review/publish last. Pass approved snapshots and summaries rather than full protected records.
 7. Pause for teacher approval only on material choices or conflicts. Preserve previous approved versions.
-8. For revisions, materialize before/after brief data, call `impact_diff` from `scripts/impact_diff.py`, show changed material fields and affected artifacts, and request confirmation before invalidation or regeneration. Follow `references/semantic-revision.md`.
-9. Deliver one coherent result with separate student/teacher surfaces, verified files, and explicit limitations. Use the material-design specialist for worksheet/workbook/exam/DOCX/PDF/HTML/CSV composition, the assessment composer for QTI, and video learning for H5P.
+8. Before each downstream call, assert the current approved brief and dependency versions with `references/brief-version-assertion.md`; reject stale inputs or request explicit re-approval.
+9. Before an evidence-sensitive route, apply the owning skill's sufficiency bar. If evidence is missing, stale, contradictory, or requires protected human judgment, stop that path and apply the human handoff in `references/error-recovery.md`; never fill the gap with model inference.
+10. For revisions, materialize before/after brief data, call `impact_diff` from `scripts/impact_diff.py`, show changed material fields and affected artifacts, and request confirmation before invalidation or regeneration. Follow `references/semantic-revision.md`.
+11. When a specialist fails, apply `references/error-recovery.md`: preserve valid partial state, state the exact blocker, and retry only from the failed dependency boundary.
+12. Deliver one coherent result with separate student/teacher surfaces, verified files, and explicit limitations. Use the owning specialist for every generated artifact.
 
 ## Conversation rules
 
@@ -30,4 +33,4 @@ Coordinate broad teaching work conversationally while preserving teacher authori
 
 ## Delivery contract
 
-Return the approved brief version, coherent artifact set, separate student and teacher surfaces, affected-version notes after revisions, verified supported files, and explicit limitations. Preserve Zamery Core V2 exactly. V3 has 11 specialist routes plus this Copilot.
+Return the approved brief version, coherent artifact set, separate student and teacher surfaces, affected-version notes after revisions, verified supported files, and explicit limitations. Preserve Zamery Core V2 exactly. V3 has 15 specialist routes plus this Copilot.

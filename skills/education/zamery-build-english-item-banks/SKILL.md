@@ -17,7 +17,7 @@ Build governed collections of atomic assessment or practice items. Treat the ban
 
 ## Required workflow
 
-1. Define the bank blueprint before drafting any item. Record grade band and CEFR independently; objective IDs; target counts by domain, skill, interaction, difficulty, cognitive operation, and source; exclusions; seed; and batch size.
+1. Define the bank blueprint before drafting any item. Apply `../_shared/references/brief-version-contract.md` to the approved brief and every curriculum, source, blueprint, and authority dependency; reject stale or unapproved input even when invoked directly. Record grade band and CEFR independently; objective IDs; target counts by domain, skill, interaction, difficulty, cognitive operation, misconception family, and source; exclusions; seed; and batch size.
 2. Choose 20–50 item chunks. Never ask a model to produce 400 final items in one undifferentiated response.
 3. Create the SQLite operational store with `scripts/init_item_bank.py`.
 4. Generate each chunk as canonical `zamery-item.v3` JSONL. Use `assets/canonical-item.schema.json` and `references/canonical-item-model.md`.
@@ -46,6 +46,8 @@ Read `references/storage-policy.md` before choosing or changing formats.
 - Exact and near duplicates are reported with scores.
 - Batch completion is measured by distinct item IDs and is resumable.
 - The final bank matches the blueprint distribution, not only the total count.
+- The bank records validity, bias/DIF review, exposure/security, and oral-language evidence metadata from `../_shared/references/accessibility-assessment-ai-safety.md` and `../_shared/references/english-oral-language-playbook.md`.
+- Reusable banks never encode an individual StudentCard, ClassProfile, behaviour observation, or learner label.
 
 ## References
 

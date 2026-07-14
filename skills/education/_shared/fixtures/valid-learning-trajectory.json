@@ -1,0 +1,13 @@
+{
+  "schema_version": "zamery-learning-trajectory.v1",
+  "trajectory_id": "trajectory-1",
+  "card_id": "student-local-001",
+  "objective_id": "obj-1",
+  "objective_evidence": [
+    {"evidence_id": "ev-1", "observed_at": "2026-06-01", "status": "emerging", "authority": "teacher_reviewed"},
+    {"evidence_id": "ev-2", "observed_at": "2026-06-21", "status": "developing", "authority": "teacher_reviewed"},
+    {"evidence_id": "ev-3", "observed_at": "2026-07-14", "status": "secure", "authority": "teacher_reviewed"}
+  ],
+  "trend": "improving",
+  "review_due_at": "2026-08-01"
+}

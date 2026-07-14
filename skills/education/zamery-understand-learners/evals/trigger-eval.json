@@ -1,0 +1,52 @@
+[
+  {
+    "query": "Create a StudentCard for a Grade 6 English learner — I have baseline assessment evidence, student voice from the interest survey, and three structured observations.",
+    "should_trigger": true,
+    "note": "Direct StudentCard creation request with multi-source evidence."
+  },
+  {
+    "query": "Summarise my Grade 8 class into a ClassProfile so I can plan next week's lessons around the group's current evidence.",
+    "should_trigger": true,
+    "note": "Whole-class planning needs a ClassProfile."
+  },
+  {
+    "query": "Before I design tomorrow's reteaching session, prepare a snapshot of Linh's current evidence on past-tense contrasts.",
+    "should_trigger": true,
+    "note": "Learner Context Snapshot requested before downstream design."
+  },
+  {
+    "query": "I want to understand why Minh disengages during independent reading. Walk me through collecting structured observations and student voice.",
+    "should_trigger": true,
+    "note": "Learner discovery workflow for engagement conditions."
+  },
+  {
+    "query": "Run the intake diagnostic for my new Grade 4 class and build their first StudentCards.",
+    "should_trigger": true,
+    "note": "Baseline learner study with intake orchestration."
+  },
+  {
+    "query": "Design a 45-minute Grade 8 lesson on reported speech for a mixed-confidence class.",
+    "should_trigger": false,
+    "note": "Pure lesson design — no learner understanding needed."
+  },
+  {
+    "query": "Mark this student's paragraph and tell me which errors reveal a misconception.",
+    "should_trigger": false,
+    "note": "Student-work analysis belongs to the analysis skill."
+  },
+  {
+    "query": "Create a blank Grade 5 grammar worksheet.",
+    "should_trigger": false,
+    "note": "No learner context — practice generation owns this."
+  },
+  {
+    "query": "Tell me which students are lazy and which are just unmotivated.",
+    "should_trigger": false,
+    "note": "Ambiguous — requests prohibited learner labelling instead of evidence-based discovery."
+  },
+  {
+    "query": "Help me understand my students better before I plan the unit — show me what their previous work says about current strengths and gaps.",
+    "should_trigger": true,
+    "note": "Ambiguous but leans into learner context review before planning."
+  }
+]

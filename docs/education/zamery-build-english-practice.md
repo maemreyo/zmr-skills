@@ -1,20 +1,20 @@
 Quickstart:
 
 ```bash
-npx skills add mattpocock/skills --skill=zamery-build-english-practice
+npx skills add maemreyo/zmr-skills@zmr-dev --skill=zamery-build-english-practice
 ```
 
 ```bash
 npx skills update zamery-build-english-practice
 ```
 
-[Source](https://github.com/maemreyo/zmr-skills/tree/main/skills/education/zamery-build-english-practice)
+[Source](https://github.com/maemreyo/zmr-skills/tree/zmr-dev/skills/education/zamery-build-english-practice)
 
 ## What it does
 
 `zamery-build-english-practice` produces one-off student-facing worksheets, drills, homework sets, flashcards, reading passages, and differentiated exercises for a single teaching session — not reusable item banks or graded assessments.
 
-Every student surface is **answer-free**. The skill never places answers, rubrics, explanations, or wrong-reason metadata on the student's copy. This is non-negotiable: practice is for rehearsal, not for evaluation. The student artifact shows only the task, the space to respond, and the instructions. Answers and scoring guidance stay on a separate teacher surface.
+Every student surface is **answer-free**. The skill never places answers, rubrics, explanations, or wrong-reason metadata on the student's copy. This is non-negotiable: practice is for rehearsal, not for evaluation. The student artifact shows only the task, the space to respond, and the instructions. Answers and scoring guidance stay on a separate teacher surface. Direct invocation asserts the approved brief and every blueprint, concept, reteaching-plan, learner-context, and authority version before item generation.
 
 ## When to reach for it
 
@@ -24,7 +24,7 @@ Reach for it when you need practice for *this* lesson, *these* students, *this* 
 
 ## Progression, not just exercises
 
-The leading idea is the **progression** — exercises are sequenced along a cognitive ramp. The skill uses a practice progression model: worked example first (the student sees how it's done), then guided practice (scaffolded), then independent practice (the student on their own), then retrieval (spaced, from earlier material), then transfer (the concept applied in a slightly new context). A shorter sequence is allowed only when the material doesn't support every stage.
+The leading idea is the **progression** — exercises are sequenced along a cognitive ramp. The skill uses worked examples, faded guidance, independent practice, spaced retrieval, interleaving, and near or far transfer when appropriate. A shorter sequence is allowed only when the material does not support every stage.
 
 Every item carries an independent choice of interaction type, response mode, cognitive operation, evidence type, scoring approach, and context — so variety changes what the learner *does*, not just how the worksheet looks.
 
@@ -36,4 +36,4 @@ Every item carries an independent choice of interaction type, response mode, cog
 (design → concept teaching →) practice → materials / slides
 ```
 
-Its closest neighbour is [zamery-teach-english-concepts](https://aihero.dev/skills-zamery-teach-english-concepts), which feeds the concept that the practice drills. After practice is built, the output can be handed to [zamery-design-teaching-materials](https://aihero.dev/skills-zamery-design-teaching-materials) for branded DOCX or PDF layout, or to [zamery-create-english-presentations](https://aihero.dev/skills-zamery-create-english-presentations) for classroom slide projection. When the request is broad or ambiguous, route through [zamery-teacher-copilot](https://aihero.dev/skills-zamery-teacher-copilot) first.
+Its closest neighbours are [zamery-teach-english-concepts](https://aihero.dev/skills-zamery-teach-english-concepts), which feeds the taught concept, and [zamery-plan-english-reteaching](https://aihero.dev/skills-zamery-plan-english-reteaching), which can request targeted misconception, scaffold, transfer, and reassessment practice. After practice is built, hand it to materials or presentation specialists for layout. Use [zamery-teacher-copilot](https://aihero.dev/skills-zamery-teacher-copilot) for Zamery routing and [ask-matt](https://aihero.dev/skills-ask-matt) for the wider skill set.

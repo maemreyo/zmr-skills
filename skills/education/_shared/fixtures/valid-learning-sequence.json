@@ -1,0 +1,12 @@
+{
+  "schema_version": "zamery-learning-sequence.v1",
+  "sequence_id": "sequence-1",
+  "duration_weeks": 16,
+  "objective_ids": ["obj-1", "obj-2"],
+  "prerequisite_edges": [{"from": "obj-1", "to": "obj-2"}],
+  "coverage": [{"objective_id": "obj-1", "sessions": [1, 3, 7]}, {"objective_id": "obj-2", "sessions": [4, 8, 12]}],
+  "review_schedule": [{"session": 3, "objective_ids": ["obj-1"]}],
+  "assessment_windows": [{"session": 8, "objective_ids": ["obj-1", "obj-2"]}],
+  "transfer_levels": ["near", "far"],
+  "source_authority": "teacher_supplied"
+}

@@ -1,0 +1,41 @@
+{
+  "schema_version": "zamery-student-card.v1",
+  "card_id": "student-local-001",
+  "owner": "teacher-or-school",
+  "purpose": "instructional_support",
+  "consent": {"school_authority": true, "field_scope_ids": ["scope-learning"]},
+  "lifecycle": {"created_at": "2026-07-14", "reviewed_at": "2026-07-14", "next_review_at": "2026-08-14", "delete_at": "2027-07-14"},
+  "student_voice": {"goals": ["Explain tense choices clearly"], "interests": ["space exploration"]},
+  "learning_evidence": [
+    {
+      "evidence_id": "ev-1",
+      "objective_id": "obj-1",
+      "observation": "Selected the finished-time form in four of five items",
+      "source": "assessment",
+      "authority": "teacher_reviewed",
+      "observed_at": "2026-07-14",
+      "context": "five-item tense diagnostic",
+      "evidence_reference": "assessment-2026-07-14:item-1-5",
+      "confidence": "high",
+      "counterevidence": [],
+      "expires_at": "2026-09-14",
+      "reviewed_by": "teacher-local-01",
+      "review_status": "approved",
+      "consent_scope_id": "scope-learning",
+      "dispute_status": "undisputed"
+    }
+  ],
+  "learning_conditions": {"observations": [], "strategies_tried": []},
+  "interests_and_routines": {"interest_tags": ["space exploration"], "reported_schedule_conflicts": []},
+  "authorised_support": [],
+  "disputes": [],
+  "provenance": {
+    "learning_evidence": {
+      "source": "assessment",
+      "authority": "teacher_reviewed",
+      "date": "2026-07-14",
+      "confidence": "high",
+      "expiry": "2026-09-14"
+    }
+  }
+}

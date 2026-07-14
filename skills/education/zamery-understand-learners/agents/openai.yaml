@@ -1,0 +1,12 @@
+interface:
+  display_name: Zamery Understand Learners
+  short_description: Build governed learner profiles through multi-source discovery
+  default_prompt: Use $zamery-understand-learners to understand a learner or class
+    through the Learner Discovery Pack, StudentCard, and ClassProfile before planning.
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

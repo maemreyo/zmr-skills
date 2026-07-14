@@ -22,14 +22,14 @@ class SuiteManifestTests(unittest.TestCase):
         }
         self.assertIn("intent owners must be unique", validate_manifest(data))
 
-    def test_exact_eleven_specialist_targets_are_required(self) -> None:
+    def test_exact_fifteen_specialist_targets_are_required(self) -> None:
         data = {
             "manifest_version": "zamery-suite.v3",
             "routes": [
                 {"intent": "design", "skill": "zamery-design-english-learning"}
             ],
         }
-        self.assertIn("manifest must declare exactly eleven specialist targets", validate_manifest(data))
+        self.assertIn("manifest must declare exactly fifteen specialist targets", validate_manifest(data))
 
     def test_v3_manifest_contains_new_workflow_boundaries(self) -> None:
         data = json.loads((ROOT / "suite-manifest.json").read_text(encoding="utf-8"))
@@ -38,6 +38,10 @@ class SuiteManifestTests(unittest.TestCase):
         self.assertEqual(routes["assessment_composition"], "zamery-compose-english-assessments")
         self.assertEqual(routes["ielts_practice"], "zamery-create-ielts-practice")
         self.assertEqual(routes["video_learning"], "zamery-build-video-learning")
+        self.assertEqual(routes["understand_learners"], "zamery-understand-learners")
+        self.assertEqual(routes["monitor_learning"], "zamery-monitor-english-learning")
+        self.assertEqual(routes["reteach"], "zamery-plan-english-reteaching")
+        self.assertEqual(routes["sequence_design"], "zamery-design-english-learning-sequences")
 
 
 if __name__ == "__main__":

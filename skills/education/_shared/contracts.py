@@ -2,6 +2,26 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 
+from .learning_contracts import (
+    validate_brief_version_assertion,
+    validate_communication,
+    validate_evidence_summary,
+    validate_learning_sequence,
+    validate_learning_trajectory,
+    validate_reteaching_plan,
+    validate_student_card,
+)
+
+__all__ = (
+    "validate_brief_version_assertion",
+    "validate_communication",
+    "validate_evidence_summary",
+    "validate_learning_sequence",
+    "validate_learning_trajectory",
+    "validate_reteaching_plan",
+    "validate_student_card",
+)
+
 PROVENANCE = {"explicit", "inferred", "defaulted", "unresolved"}
 GRADE_BANDS = {"k_2", "grades_3_5", "grades_6_8", "grades_9_12"}
 LEAK_FIELDS = {
@@ -27,6 +47,10 @@ ZAMERY_SKILL_NAMES = (
     "zamery-analyze-student-work",
     "zamery-review-publish-pack",
     "zamery-teacher-copilot",
+    "zamery-understand-learners",
+    "zamery-monitor-english-learning",
+    "zamery-plan-english-reteaching",
+    "zamery-design-english-learning-sequences",
 )
 
 RESPONSE_INTERACTIONS = {

@@ -1,0 +1,33 @@
+{
+  "schema_version": "zamery-reteaching-plan.v1",
+  "plan_id": "reteach-1",
+  "objective_ids": ["obj-1"],
+  "evidence_ids": ["ev-1", "ev-2"],
+  "misconception": {"statement": "Finished time and present relevance are conflated", "confidence": "medium", "competing_explanations": ["task misunderstanding"]},
+  "phases": ["reconnect_prerequisite", "contrast", "guided_discrimination", "corrective_rehearsal", "transfer"],
+  "teacher_action": {
+    "action_id": "action-reteach-1",
+    "based_on_snapshot_id": "snapshot-1",
+    "snapshot_expires_at": "2026-08-14",
+    "target": "obj-1",
+    "evidence_ids": ["ev-1", "ev-2"],
+    "proposed_move": "exemplar_contrast",
+    "rationale": "Contrast the two timelines before adding new practice",
+    "preserves": ["shared_objective", "assessment_construct", "learner_dignity"],
+    "trial_window": "two sessions",
+    "trial_sessions": 2,
+    "expected_signal": "Explains the time contrast before selecting a form",
+    "teacher_approval": true,
+    "result": "not-yet-tried",
+    "confounding_factors": [],
+    "teacher_interpretation": null,
+    "review_date": "2026-07-21"
+  },
+  "reassessment": {
+    "objective_ids": ["obj-1"],
+    "success_evidence": "Explains and applies the contrast in a new context",
+    "item_count": 5,
+    "wait_days": 2,
+    "auto_schedule": true
+  }
+}

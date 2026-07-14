@@ -9,4 +9,6 @@
   {"query":"Assemble Forms A and B from this approved bank.","should_trigger":false,"note":"Narrow assessment-composition route."},
   {"query":"Build IELTS Academic Reading practice only.","should_trigger":false,"note":"Narrow IELTS route."},
   {"query":"Mark this attached student paragraph with my rubric.","should_trigger":false,"note":"Narrow student-analysis route."}
+  ,{"query":"Create StudentCards, a class profile, a 16-week sequence, and individual reteaching packs from these diagnostics.","should_trigger":true,"note":"Broad learner, sequence, monitoring, and reteaching coordination."}
+  ,{"query":"Show this learner's English progress over six weeks.","should_trigger":false,"note":"Narrow monitoring route."}
 ]

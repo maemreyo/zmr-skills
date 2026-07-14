@@ -1,6 +1,11 @@
+import sys
 import unittest
+from pathlib import Path
 
-from contracts import (
+REPO_ROOT = Path(__file__).resolve().parents[4]
+sys.path.insert(0, str(REPO_ROOT))
+
+from skills.education._shared.contracts import (
     RESPONSE_INTERACTIONS,
     ZAMERY_SKILL_NAMES,
     validate_batch_manifest,
@@ -46,14 +51,18 @@ def canonical_item() -> dict[str, object]:
 
 
 class V3FoundationAcceptanceTests(unittest.TestCase):
-    def test_suite_declares_twelve_unique_v3_skills(self) -> None:
-        self.assertEqual(len(ZAMERY_SKILL_NAMES), 12)
-        self.assertEqual(len(set(ZAMERY_SKILL_NAMES)), 12)
+    def test_suite_declares_sixteen_unique_v3_skills(self) -> None:
+        self.assertEqual(len(ZAMERY_SKILL_NAMES), 16)
+        self.assertEqual(len(set(ZAMERY_SKILL_NAMES)), 16)
         for name in (
             "zamery-build-english-item-banks",
             "zamery-compose-english-assessments",
             "zamery-create-ielts-practice",
             "zamery-build-video-learning",
+            "zamery-understand-learners",
+            "zamery-monitor-english-learning",
+            "zamery-plan-english-reteaching",
+            "zamery-design-english-learning-sequences",
         ):
             self.assertIn(name, ZAMERY_SKILL_NAMES)
         self.assertNotIn("zamery-assess-english-learning", ZAMERY_SKILL_NAMES)

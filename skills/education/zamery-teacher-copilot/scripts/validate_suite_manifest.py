@@ -5,6 +5,9 @@ import json
 from pathlib import Path
 
 EXPECTED_ROUTES = {
+    "understand_learners": "zamery-understand-learners",
+    "monitor_learning": "zamery-monitor-english-learning",
+    "sequence_design": "zamery-design-english-learning-sequences",
     "design": "zamery-design-english-learning",
     "concept_teaching": "zamery-teach-english-concepts",
     "practice": "zamery-build-english-practice",
@@ -15,6 +18,7 @@ EXPECTED_ROUTES = {
     "material_design": "zamery-design-teaching-materials",
     "presentation": "zamery-create-english-presentations",
     "student_work_analysis": "zamery-analyze-student-work",
+    "reteach": "zamery-plan-english-reteaching",
     "review_publish": "zamery-review-publish-pack",
 }
 
@@ -60,8 +64,8 @@ def validate_manifest(data: dict[str, object]) -> list[str]:
         errors.append("intent owners must be unique")
     if len(skills) != len(set(skills)):
         errors.append("specialist targets must be unique")
-    if len(set(skills)) != 11:
-        errors.append("manifest must declare exactly eleven specialist targets")
+    if len(set(skills)) != 15:
+        errors.append("manifest must declare exactly fifteen specialist targets")
     if actual != EXPECTED_ROUTES:
         errors.append("routes must exactly match the approved intent owners")
     return errors
@@ -95,7 +99,7 @@ def main() -> int:
         print(error)
     if errors:
         return 1
-    print("11/11 specialist targets discovered")
+    print("15/15 specialist targets discovered")
     return 0
 
 

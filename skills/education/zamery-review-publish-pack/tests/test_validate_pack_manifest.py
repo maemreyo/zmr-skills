@@ -79,6 +79,22 @@ class PackManifestTests(unittest.TestCase):
         changed = {**VALID, "objective_ids": ["obj-1", "obj-2"]}
         self.assertIn("pack objective obj-2 is not covered by any artifact", validate_pack_manifest(changed))
 
+    def test_student_card_data_leakage_is_a_hard_block(self) -> None:
+        changed = {
+            **VALID,
+            "safety_findings": [
+                {
+                    "kind": "student_card_leakage",
+                    "artifact_id": "deck-1",
+                    "detail": "card_id and behaviour observation on projected slide",
+                }
+            ],
+        }
+        self.assertIn(
+            "blocking safety finding student_card_leakage in deck-1: card_id and behaviour observation on projected slide",
+            validate_pack_manifest(changed),
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

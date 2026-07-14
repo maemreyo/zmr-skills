@@ -1,20 +1,20 @@
 Quickstart:
 
 ```bash
-npx skills add mattpocock/skills --skill=zamery-design-teaching-materials
+npx skills add maemreyo/zmr-skills@zmr-dev --skill=zamery-design-teaching-materials
 ```
 
 ```bash
 npx skills update zamery-design-teaching-materials
 ```
 
-[Source](https://github.com/mattpocock/skills/tree/main/skills/education/zamery-design-teaching-materials)
+[Source](https://github.com/maemreyo/zmr-skills/tree/zmr-dev/skills/education/zamery-design-teaching-materials)
 
 ## What it does
 
-`zamery-design-teaching-materials` composes approved English K-12 content into branded, print-ready classroom documents — worksheets, workbooks, exam papers, answer keys, and administration guides.
+`zamery-design-teaching-materials` composes approved English K-12 content into branded, accessible classroom documents — worksheets, workbooks, exam papers, answer keys, administration guides, learner progress reports, family updates, student goal reviews, and curriculum overviews.
 
-It never changes what students are asked to learn or how the teacher teaches it. Pedagogy arrives approved; this skill only controls how that content lands on the page. It validates every layout against a template registry before rendering, so a worksheet template is never stretched to hold an exam, and an exam template is never used for a workbook. Internal metadata (prompts, route plans, manifests, QA ledgers) is hard-blocked from leaking into classroom-facing files.
+It never changes what students are asked to learn or how the teacher teaches it. Pedagogy arrives approved; this skill only controls how that content lands on the page. It validates every layout against a template registry before rendering, so a worksheet template is never stretched to hold an exam, and an exam template is never used for a workbook. Internal metadata (prompts, route plans, manifests, QA ledgers) is hard-blocked from leaking into classroom-facing files. Direct invocation asserts the approved brief and every content, template, progress-fact, and authority version before composition; stale or unapproved input is rejected.
 
 ## When to reach for it
 
@@ -32,7 +32,7 @@ The **component registry** maps every content unit (objective, question, instruc
 
 The **response-space registry** allocates writing room per item. Short-answer items get a ruled line; extended responses get a half-page box; diagram tasks get a labelled grid. The registry prevents the default of identical answer areas for every item in a document.
 
-Before rendering, the skill produces a `zamery-layout.v2` manifest that captures every page's purpose, brand application, grid, item placement, and occupancy. A script validates the manifest against the registries, so a mismatch between intended layout and available template is caught before any DOCX or PDF is written.
+Before rendering, the skill produces a `zamery-layout.v2` manifest that captures every page's purpose, brand application, grid, item placement, and occupancy. Semantic reading order, headings, alt text, contrast, captions, response space, and format-specific accessibility are checked before delivery. Progress communications must pass the shared audience, consent, positive-factual framing, and approved-fact contract before composition; StudentCard IDs, individual behaviour narratives, protected profile data, and unapproved claims are blocked.
 
 ## It's working if
 
@@ -49,4 +49,4 @@ Before rendering, the skill produces a `zamery-layout.v2` manifest that captures
 zamery-build-english-practice → zamery-design-teaching-materials → zamery-review-publish-pack
 ```
 
-Its neighbour [zamery-build-english-practice](https://aihero.dev/skills-zamery-build-english-practice) produces the content it composes; [zamery-review-publish-pack](https://aihero.dev/skills-zamery-review-publish-pack) gates and ships what it renders. For slide decks instead of page layouts, use [zamery-create-english-presentations](https://aihero.dev/skills-zamery-create-english-presentations). When you're unsure which skill fits, [zamery-teacher-copilot](https://aihero.dev/skills-zamery-teacher-copilot) routes you.
+Its neighbour [zamery-build-english-practice](https://aihero.dev/skills-zamery-build-english-practice) produces the content it composes; [zamery-review-publish-pack](https://aihero.dev/skills-zamery-review-publish-pack) gates and ships what it renders. For slide decks instead of page layouts, use [zamery-create-english-presentations](https://aihero.dev/skills-zamery-create-english-presentations). Use [zamery-teacher-copilot](https://aihero.dev/skills-zamery-teacher-copilot) for Zamery routing and [ask-matt](https://aihero.dev/skills-ask-matt) for the wider skill set.

@@ -1,0 +1,13 @@
+interface:
+  display_name: Zamery Monitor English Learning
+  short_description: Track English K–12 learning trajectories and objective evidence
+  default_prompt: Use $zamery-monitor-english-learning to build a learning trajectory
+    from assessment and student-work evidence, summarise objective progress, or
+    create a class progress profile.
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

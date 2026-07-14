@@ -186,7 +186,9 @@ General workflow tools, not code-specific.
 
 ### Education
 
-English K–12 teaching skills: lesson design, concept teaching, practice, assessments, IELTS, video learning, materials, presentations, student-work analysis, and publishing.
+English K–12 teaching skills: learner discovery, progress monitoring, long-horizon sequencing, lesson design, concept teaching, practice, assessments, reteaching, IELTS, video learning, materials, presentations, student-work analysis, and publishing.
+
+The Zamery Education suite is maintained in [`maemreyo/zmr-skills`](https://github.com/maemreyo/zmr-skills/tree/zmr-dev/skills/education) on the `zmr-dev` branch. Install an Education skill with `npx skills add maemreyo/zmr-skills@zmr-dev --skill=<name>`.
 
 **User-invoked**
 
@@ -194,6 +196,10 @@ English K–12 teaching skills: lesson design, concept teaching, practice, asses
 
 **Model-invoked**
 
+- **[zamery-understand-learners](./skills/education/zamery-understand-learners/SKILL.md)** — Build governed StudentCards, privacy-safe ClassProfiles, and teacher-approved Learner Context Snapshots.
+- **[zamery-monitor-english-learning](./skills/education/zamery-monitor-english-learning/SKILL.md)** — Aggregate dated evidence into objective-level learning trajectories and class progress profiles without prediction or intervention scoring.
+- **[zamery-plan-english-reteaching](./skills/education/zamery-plan-english-reteaching/SKILL.md)** — Plan the smallest evidence-grounded corrective move and hand off a validated reteaching loop for execution.
+- **[zamery-design-english-learning-sequences](./skills/education/zamery-design-english-learning-sequences/SKILL.md)** — Design versioned course, term, semester, or year-long objective and retrieval maps before lesson-level work.
 - **[zamery-design-english-learning](./skills/education/zamery-design-english-learning/SKILL.md)** — Plan, structure, sequence, or redesign an English K–12 lesson or unit blueprint.
 - **[zamery-teach-english-concepts](./skills/education/zamery-teach-english-concepts/SKILL.md)** — Teach English K–12 concepts with memorable examples and comprehension checks.
 - **[zamery-build-english-practice](./skills/education/zamery-build-english-practice/SKILL.md)** — Create one-off worksheets, drills, homework sets, and differentiated exercises.
@@ -204,4 +210,4 @@ English K–12 teaching skills: lesson design, concept teaching, practice, asses
 - **[zamery-design-teaching-materials](./skills/education/zamery-design-teaching-materials/SKILL.md)** — Compose approved content into branded worksheets, workbooks, exam papers, and print-ready DOCX/PDF.
 - **[zamery-create-english-presentations](./skills/education/zamery-create-english-presentations/SKILL.md)** — Convert approved teaching content into classroom slides and speaker notes.
 - **[zamery-analyze-student-work](./skills/education/zamery-analyze-student-work/SKILL.md)** — Mark, diagnose, and provide feedback on student submissions with PII redaction.
-- **[zamery-review-publish-pack](./skills/education/zamery-review-publish-pack/SKILL.md)** — Gate, finalise, package, and export teaching packs through six quality gates.
+- **[zamery-review-publish-pack](./skills/education/zamery-review-publish-pack/SKILL.md)** — Gate, finalise, package, and export teaching packs through seven quality gates.

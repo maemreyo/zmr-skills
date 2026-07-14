@@ -1,0 +1,27 @@
+[
+  {
+    "query": "Show me Minh's progress on past-tense objectives this term — which are secure, where has growth stalled, and what evidence changed since last month?",
+    "should_trigger": true,
+    "note": "Trajectory request for a named learner with time filter and evidence-change concern."
+  },
+  {
+    "query": "Build a class progress profile for Grade 7 English — which objectives are covered, how fresh is the evidence, and where are the gaps?",
+    "should_trigger": true,
+    "note": "Whole-class coverage and evidence-freshness request."
+  },
+  {
+    "query": "Summarise what we know about Bao's progress on present-perfect vs past-simple across the last six assessments and three homework sets.",
+    "should_trigger": true,
+    "note": "Longitudinal aggregation from assessment and student-work sources."
+  },
+  {
+    "query": "Create a new StudentCard for a new student who just joined the class.",
+    "should_trigger": false,
+    "note": "Learner discovery owns initial profiling and StudentCard creation."
+  },
+  {
+    "query": "Which learners in my Grade 10 class are most likely to fail the end-of-term exam?",
+    "should_trigger": false,
+    "note": "Predictive ranking and risk assessment are explicitly out of scope."
+  }
+]
