@@ -1,0 +1,49 @@
+name: Education standalone skills
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - zmr-dev
+    paths:
+      - "skills/education/**"
+      - "scripts/build_education_standalone.py"
+      - "tests/test_build_education_standalone.py"
+      - ".github/workflows/education-standalone.yml"
+  pull_request:
+    paths:
+      - "skills/education/**"
+      - "scripts/build_education_standalone.py"
+      - "tests/test_build_education_standalone.py"
+      - ".github/workflows/education-standalone.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - name: Run standalone builder tests
+        run: python3 -m unittest discover -s tests -v
+
+      - name: Build and certify all Education skills
+        run: python3 scripts/build_education_standalone.py
+
+      - name: Upload standalone packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: zamery-education-standalone
+          path: dist/education-standalone/
+          if-no-files-found: error
+          compression-level: 0

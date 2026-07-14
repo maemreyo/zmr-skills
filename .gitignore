@@ -2,3 +2,4 @@ node_modules
 .DS_Store
 .omo/run-continuation/
 __pycache__
+dist/
