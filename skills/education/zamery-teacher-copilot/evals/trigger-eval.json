@@ -1,0 +1,12 @@
+[
+  {"query":"Build a complete Grade 7 pack with lesson, 100-item workbook, exam Forms A/B, answers, slides, and print files.","should_trigger":true,"note":"Broad multi-route V3 pack."},
+  {"query":"I want 400 reusable questions, a semester exam, and a branded workbook but do not know the workflow.","should_trigger":true,"note":"Item bank, assessment, and material-design coordination."},
+  {"query":"Use this YouTube transcript for an IELTS Listening lesson, H5P, worksheet, and teacher guide.","should_trigger":true,"note":"Video, IELTS, artifact, and publish coordination."},
+  {"query":"Build a complete English teaching pack for this attached unit; ask only about material gaps.","should_trigger":true,"note":"Ambiguous end-to-end pack."},
+  {"query":"I'm not sure whether I need a worksheet, item bank, exam, or slides; help me choose.","should_trigger":true,"note":"Ambiguous route selection."},
+  {"query":"Create exactly 12 ungraded worksheet questions from this approved lesson.","should_trigger":false,"note":"Narrow practice route."},
+  {"query":"Create a reusable 300-item bank with duplicate checking.","should_trigger":false,"note":"Narrow item-bank route."},
+  {"query":"Assemble Forms A and B from this approved bank.","should_trigger":false,"note":"Narrow assessment-composition route."},
+  {"query":"Build IELTS Academic Reading practice only.","should_trigger":false,"note":"Narrow IELTS route."},
+  {"query":"Mark this attached student paragraph with my rubric.","should_trigger":false,"note":"Narrow student-analysis route."}
+]

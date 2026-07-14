@@ -1,0 +1,16 @@
+{
+  "manifest_version": "zamery-suite.v3",
+  "routes": [
+    {"intent": "design", "skill": "zamery-design-english-learning"},
+    {"intent": "concept_teaching", "skill": "zamery-teach-english-concepts"},
+    {"intent": "practice", "skill": "zamery-build-english-practice"},
+    {"intent": "item_bank", "skill": "zamery-build-english-item-banks"},
+    {"intent": "assessment_composition", "skill": "zamery-compose-english-assessments"},
+    {"intent": "ielts_practice", "skill": "zamery-create-ielts-practice"},
+    {"intent": "video_learning", "skill": "zamery-build-video-learning"},
+    {"intent": "material_design", "skill": "zamery-design-teaching-materials"},
+    {"intent": "presentation", "skill": "zamery-create-english-presentations"},
+    {"intent": "student_work_analysis", "skill": "zamery-analyze-student-work"},
+    {"intent": "review_publish", "skill": "zamery-review-publish-pack"}
+  ]
+}

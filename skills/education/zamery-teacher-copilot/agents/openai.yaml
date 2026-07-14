@@ -1,0 +1,12 @@
+interface:
+  display_name: Zamery Teacher Copilot
+  short_description: "Coordinate complete English K\u201312 teaching workflows"
+  default_prompt: Use $zamery-teacher-copilot to turn my teaching need into a coherent,
+    classroom-ready English pack.
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true
