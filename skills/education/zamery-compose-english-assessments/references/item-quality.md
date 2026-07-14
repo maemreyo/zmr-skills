@@ -1,0 +1,3 @@
+# Item Quality
+
+Each item measures one primary construct and cites its objective. Instructions state the response action. Selected-response distractors are plausible, grammatically parallel, mutually distinct after Unicode normalization, and free of length, wording, or position clues. `wrong_reasons` explain the misconception represented by each distractor, not “this is incorrect.” Constructed responses state expected evidence and scoring boundaries. Probing follow-ups ask learners to identify evidence, discriminate rules, or transfer reasoning; they do not merely repeat the item or reveal the answer in the question.

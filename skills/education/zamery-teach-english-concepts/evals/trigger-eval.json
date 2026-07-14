@@ -1,0 +1,27 @@
+[
+  {
+    "query": "Help me teach the difference between used to, be used to, and get used to through inverse thinking.",
+    "should_trigger": true,
+    "note": "Concept explanation with a pinned methodology."
+  },
+  {
+    "query": "Give me one compact board table for this vocabulary set: core meaning, clues, collocations, and a memorable example.",
+    "should_trigger": true,
+    "note": "Direct match for the vocabulary board contract."
+  },
+  {
+    "query": "Help me with conditionals for tomorrow; I am not sure whether I need an explanation, practice, or a test.",
+    "should_trigger": false,
+    "note": "Ambiguous multi-job request should enter through the Copilot."
+  },
+  {
+    "query": "Create a 30-question final test and a separate answer key.",
+    "should_trigger": false,
+    "note": "Assessment generation owns this request."
+  },
+  {
+    "query": "Turn this approved explanation into a branded PowerPoint.",
+    "should_trigger": false,
+    "note": "Presentation delivery owns this request."
+  }
+]

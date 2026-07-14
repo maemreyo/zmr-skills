@@ -1,0 +1,11 @@
+[
+  {"query":"Assemble a 60-minute Grade 8 midterm with Forms A and B from this approved item bank.","should_trigger":true,"note":"Parallel form composition."},
+  {"query":"Create a three-question Grade 4 exit ticket with a separate teacher answer set.","should_trigger":true,"note":"Small formative assessment."},
+  {"query":"Use this blueprint and seed to regenerate the exam and export it as QTI.","should_trigger":true,"note":"Reproducible assessment export."},
+  {"query":"Balance two mock-exam forms and report their difficulty equivalence.","should_trigger":true,"note":"Form assembly and equivalence."},
+  {"query":"Generate a reusable bank of 400 grammar questions in batches.","should_trigger":false,"note":"Bulk bank creation belongs to item banks."},
+  {"query":"Give students ungraded guided practice before the quiz.","should_trigger":false,"note":"Ungraded guided work belongs to practice."},
+  {"query":"Here is Minh's completed test; diagnose the errors.","should_trigger":false,"note":"Submitted student work belongs to analysis."},
+  {"query":"Make this approved exam beautiful in DOCX and PDF.","should_trigger":false,"note":"Visual composition belongs to material design."},
+  {"query":"I need some questions but have not decided whether this is guided practice or a graded check.","should_trigger":false,"note":"Ambiguous practice-versus-assessment intent should enter through the Copilot."}
+]

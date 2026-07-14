@@ -1,0 +1,10 @@
+[
+  {"query":"Build a reusable bank of 400 Grade 7 grammar questions in resumable batches.","should_trigger":true,"note":"Large governed item bank."},
+  {"query":"I need 80 reading items with versions, duplicate checks, and CSV review export.","should_trigger":true,"note":"Reusable bank and governance."},
+  {"query":"Create a semester pool of 300 English questions with easy, medium, and hard quotas.","should_trigger":true,"note":"Blueprinted bulk pool."},
+  {"query":"Generate parallel item variants and store them in SQLite and JSONL.","should_trigger":true,"note":"Versioned bank storage."},
+  {"query":"Make one printable worksheet with 15 present-simple questions.","should_trigger":false,"note":"One-off practice belongs to practice skill."},
+  {"query":"Assemble Form A and Form B from my approved bank.","should_trigger":false,"note":"Form composition belongs to assessment composer."},
+  {"query":"Turn this approved quiz into a branded DOCX.","should_trigger":false,"note":"Visual composition belongs to material design."},
+  {"query":"Mark these 28 student answers and explain their errors.","should_trigger":false,"note":"Actual student work belongs to analysis."}
+]

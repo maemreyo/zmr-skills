@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Zamery IELTS Blueprint V3",
+  "type": "object",
+  "required": ["schema_version", "profile", "authority_label", "full_test", "sections"],
+  "properties": {
+    "schema_version": {"const": "zamery-ielts-blueprint.v3"},
+    "profile": {"enum": ["academic", "general_training"]},
+    "authority_label": {"enum": ["ielts_aligned_practice", "ielts_aligned_mock"]},
+    "full_test": {"type": "boolean"},
+    "sections": {"type": "object", "minProperties": 1}
+  }
+}

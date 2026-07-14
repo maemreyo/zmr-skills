@@ -1,0 +1,12 @@
+interface:
+  display_name: Zamery Build English Practice
+  short_description: "Create aligned English K\u201312 practice materials"
+  default_prompt: Use $zamery-build-english-practice to create aligned, student-safe
+    English practice materials.
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

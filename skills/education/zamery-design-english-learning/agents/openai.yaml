@@ -1,0 +1,12 @@
+interface:
+  display_name: Zamery Design English Learning
+  short_description: "Design aligned English K\u201312 lessons and units"
+  default_prompt: Use $zamery-design-english-learning to design an aligned English
+    lesson or unit blueprint.
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

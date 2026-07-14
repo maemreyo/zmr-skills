@@ -1,0 +1,12 @@
+interface:
+  display_name: Zamery Teach English Concepts
+  short_description: Teach English concepts with fitting methodologies
+  default_prompt: Use $zamery-teach-english-concepts to explain an English concept
+    with an age-appropriate teaching method.
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

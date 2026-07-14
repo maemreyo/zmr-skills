@@ -1,0 +1,13 @@
+[
+  {"query":"Create a printable Grade 6 worksheet with 12 varied activities aligned to these objectives.","should_trigger":true,"note":"One-off worksheet."},
+  {"query":"Turn this vocabulary lesson into flashcards, guided practice, and independent homework.","should_trigger":true,"note":"Practice artifact set."},
+  {"query":"Make ungraded matching, ordering, cloze, and speaking practice for Grade 4.","should_trigger":true,"note":"Varied practice interactions."},
+  {"query":"Create 25 retrieval and transfer questions for tomorrow's lesson.","should_trigger":true,"note":"Small disposable practice set."},
+  {"query":"Build a reusable bank of 80 questions with versions and duplicate reports.","should_trigger":false,"note":"Governed bulk generation belongs to item banks."},
+  {"query":"Generate 400 questions in resumable batches and export SQLite.","should_trigger":false,"note":"Item-bank workflow."},
+  {"query":"Write a 20-question graded test with an answer key.","should_trigger":false,"note":"Assessment composition."},
+  {"query":"Build IELTS Academic Reading practice.","should_trigger":false,"note":"IELTS profile."},
+  {"query":"Use this YouTube video and transcript for timestamped questions.","should_trigger":false,"note":"Video learning."},
+  {"query":"Explain why my student keeps confusing since and for.","should_trigger":false,"note":"Student-work diagnosis."},
+  {"query":"Make some activities from this approved lesson; I have not chosen the exercise types.","should_trigger":true,"note":"Ambiguous exercise type remains a practice job with minimal local intake."}
+]

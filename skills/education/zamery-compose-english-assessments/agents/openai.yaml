@@ -1,0 +1,11 @@
+interface:
+  display_name: Zamery Compose English Assessments
+  short_description: Assemble reproducible English exams, forms, keys, and QTI
+  default_prompt: Use $zamery-compose-english-assessments to assemble blueprint-exact English assessment forms with separate teacher scoring data.
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

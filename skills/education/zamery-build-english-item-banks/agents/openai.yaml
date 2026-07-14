@@ -1,0 +1,13 @@
+interface:
+  display_name: Zamery English Item Banks
+  short_description: "Build governed English K\u201312 item banks at 80\u2013400+\
+    \ scale"
+  default_prompt: "Create a resumable, validated English K\u201312 item bank with\
+    \ review exports."
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

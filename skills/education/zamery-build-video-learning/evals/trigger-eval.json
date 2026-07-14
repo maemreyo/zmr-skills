@@ -1,0 +1,12 @@
+[
+  {"query":"Use this YouTube link and my transcript to build timestamped English listening questions.","should_trigger":true,"note":"Teacher-supplied transcript grounding."},
+  {"query":"Create pre-, during-, and post-viewing activities for this English video.","should_trigger":true,"note":"Video learning sequence."},
+  {"query":"Export these timestamped questions as an H5P Interactive Video package.","should_trigger":true,"note":"H5P delivery."},
+  {"query":"I own the channel; use the authorized transcript and add source anchors.","should_trigger":true,"note":"Authorized-channel evidence."},
+  {"query":"Build IELTS-style Listening practice from this clip and transcript.","should_trigger":true,"note":"Video learning with IELTS handoff."},
+  {"query":"The public YouTube link has no transcript; create observation prompts and mark teacher verification.","should_trigger":true,"note":"Ungrounded safe mode."},
+  {"query":"Create a printable Grade 6 grammar worksheet with no media.","should_trigger":false,"note":"Ordinary practice."},
+  {"query":"Generate a 300-question reusable English bank.","should_trigger":false,"note":"Bulk item-bank workflow."},
+  {"query":"Assemble Forms A and B from this approved bank.","should_trigger":false,"note":"Assessment composition."},
+  {"query":"Turn this approved lesson into a branded DOCX and slides.","should_trigger":false,"note":"Artifact design and presentation."}
+]

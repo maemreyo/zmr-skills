@@ -1,0 +1,3 @@
+# AnswerSet Contract
+
+An AnswerSet is a full artifact envelope with `artifact_type: answer_set`, `audience: teacher`, positive `version`, matching `brief_id`, grade/CEFR/languages/objectives/methodology lineage, source references, authority, accessibility, brand, and a versioned dependency on `source_artifact_id`. It also has `answer_set_id`, exact `source_version`, and one answer entry per student `question_id`. Selected-response entries identify the correct option and may include explanation and targeted `wrong_reasons`. Constructed-response entries use `accepted_answers`, required evidence, and/or an analytic `rubric`; they do not require options. A teacher answer-key document is rendered from this AnswerSet and is never independently authored.

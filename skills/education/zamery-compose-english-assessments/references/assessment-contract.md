@@ -1,0 +1,5 @@
+# Assessment Contract
+
+The bundle declares `requested_item_count`, optional requested difficulty distribution, a `student_artifact`, and a separate `answer_set`. The student artifact has stable identity, audience, version, brief, grade/CEFR, languages, objective lineage, source authority, accessibility, brand, dependencies, and questions. Canonical V3 items use independent `interaction` and `response_mode` fields. A renderer may project them to the legacy layout categories `selected_response`, `short_answer`, `explanation`, and `two_sentence_transfer`; these categories describe required writing space and do not replace the canonical taxonomy.
+
+Every student question preserves its canonical item ID/version and declares integer `expected_response_lines` plus non-empty `layout_intent`. Minimum legacy projection space is: `selected_response` 1, `short_answer` 2, `explanation` 4, and `two_sentence_transfer` 5. The material-design workflow consumes these values. Hidden answer metadata is always leakage.

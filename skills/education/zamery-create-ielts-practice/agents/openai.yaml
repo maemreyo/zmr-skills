@@ -1,0 +1,12 @@
+interface:
+  display_name: Zamery IELTS Practice
+  short_description: Create safely labeled IELTS-aligned English practice
+  default_prompt: Create IELTS-aligned practice with official task-family constraints
+    and safe labeling.
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

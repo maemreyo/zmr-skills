@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Zamery Media Manifest V3",
+  "type": "object",
+  "required": ["schema_version", "media_id", "title", "source_type", "url", "duration_seconds", "language", "transcript", "accessibility"],
+  "properties": {
+    "schema_version": {"const": "zamery-media.v3"},
+    "source_type": {"enum": ["youtube", "web_video", "teacher_file"]},
+    "duration_seconds": {"type": "number", "exclusiveMinimum": 0},
+    "transcript": {"type": "object"},
+    "accessibility": {"type": "object"}
+  }
+}

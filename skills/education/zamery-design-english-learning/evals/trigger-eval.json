@@ -1,0 +1,27 @@
+[
+  {
+    "query": "Design a 45-minute Grade 8 English lesson on reported speech for a mixed-confidence class.",
+    "should_trigger": true,
+    "note": "Direct lesson-design request with learner and duration context."
+  },
+  {
+    "query": "Plan a six-session Grade 5 reading unit, but ask me if the final assessment choice materially changes the sequence.",
+    "should_trigger": true,
+    "note": "Unit sequencing and conditional clarification are owned here."
+  },
+  {
+    "query": "I need something for Grade 6 modal verbs tomorrow, but I do not know whether I need a lesson, worksheet, quiz, or slides.",
+    "should_trigger": false,
+    "note": "Ambiguous job and artifact scope should enter through the Copilot."
+  },
+  {
+    "query": "Here is my approved lesson plan. Turn it into a printable worksheet with 12 questions.",
+    "should_trigger": false,
+    "note": "The blueprint already exists; practice generation owns this."
+  },
+  {
+    "query": "Mark this student's paragraph and tell me which errors reveal a misconception.",
+    "should_trigger": false,
+    "note": "Real student-work diagnosis belongs to the analysis skill."
+  }
+]

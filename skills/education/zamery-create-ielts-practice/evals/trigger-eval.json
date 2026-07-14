@@ -1,0 +1,12 @@
+[
+  {"query":"Create an IELTS Academic Listening practice set using map labelling and note completion.","should_trigger":true,"note":"Listening profile."},
+  {"query":"Build a full IELTS Academic Reading mock with 40 questions.","should_trigger":true,"note":"Reading mock profile."},
+  {"query":"Give criterion-based feedback on this IELTS Writing Task 2 response.","should_trigger":true,"note":"Writing criteria."},
+  {"query":"Create IELTS General Training Writing Task 1 letter practice.","should_trigger":true,"note":"GT Writing distinction."},
+  {"query":"Prepare Speaking Parts 1, 2, and 3 with an examiner guide.","should_trigger":true,"note":"Speaking profile."},
+  {"query":"Score these IELTS Reading answers but label the result as practice, not official.","should_trigger":true,"note":"Safe objective scoring."},
+  {"query":"Make a Grade 5 vocabulary worksheet.","should_trigger":false,"note":"Ordinary K–12 practice."},
+  {"query":"Generate a generic 300-question grammar bank.","should_trigger":false,"note":"Bulk bank without IELTS intent."},
+  {"query":"Mark this school midterm and diagnose the student's errors.","should_trigger":false,"note":"Student-work analysis."},
+  {"query":"Turn my approved English lesson into slides.","should_trigger":false,"note":"Presentation creation."}
+]

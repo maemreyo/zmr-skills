@@ -1,0 +1,12 @@
+interface:
+  display_name: Zamery Video Learning
+  short_description: Build transcript-grounded English video lessons
+  default_prompt: Build a timestamp-grounded English lesson from an authorized transcript
+    or media source.
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true
