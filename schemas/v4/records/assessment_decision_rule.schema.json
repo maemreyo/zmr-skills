@@ -1,0 +1,38 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "member_item_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Member Item Ids",
+      "type": "array"
+    },
+    "outcome": {
+      "title": "Outcome",
+      "type": "string"
+    },
+    "record_id": {
+      "title": "Record Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "default": "4.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "threshold": {
+      "minimum": 0,
+      "title": "Threshold",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "record_id",
+    "member_item_ids",
+    "threshold",
+    "outcome"
+  ],
+  "title": "AssessmentDecisionRule",
+  "type": "object"
+}

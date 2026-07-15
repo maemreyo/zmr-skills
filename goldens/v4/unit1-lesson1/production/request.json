@@ -1,0 +1,7 @@
+{
+  "record_id": "request:unit1",
+  "lifecycle_goal": "publish_teaching_pack",
+  "domain_profiles": [
+    "ielts_foundation_coursebook"
+  ]
+}

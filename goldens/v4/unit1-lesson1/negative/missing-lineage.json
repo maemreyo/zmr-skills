@@ -1,0 +1,6 @@
+{
+  "fixture": "missing-lineage",
+  "expected_findings": [
+    "MISSING_SOURCE_LINEAGE"
+  ]
+}

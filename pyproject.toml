@@ -1,0 +1,53 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "zamery-education-v4"
+version = "4.0.0"
+description = "Content-addressed, evidence-driven education production pipeline"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+  "pydantic>=2.10,<3",
+  "typer>=0.15,<1",
+  "PyYAML>=6,<7",
+  "python-docx>=1.1,<2",
+  "python-pptx>=1,<2",
+  "pypdf>=5,<6",
+  "Pillow>=11,<13",
+]
+
+[project.optional-dependencies]
+dev = [
+  "hypothesis>=6.120,<7",
+  "mypy>=1.14,<2",
+  "pytest>=8.3,<10",
+  "pytest-asyncio>=0.25,<2",
+  "pytest-cov>=6,<8",
+  "ruff>=0.9,<1",
+]
+
+[project.scripts]
+zamery-v4 = "zamery_education_v4.cli.app:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/zamery_education_v4"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests/v4"]
+pythonpath = ["src"]
+asyncio_mode = "auto"
+markers = ["integration: requires external document tooling"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "RUF"]
+ignore = ["B008"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+packages = ["zamery_education_v4"]

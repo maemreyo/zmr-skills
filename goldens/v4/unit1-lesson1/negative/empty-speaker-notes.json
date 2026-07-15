@@ -1,0 +1,6 @@
+{
+  "fixture": "empty-speaker-notes",
+  "expected_findings": [
+    "EMPTY_SPEAKER_NOTES"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "cache_enabled": true,
+  "capability_id": "reference.node_echo",
+  "capability_version": "4.0.0",
+  "deterministic": true,
+  "failure_codes": [
+    "INVALID_INPUT"
+  ],
+  "filesystem_read": "input_mount_only",
+  "filesystem_write": "output_mount_only",
+  "inputs": [],
+  "lockfile_hash": "sha256:59b2ae484500285d6806f89539cdd16508238f7c3cbce0c7b1f40fd4de607c4b",
+  "lockfile_path": "capabilities/reference/node_echo/package-lock.json",
+  "memory_mb": 128,
+  "network_domains": [],
+  "outputs": [
+    "echo_record"
+  ],
+  "protocol_version": "zamery-capability.v1",
+  "runtime_digest": "sha256:3b7a854de32279b2dd858e8d5347a115652a568016169fe142fe9ec32554cf42",
+  "runtime_kind": "node",
+  "runtime_version": "22",
+  "side_effects": "none",
+  "timeout_seconds": 10
+}

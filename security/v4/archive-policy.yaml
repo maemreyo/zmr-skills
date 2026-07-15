@@ -1,0 +1,10 @@
+version: archive-policy@4.0.0
+reject:
+  - absolute_paths
+  - parent_traversal
+  - symlinks
+  - duplicate_normalized_paths
+  - case_collisions
+  - crc_failure
+max_files: 10000
+max_uncompressed_bytes: 1073741824

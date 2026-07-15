@@ -1,0 +1,60 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "constraints": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Constraints",
+      "type": "array"
+    },
+    "duration_minutes": {
+      "exclusiveMinimum": 0,
+      "maximum": 1440,
+      "title": "Duration Minutes",
+      "type": "integer"
+    },
+    "learner_level": {
+      "title": "Learner Level",
+      "type": "string"
+    },
+    "lifecycle_goal": {
+      "default": "publish_teaching_pack",
+      "title": "Lifecycle Goal",
+      "type": "string"
+    },
+    "record_id": {
+      "title": "Record Id",
+      "type": "string"
+    },
+    "requested_deliverables": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Requested Deliverables",
+      "type": "array"
+    },
+    "schema_version": {
+      "default": "4.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Source Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "record_id",
+    "duration_minutes",
+    "learner_level",
+    "source_ids"
+  ],
+  "title": "TeachingBrief",
+  "type": "object"
+}

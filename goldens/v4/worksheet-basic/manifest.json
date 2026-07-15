@@ -1,0 +1,15 @@
+{
+  "guided_ids": [
+    "g1",
+    "g2"
+  ],
+  "independent_ids": [
+    "i1",
+    "i2"
+  ],
+  "retrieval_ids": [
+    "r1"
+  ],
+  "answer_separated": true,
+  "print_profile": "a4"
+}

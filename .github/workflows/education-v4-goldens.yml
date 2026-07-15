@@ -1,0 +1,52 @@
+name: Education V4 Goldens
+on:
+  pull_request:
+    paths:
+      - "src/zamery_education_v4/**"
+      - "tests/v4/**"
+      - "capabilities/**"
+      - "adapters/**"
+  push:
+    branches: [zmr-dev]
+  schedule:
+    - cron: "17 2 * * *"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  v4-golden-unit1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-education-v4
+      - run: uv run pytest tests/v4/goldens -q
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v4-golden-unit1-verification
+          path: build/
+          if-no-files-found: ignore
+  v4-golden-bank:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-education-v4
+      - run: uv run pytest tests/v4/goldens -q
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v4-golden-bank-verification
+          path: build/
+          if-no-files-found: ignore
+  v4-golden-assessment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-education-v4
+      - run: uv run pytest tests/v4/goldens -q
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v4-golden-assessment-verification
+          path: build/
+          if-no-files-found: ignore

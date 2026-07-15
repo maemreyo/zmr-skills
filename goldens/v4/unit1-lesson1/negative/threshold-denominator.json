@@ -1,0 +1,6 @@
+{
+  "fixture": "threshold-denominator",
+  "expected_findings": [
+    "DECISION_RULE_DENOMINATOR_MISMATCH"
+  ]
+}

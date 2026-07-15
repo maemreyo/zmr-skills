@@ -1,0 +1,20 @@
+name: Setup Education V4
+description: Install pinned Python/Node toolchains and V4 dependencies
+runs:
+  using: composite
+  steps:
+    - uses: astral-sh/setup-uv@v6
+      with:
+        version: "0.8.0"
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+        cache: pip
+    - uses: actions/setup-node@v4
+      with:
+        node-version: "22"
+        cache: npm
+    - shell: bash
+      run: uv sync --extra dev
+    - shell: bash
+      run: uv run python scripts/v4/verify_runtime_digests.py

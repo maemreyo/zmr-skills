@@ -1,0 +1,9 @@
+{
+  "record_id": "request:video",
+  "requested_deliverables": [
+    "video_activity"
+  ],
+  "source_kinds": [
+    "video"
+  ]
+}

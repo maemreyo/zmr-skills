@@ -1,0 +1,32 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "max_attempts": {
+      "default": 1,
+      "title": "Max Attempts",
+      "type": "integer"
+    },
+    "record_id": {
+      "title": "Record Id",
+      "type": "string"
+    },
+    "retryable_codes": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Retryable Codes",
+      "type": "array"
+    },
+    "schema_version": {
+      "default": "4.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "record_id"
+  ],
+  "title": "RetryPolicy",
+  "type": "object"
+}

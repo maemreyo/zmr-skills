@@ -1,0 +1,48 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "declared_hash": {
+      "title": "Declared Hash",
+      "type": "string"
+    },
+    "media_type": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Media Type"
+    },
+    "output_type": {
+      "title": "Output Type",
+      "type": "string"
+    },
+    "path": {
+      "title": "Path",
+      "type": "string"
+    },
+    "record_type": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Record Type"
+    }
+  },
+  "required": [
+    "output_type",
+    "path",
+    "declared_hash"
+  ],
+  "title": "OutputDeclaration",
+  "type": "object"
+}

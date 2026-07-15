@@ -1,0 +1,53 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "capability_id": {
+      "title": "Capability Id",
+      "type": "string"
+    },
+    "capability_version": {
+      "title": "Capability Version",
+      "type": "string"
+    },
+    "configuration": {
+      "additionalProperties": true,
+      "title": "Configuration",
+      "type": "object"
+    },
+    "input_mount": {
+      "default": "inputs",
+      "title": "Input Mount",
+      "type": "string"
+    },
+    "input_records": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Input Records",
+      "type": "array"
+    },
+    "invocation_id": {
+      "title": "Invocation Id",
+      "type": "string"
+    },
+    "output_mount": {
+      "default": "outputs",
+      "title": "Output Mount",
+      "type": "string"
+    },
+    "protocol_version": {
+      "const": "zamery-capability.v1",
+      "default": "zamery-capability.v1",
+      "title": "Protocol Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "invocation_id",
+    "capability_id",
+    "capability_version"
+  ],
+  "title": "CapabilityInvocation",
+  "type": "object"
+}

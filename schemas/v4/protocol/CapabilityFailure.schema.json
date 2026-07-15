@@ -1,0 +1,49 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "affected_ids": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Affected Ids",
+      "type": "array"
+    },
+    "failure_code": {
+      "title": "Failure Code",
+      "type": "string"
+    },
+    "invocation_id": {
+      "title": "Invocation Id",
+      "type": "string"
+    },
+    "message": {
+      "title": "Message",
+      "type": "string"
+    },
+    "protocol_version": {
+      "const": "zamery-capability.v1",
+      "default": "zamery-capability.v1",
+      "title": "Protocol Version",
+      "type": "string"
+    },
+    "retryable": {
+      "default": false,
+      "title": "Retryable",
+      "type": "boolean"
+    },
+    "status": {
+      "const": "failure",
+      "default": "failure",
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "invocation_id",
+    "failure_code",
+    "message"
+  ],
+  "title": "CapabilityFailure",
+  "type": "object"
+}

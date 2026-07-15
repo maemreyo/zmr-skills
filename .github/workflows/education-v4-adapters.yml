@@ -1,0 +1,64 @@
+name: Education V4 Adapters
+on:
+  pull_request:
+    paths:
+      - "src/zamery_education_v4/**"
+      - "tests/v4/**"
+      - "capabilities/**"
+      - "adapters/**"
+  push:
+    branches: [zmr-dev]
+  schedule:
+    - cron: "17 2 * * *"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  v4-docx-adapter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-education-v4
+      - run: uv run pytest tests/v4/adapters tests/v4/publication tests/v4/security -q
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v4-docx-adapter-verification
+          path: build/
+          if-no-files-found: ignore
+  v4-pptx-adapter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-education-v4
+      - run: uv run pytest tests/v4/adapters tests/v4/publication tests/v4/security -q
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v4-pptx-adapter-verification
+          path: build/
+          if-no-files-found: ignore
+  v4-pdf-adapter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-education-v4
+      - run: uv run pytest tests/v4/adapters tests/v4/publication tests/v4/security -q
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v4-pdf-adapter-verification
+          path: build/
+          if-no-files-found: ignore
+  v4-pack-security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-education-v4
+      - run: uv run pytest tests/v4/adapters tests/v4/publication tests/v4/security -q
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v4-pack-security-verification
+          path: build/
+          if-no-files-found: ignore

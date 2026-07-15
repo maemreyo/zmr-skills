@@ -1,0 +1,7 @@
+{
+  "quantity": 300,
+  "record_id": "request:bank",
+  "requested_deliverables": [
+    "item_bank"
+  ]
+}

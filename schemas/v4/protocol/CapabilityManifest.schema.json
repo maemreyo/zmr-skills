@@ -1,0 +1,141 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "cache_enabled": {
+      "default": true,
+      "title": "Cache Enabled",
+      "type": "boolean"
+    },
+    "capability_id": {
+      "title": "Capability Id",
+      "type": "string"
+    },
+    "capability_version": {
+      "title": "Capability Version",
+      "type": "string"
+    },
+    "deterministic": {
+      "title": "Deterministic",
+      "type": "boolean"
+    },
+    "failure_codes": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Failure Codes",
+      "type": "array"
+    },
+    "filesystem_read": {
+      "const": "input_mount_only",
+      "default": "input_mount_only",
+      "title": "Filesystem Read",
+      "type": "string"
+    },
+    "filesystem_write": {
+      "const": "output_mount_only",
+      "default": "output_mount_only",
+      "title": "Filesystem Write",
+      "type": "string"
+    },
+    "inputs": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Inputs",
+      "type": "array"
+    },
+    "lockfile_hash": {
+      "title": "Lockfile Hash",
+      "type": "string"
+    },
+    "lockfile_path": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Lockfile Path"
+    },
+    "memory_mb": {
+      "default": 512,
+      "exclusiveMinimum": 0,
+      "title": "Memory Mb",
+      "type": "integer"
+    },
+    "network_domains": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Network Domains",
+      "type": "array"
+    },
+    "outputs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Outputs",
+      "type": "array"
+    },
+    "protocol_version": {
+      "const": "zamery-capability.v1",
+      "default": "zamery-capability.v1",
+      "title": "Protocol Version",
+      "type": "string"
+    },
+    "runtime_digest": {
+      "title": "Runtime Digest",
+      "type": "string"
+    },
+    "runtime_kind": {
+      "enum": [
+        "python",
+        "node",
+        "native"
+      ],
+      "title": "Runtime Kind",
+      "type": "string"
+    },
+    "runtime_version": {
+      "title": "Runtime Version",
+      "type": "string"
+    },
+    "side_effects": {
+      "default": "none",
+      "enum": [
+        "none",
+        "model",
+        "binary",
+        "network",
+        "human"
+      ],
+      "title": "Side Effects",
+      "type": "string"
+    },
+    "timeout_seconds": {
+      "default": 60,
+      "exclusiveMinimum": 0,
+      "maximum": 3600,
+      "title": "Timeout Seconds",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "capability_id",
+    "capability_version",
+    "outputs",
+    "deterministic",
+    "runtime_kind",
+    "runtime_version",
+    "runtime_digest",
+    "lockfile_hash"
+  ],
+  "title": "CapabilityManifest",
+  "type": "object"
+}

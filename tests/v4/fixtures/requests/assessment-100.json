@@ -1,0 +1,8 @@
+{
+  "graded": true,
+  "quantity": 100,
+  "record_id": "request:exam",
+  "requested_deliverables": [
+    "assessment"
+  ]
+}

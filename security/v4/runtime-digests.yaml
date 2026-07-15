@@ -1,0 +1,62 @@
+version: runtime-digests@4.0.0
+capabilities:
+  reference.node_echo:
+    runtime_digest: sha256:3b7a854de32279b2dd858e8d5347a115652a568016169fe142fe9ec32554cf42
+    lockfile_hash: sha256:59b2ae484500285d6806f89539cdd16508238f7c3cbce0c7b1f40fd4de607c4b
+    lockfile_path: capabilities/reference/node_echo/package-lock.json
+    runtime_kind: node
+    runtime_version: "22"
+  reference.python_echo:
+    runtime_digest: sha256:941695764b1cd14362be6762db540d6eb4959a6b6ecf216ef656c4147375f7e0
+    lockfile_hash: sha256:f6cb6ce401ebb43bec54a7c0fd5589bc9bcddf28de421de694748f8ec5e15e9c
+    lockfile_path: capabilities/python-runtime.lock.json
+    runtime_kind: python
+    runtime_version: "3.12"
+  verification.accessibility:
+    runtime_digest: sha256:941695764b1cd14362be6762db540d6eb4959a6b6ecf216ef656c4147375f7e0
+    lockfile_hash: sha256:f6cb6ce401ebb43bec54a7c0fd5589bc9bcddf28de421de694748f8ec5e15e9c
+    lockfile_path: capabilities/python-runtime.lock.json
+    runtime_kind: python
+    runtime_version: "3.12"
+  verification.answer_authority:
+    runtime_digest: sha256:941695764b1cd14362be6762db540d6eb4959a6b6ecf216ef656c4147375f7e0
+    lockfile_hash: sha256:f6cb6ce401ebb43bec54a7c0fd5589bc9bcddf28de421de694748f8ec5e15e9c
+    lockfile_path: capabilities/python-runtime.lock.json
+    runtime_kind: python
+    runtime_version: "3.12"
+  verification.answer_separation:
+    runtime_digest: sha256:941695764b1cd14362be6762db540d6eb4959a6b6ecf216ef656c4147375f7e0
+    lockfile_hash: sha256:f6cb6ce401ebb43bec54a7c0fd5589bc9bcddf28de421de694748f8ec5e15e9c
+    lockfile_path: capabilities/python-runtime.lock.json
+    runtime_kind: python
+    runtime_version: "3.12"
+  verification.decision_rule:
+    runtime_digest: sha256:941695764b1cd14362be6762db540d6eb4959a6b6ecf216ef656c4147375f7e0
+    lockfile_hash: sha256:f6cb6ce401ebb43bec54a7c0fd5589bc9bcddf28de421de694748f8ec5e15e9c
+    lockfile_path: capabilities/python-runtime.lock.json
+    runtime_kind: python
+    runtime_version: "3.12"
+  verification.objective_coverage:
+    runtime_digest: sha256:941695764b1cd14362be6762db540d6eb4959a6b6ecf216ef656c4147375f7e0
+    lockfile_hash: sha256:f6cb6ce401ebb43bec54a7c0fd5589bc9bcddf28de421de694748f8ec5e15e9c
+    lockfile_path: capabilities/python-runtime.lock.json
+    runtime_kind: python
+    runtime_version: "3.12"
+  verification.privacy_homework:
+    runtime_digest: sha256:941695764b1cd14362be6762db540d6eb4959a6b6ecf216ef656c4147375f7e0
+    lockfile_hash: sha256:f6cb6ce401ebb43bec54a7c0fd5589bc9bcddf28de421de694748f8ec5e15e9c
+    lockfile_path: capabilities/python-runtime.lock.json
+    runtime_kind: python
+    runtime_version: "3.12"
+  verification.safety:
+    runtime_digest: sha256:941695764b1cd14362be6762db540d6eb4959a6b6ecf216ef656c4147375f7e0
+    lockfile_hash: sha256:f6cb6ce401ebb43bec54a7c0fd5589bc9bcddf28de421de694748f8ec5e15e9c
+    lockfile_path: capabilities/python-runtime.lock.json
+    runtime_kind: python
+    runtime_version: "3.12"
+  verification.source_lineage:
+    runtime_digest: sha256:941695764b1cd14362be6762db540d6eb4959a6b6ecf216ef656c4147375f7e0
+    lockfile_hash: sha256:f6cb6ce401ebb43bec54a7c0fd5589bc9bcddf28de421de694748f8ec5e15e9c
+    lockfile_path: capabilities/python-runtime.lock.json
+    runtime_kind: python
+    runtime_version: "3.12"

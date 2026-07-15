@@ -1,0 +1,21 @@
+{
+  "decision_rules": [
+    {
+      "denominator": 1,
+      "member_item_ids": [
+        "i1"
+      ],
+      "record_id": "student",
+      "threshold": 1
+    },
+    {
+      "denominator": 2,
+      "member_item_ids": [
+        "i1",
+        "i2"
+      ],
+      "record_id": "teacher",
+      "threshold": 2
+    }
+  ]
+}

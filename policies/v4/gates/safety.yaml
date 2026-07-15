@@ -1,0 +1,4 @@
+gate: safety
+version: safety-policy@4.0.0
+required_receipt_types: [safety, privacy]
+hard_block_codes: [MEDIA_PRIVACY_ALTERNATIVE_MISSING]

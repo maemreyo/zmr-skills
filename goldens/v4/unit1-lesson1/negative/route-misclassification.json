@@ -1,0 +1,6 @@
+{
+  "fixture": "route-misclassification",
+  "expected_findings": [
+    "WORKFLOW_GOAL_MISMATCH"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "fixture": "unsafe-media-homework",
+  "expected_findings": [
+    "MEDIA_PRIVACY_ALTERNATIVE_MISSING"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "decision_rules": [
+    {
+      "denominator": 3,
+      "member_item_ids": [
+        "i1",
+        "i2"
+      ],
+      "record_id": "rule:1",
+      "threshold": 2
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+gate: pack
+version: pack-policy@4.0.0
+required_receipt_types: [archive_security, reopen, rerender]
+required_review_rubric: teacher-usability@4.0.0
+hard_block_codes: [REOPEN_RECEIPT_MISSING, ARCHIVE_SECURITY_FAILED]

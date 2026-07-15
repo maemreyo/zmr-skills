@@ -1,0 +1,13 @@
+{
+  "missions": [
+    {
+      "consent": false,
+      "deletion_policy": null,
+      "neutral_alternative": false,
+      "private_submission": false,
+      "record_id": "mission:1",
+      "requires_face": true,
+      "retention_policy": null
+    }
+  ]
+}

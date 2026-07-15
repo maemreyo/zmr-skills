@@ -1,0 +1,4 @@
+cover: {min_occupancy: 0.01, max_occupancy: 0.75}
+student_practice: {min_occupancy: 0.02, max_occupancy: 0.65}
+teacher_command_center: {min_occupancy: 0.05, max_occupancy: 0.80}
+answer_key: {min_occupancy: 0.03, max_occupancy: 0.80}

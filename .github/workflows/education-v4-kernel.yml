@@ -1,0 +1,40 @@
+name: Education V4 Kernel
+on:
+  pull_request:
+    paths:
+      - "src/zamery_education_v4/**"
+      - "tests/v4/**"
+      - "capabilities/**"
+      - "adapters/**"
+  push:
+    branches: [zmr-dev]
+  schedule:
+    - cron: "17 2 * * *"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  v4-kernel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-education-v4
+      - run: uv run pytest tests/v4/kernel tests/v4/protocol tests/v4/execution -q
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v4-kernel-verification
+          path: build/
+          if-no-files-found: ignore
+  v4-capability-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-education-v4
+      - run: uv run pytest tests/v4/kernel tests/v4/protocol tests/v4/execution -q
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v4-capability-contracts-verification
+          path: build/
+          if-no-files-found: ignore

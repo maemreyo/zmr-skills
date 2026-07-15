@@ -1,0 +1,97 @@
+{
+  "$defs": {
+    "ApprovalScope": {
+      "enum": [
+        "teaching_brief",
+        "pedagogy",
+        "content",
+        "safety",
+        "accessibility",
+        "presentation",
+        "publication"
+      ],
+      "title": "ApprovalScope",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "accepted_assumptions": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Accepted Assumptions",
+      "type": "array"
+    },
+    "accepted_limitations": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Accepted Limitations",
+      "type": "array"
+    },
+    "approved_at": {
+      "format": "date-time",
+      "title": "Approved At",
+      "type": "string"
+    },
+    "approved_hashes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Approved Hashes",
+      "type": "array"
+    },
+    "approver_role": {
+      "title": "Approver Role",
+      "type": "string"
+    },
+    "record_id": {
+      "title": "Record Id",
+      "type": "string"
+    },
+    "revokes": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Revokes",
+      "type": "array"
+    },
+    "schema_version": {
+      "default": "4.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "scope": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ApprovalScope"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "title": "Scope"
+    },
+    "supersedes": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Supersedes",
+      "type": "array"
+    }
+  },
+  "required": [
+    "record_id",
+    "scope",
+    "approved_hashes",
+    "approver_role",
+    "approved_at"
+  ],
+  "title": "ApprovalRecord",
+  "type": "object"
+}

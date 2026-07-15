@@ -1,0 +1,4 @@
+gate: pedagogy
+version: pedagogy-policy@4.0.0
+required_receipt_types: [objective_coverage]
+required_review_rubric: pedagogy-rubric@4.0.0

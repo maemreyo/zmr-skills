@@ -1,0 +1,8 @@
+{
+  "source_allowlisted": true,
+  "transcript_provenance": true,
+  "timestamps": true,
+  "caption_fallback": true,
+  "h5p_valid": true,
+  "privacy_safe": true
+}

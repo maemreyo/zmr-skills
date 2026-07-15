@@ -1,0 +1,138 @@
+{
+  "$defs": {
+    "Finding": {
+      "additionalProperties": false,
+      "properties": {
+        "affected_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Affected Ids",
+          "type": "array"
+        },
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "remediation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Remediation"
+        },
+        "severity": {
+          "default": "error",
+          "enum": [
+            "info",
+            "warning",
+            "error",
+            "critical"
+          ],
+          "title": "Severity",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "title": "Finding",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "consumed_evidence_hashes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Consumed Evidence Hashes",
+      "type": "array"
+    },
+    "consumed_review_hashes": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Consumed Review Hashes",
+      "type": "array"
+    },
+    "decision": {
+      "enum": [
+        "pass",
+        "warn",
+        "fail"
+      ],
+      "title": "Decision",
+      "type": "string"
+    },
+    "findings": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Finding"
+      },
+      "title": "Findings",
+      "type": "array"
+    },
+    "gate": {
+      "title": "Gate",
+      "type": "string"
+    },
+    "invalidation_conditions": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Invalidation Conditions",
+      "type": "array"
+    },
+    "policy_version": {
+      "title": "Policy Version",
+      "type": "string"
+    },
+    "record_id": {
+      "title": "Record Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "default": "4.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "severity": {
+      "enum": [
+        "none",
+        "warning",
+        "hard_block"
+      ],
+      "title": "Severity",
+      "type": "string"
+    },
+    "subject_graph_hash": {
+      "title": "Subject Graph Hash",
+      "type": "string"
+    }
+  },
+  "required": [
+    "record_id",
+    "gate",
+    "policy_version",
+    "subject_graph_hash",
+    "consumed_evidence_hashes",
+    "decision",
+    "severity"
+  ],
+  "title": "GateDecision",
+  "type": "object"
+}

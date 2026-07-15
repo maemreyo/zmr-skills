@@ -1,0 +1,6 @@
+{
+  "fixture": "self-attested-pack-qa",
+  "expected_findings": [
+    "REOPEN_RECEIPT_MISSING"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "cache_enabled": true,
+  "capability_id": "verification.objective_coverage",
+  "capability_version": "4.0.0",
+  "deterministic": true,
+  "failure_codes": [
+    "INVALID_INPUT",
+    "INSPECTOR_EXECUTION_FAILED"
+  ],
+  "filesystem_read": "input_mount_only",
+  "filesystem_write": "output_mount_only",
+  "inputs": [
+    "candidate_graph"
+  ],
+  "lockfile_hash": "sha256:f6cb6ce401ebb43bec54a7c0fd5589bc9bcddf28de421de694748f8ec5e15e9c",
+  "lockfile_path": "capabilities/python-runtime.lock.json",
+  "memory_mb": 256,
+  "network_domains": [],
+  "outputs": [
+    "evidence_receipt"
+  ],
+  "protocol_version": "zamery-capability.v1",
+  "runtime_digest": "sha256:941695764b1cd14362be6762db540d6eb4959a6b6ecf216ef656c4147375f7e0",
+  "runtime_kind": "python",
+  "runtime_version": "3.12",
+  "side_effects": "none",
+  "timeout_seconds": 30
+}

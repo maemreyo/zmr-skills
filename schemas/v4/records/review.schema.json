@@ -1,0 +1,131 @@
+{
+  "$defs": {
+    "Finding": {
+      "additionalProperties": false,
+      "properties": {
+        "affected_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Affected Ids",
+          "type": "array"
+        },
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "remediation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Remediation"
+        },
+        "severity": {
+          "default": "error",
+          "enum": [
+            "info",
+            "warning",
+            "error",
+            "critical"
+          ],
+          "title": "Severity",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "title": "Finding",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "decision": {
+      "enum": [
+        "accept",
+        "revise",
+        "reject"
+      ],
+      "title": "Decision",
+      "type": "string"
+    },
+    "findings": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Finding"
+      },
+      "title": "Findings",
+      "type": "array"
+    },
+    "ratings": {
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "boolean"
+          }
+        ]
+      },
+      "title": "Ratings",
+      "type": "object"
+    },
+    "record_id": {
+      "title": "Record Id",
+      "type": "string"
+    },
+    "reviewed_at": {
+      "format": "date-time",
+      "title": "Reviewed At",
+      "type": "string"
+    },
+    "reviewer_role": {
+      "title": "Reviewer Role",
+      "type": "string"
+    },
+    "rubric_version": {
+      "title": "Rubric Version",
+      "type": "string"
+    },
+    "schema_version": {
+      "default": "4.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "subject_hashes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Subject Hashes",
+      "type": "array"
+    }
+  },
+  "required": [
+    "record_id",
+    "rubric_version",
+    "reviewer_role",
+    "subject_hashes",
+    "ratings",
+    "decision",
+    "reviewed_at"
+  ],
+  "title": "ReviewRecord",
+  "type": "object"
+}

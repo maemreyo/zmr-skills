@@ -1,0 +1,6 @@
+{
+  "fixture": "render-analyzer-crash",
+  "expected_findings": [
+    "INSPECTOR_EXECUTION_FAILED"
+  ]
+}

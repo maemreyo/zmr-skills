@@ -1,0 +1,4 @@
+gate: content
+version: content-policy@4.0.0
+required_receipt_types: [answer_authority, decision_rule]
+hard_block_codes: [MISSING_SOURCE_ANSWER_AUTHORITY, DECISION_RULE_DENOMINATOR_MISMATCH]

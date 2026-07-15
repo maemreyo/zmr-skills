@@ -1,0 +1,15 @@
+{
+  "domain_terms": [
+    "IELTS"
+  ],
+  "lifecycle_goal": "publish_teaching_pack",
+  "record_id": "request:pack",
+  "requested_deliverables": [
+    "student_workbook",
+    "teacher_guide",
+    "presentation"
+  ],
+  "source_kinds": [
+    "textbook"
+  ]
+}

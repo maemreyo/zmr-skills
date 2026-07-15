@@ -1,0 +1,101 @@
+{
+  "$defs": {
+    "OutputDeclaration": {
+      "additionalProperties": false,
+      "properties": {
+        "declared_hash": {
+          "title": "Declared Hash",
+          "type": "string"
+        },
+        "media_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Media Type"
+        },
+        "output_type": {
+          "title": "Output Type",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "record_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Record Type"
+        }
+      },
+      "required": [
+        "output_type",
+        "path",
+        "declared_hash"
+      ],
+      "title": "OutputDeclaration",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "invocation_id": {
+      "title": "Invocation Id",
+      "type": "string"
+    },
+    "metrics": {
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "title": "Metrics",
+      "type": "object"
+    },
+    "outputs": {
+      "items": {
+        "$ref": "#/$defs/OutputDeclaration"
+      },
+      "title": "Outputs",
+      "type": "array"
+    },
+    "protocol_version": {
+      "const": "zamery-capability.v1",
+      "default": "zamery-capability.v1",
+      "title": "Protocol Version",
+      "type": "string"
+    },
+    "status": {
+      "const": "success",
+      "default": "success",
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "invocation_id",
+    "outputs"
+  ],
+  "title": "CapabilityResult",
+  "type": "object"
+}

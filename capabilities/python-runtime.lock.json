@@ -1,0 +1,21 @@
+{
+  "development_packages": {
+    "hypothesis": "6.120.0",
+    "mypy": "1.14.1",
+    "pytest": "9.0.2",
+    "pytest-asyncio": "1.3.0",
+    "pytest-cov": "7.0.0",
+    "ruff": "0.9.10"
+  },
+  "packages": {
+    "Pillow": "12.2.0",
+    "PyYAML": "6.0.3",
+    "pydantic": "2.13.4",
+    "pypdf": "5.9.0",
+    "python-docx": "1.2.0",
+    "python-pptx": "1.0.2",
+    "typer": "0.26.3"
+  },
+  "python": "3.12.11",
+  "schema_version": "zamery-python-runtime-lock.v1"
+}

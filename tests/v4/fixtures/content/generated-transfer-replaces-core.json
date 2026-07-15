@@ -1,0 +1,9 @@
+{
+  "approval_hash": null,
+  "core_source_ids": [
+    "source:core"
+  ],
+  "replacement_source_ids": [
+    "source:generated"
+  ]
+}

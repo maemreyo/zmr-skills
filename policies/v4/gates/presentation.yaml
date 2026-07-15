@@ -1,0 +1,4 @@
+gate: presentation
+version: presentation-policy@4.0.0
+required_receipt_types: [binary_inspection, render, speaker_notes]
+hard_block_codes: [EMPTY_SPEAKER_NOTES, RENDER_FAILED]

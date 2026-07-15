@@ -1,0 +1,41 @@
+{
+  "lifecycle_goal": "publish_teaching_pack",
+  "source_model": {
+    "core": [
+      "mindset:unit1"
+    ],
+    "supplementary": [
+      "original:vocabulary-transfer"
+    ]
+  },
+  "objective_evidence": true,
+  "decision_rule_membership": [
+    "item:1",
+    "item:2",
+    "item:3"
+  ],
+  "answer_authority": true,
+  "answer_separation": true,
+  "meaningful_speaker_notes": true,
+  "privacy_safe_alternatives": true,
+  "gate_decisions": [
+    "brief",
+    "pedagogy",
+    "content",
+    "safety",
+    "accessibility",
+    "presentation",
+    "pack"
+  ],
+  "reextract_verified": true,
+  "rerender_verified": true,
+  "deliverables": [
+    "student_workbook.docx",
+    "teacher_guide.docx",
+    "answer_key.pdf",
+    "presentation.pptx",
+    "homework.json",
+    "governance-report.json",
+    "unit1-pack.zip"
+  ]
+}

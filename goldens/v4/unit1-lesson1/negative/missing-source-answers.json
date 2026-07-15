@@ -1,0 +1,6 @@
+{
+  "fixture": "missing-source-answers",
+  "expected_findings": [
+    "MISSING_SOURCE_ANSWER_AUTHORITY"
+  ]
+}

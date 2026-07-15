@@ -1,0 +1,14 @@
+version: release-criteria@4.0.0
+criteria:
+  - kernel_graph
+  - cross_language_protocol
+  - unit1_seven_gates
+  - five_additional_goldens
+  - clean_index_rebuild
+  - semantic_determinism
+  - reextract_reopen_rerender
+  - known_audit_failures
+  - no_severe_v3_regression
+  - no_silent_migration_loss
+  - sandbox_archive_security
+  - teacher_classroom_usability

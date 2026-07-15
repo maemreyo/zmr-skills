@@ -1,0 +1,48 @@
+name: Education V4 Release
+on:
+  pull_request:
+    paths:
+      - "src/zamery_education_v4/**"
+      - "tests/v4/**"
+      - "capabilities/**"
+      - "adapters/**"
+  push:
+    branches: [zmr-dev]
+  schedule:
+    - cron: "17 2 * * *"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  v4-determinism:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-education-v4
+      - name: Verify immutable document-tool base
+        env:
+          PYTHON_BASE_IMAGE: ${{ vars.EDUCATION_V4_PYTHON_BASE_IMAGE }}
+        run: uv run python scripts/v4/verify_runtime_digests.py --production --container-image "$PYTHON_BASE_IMAGE"
+      - run: uv run pytest tests/v4/release tests/v4/migrations tests/v4/cutover -q
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v4-determinism-verification
+          path: build/
+          if-no-files-found: ignore
+  v4-migration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-education-v4
+      - name: Verify immutable document-tool base
+        env:
+          PYTHON_BASE_IMAGE: ${{ vars.EDUCATION_V4_PYTHON_BASE_IMAGE }}
+        run: uv run python scripts/v4/verify_runtime_digests.py --production --container-image "$PYTHON_BASE_IMAGE"
+      - run: uv run pytest tests/v4/release tests/v4/migrations tests/v4/cutover -q
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v4-migration-verification
+          path: build/
+          if-no-files-found: ignore

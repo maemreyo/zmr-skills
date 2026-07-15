@@ -1,0 +1,16 @@
+{
+  "edges": [],
+  "graph_id": "graph:invalid-rule",
+  "records": [
+    {
+      "record_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "record_id": "rule:1",
+      "record_type": "assessment_decision_rule"
+    },
+    {
+      "record_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "record_id": "item:1",
+      "record_type": "item"
+    }
+  ]
+}
